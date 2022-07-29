@@ -1,0 +1,27 @@
+@use "../abstract/color";
+@use "../abstract/sizing";
+
+.mn-c-material-form {
+	display: flex;
+	flex-direction: column;
+	background-color: color.$background;
+	gap: calc(sizing.$main * 1);
+	padding: calc(sizing.$main * 2);
+	width: calc(sizing.$main * 20);
+	align-items: center;
+	border: 1px solid color.$main3;
+
+	.pdf-upload {
+		display: flex;
+		flex-direction: row;
+		gap: calc(sizing.$main);
+	}
+
+	.button {
+		margin-top: sizing.$main;
+		width: calc(sizing.$main * 16);
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+	}
+}

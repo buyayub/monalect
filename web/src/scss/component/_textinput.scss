@@ -1,0 +1,38 @@
+@use "../abstract/color";
+@use "../abstract/sizing";
+
+.mn-c-textinput {
+	display: flex;
+	flex-direction: column;
+	gap: calc(sizing.$main * 0.25);
+
+	label, & p {
+		font-size: sizing.$fs-small;
+	}
+
+	label {
+		font-weight: bold;
+		color: color.$main1;
+	}
+
+	input {
+		background-color: color.$background;
+		border: 1px solid color.$main2;
+		height: calc(sizing.$main * 2);
+		width: calc(sizing.$main * 16);
+		color: color.$main0;
+		padding-left: calc(sizing.$main * 0.5);
+
+		&::placeholder{
+			color: color.$main1;
+		}
+
+		&:invalid {
+			border-color: color.$red1;
+		}
+	}
+
+	&.mn-is-numeric input {
+		width: calc(sizing.$main * 3);
+	}	
+}

@@ -1,0 +1,9 @@
+@use "./sizing";
+@use "./color";
+
+html {
+	font-family: 'Roboto', sans-serif;
+	font-weight: 400;
+	font-size: sizing.$fs-p;
+	color: color.$main0;
+}

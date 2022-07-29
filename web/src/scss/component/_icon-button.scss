@@ -1,0 +1,59 @@
+@use "../abstract/sizing";
+@use "../abstract/color";
+
+.mn-c-icon-button {
+	width: calc(sizing.$main * 2);
+	height: calc(sizing.$main *2);
+	border-radius: 0px;
+	border: 1px solid color.$main2;
+	background-color: color.$background;
+	color: color.$main2;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	&.mn-is-large {
+		width: calc(sizing.$main * 3);
+		height: calc(sizing.$main * 3);
+	}
+
+	&.mn-is-small {
+		padding: 0px;
+		width: calc(sizing.$main * 1.5);
+		height: calc(sizing.$main * 1.5);
+
+		> svg {
+			stroke-width: 1.5;
+		}
+	}
+
+	&.mn-is-danger {
+		color: color.$red2;
+		border-color: color.$red2;
+		&:hover {
+			background-color: color.$red2;
+			color: color.$red1;
+			border-color: color.$red1;
+		}
+	}
+
+	&.mn-is-secondary {
+		background-color: color.$main3;
+		border-color: color.$main3;
+
+		&:hover {
+			background-color: color.$main2;
+		}
+	}
+
+	&:hover {
+		background-color: color.$main3;
+		color: color.$main1;
+		cursor: pointer;
+	}
+
+	& > * {
+		width: 100%;
+		height: 100%;
+	}
+}

@@ -1,0 +1,26 @@
+@use "./base/reset";
+@use "./base/core";
+
+@use "./abstract/typography";
+@use "./abstract/color";
+
+@use "./component/button";
+@use "./component/textinput";
+@use "./component/icon-button";
+@use "./component/dropdown";
+@use "./component/navbar";
+@use "./component/login-form";
+@use "./component/learning-material";
+@use "./component/learning-material-add";
+@use "./component/material-section";
+@use "./component/material-section-add";
+@use "./component/material-form";
+@use "./component/material-wrapper";
+@use "./component/section-form";
+@use "./component/file-upload";
+@use "./component/modal";
+
+body {
+	background-color: color.$background;
+	box-sizing: border-box;
+}

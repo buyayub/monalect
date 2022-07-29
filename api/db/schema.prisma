@@ -8,11 +8,111 @@ generator client {
   binaryTargets = "native"
 }
 
-// Define your own datamodels here and run `yarn redwood prisma migrate dev`
-// to create migrations for them and apply to your dev DB.
-// TODO: Please remove the following example:
-model UserExample {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
+model User {
+	id		Int	@id @default(autoincrement())
+	name 		String?	@unique
+	email		String	@unique
+	hashedPassword	String
+	salt		String
+	resetToken	String?
+	resetTokenExpiresAt DateTime?
+	courses		Course[]
 }
+
+model Course {
+	id		Int	@id @default(autoincrement())
+	title		String
+	createdAt 	DateTime 	@default(now())
+	user		User	@relation(fields: [userId], references: [id])
+	userId		Int
+	textbooks 	Textbook[]
+	articles	Article[]
+	goals		Goal[]
+}
+
+model Textbook {
+	id		Int 	@id @default(autoincrement())
+	title		String	@default("Untitled")
+	author		String?
+	pages		Int?
+	pageOffset	Int?	
+	isbn		String?	
+	url		String?
+	course 		Course 	@relation(fields: [courseId], references: [id])
+	courseId 	Int
+	sections	TextbookSection[]
+}
+
+model TextbookSection {
+	id		Int	@id @default(autoincrement())
+	title		String	@default("Untitled")
+	start		Int
+	end		Int
+	lesson 		Lesson? @relation(fields: [lessonId], references: [id])
+	lessonId 	Int?
+	textbook 	Textbook @relation(fields: [textbookId], references: [id])
+	textbookId 	Int
+}
+
+model Article {
+	id		Int 	@id @default(autoincrement())
+	title		String	@default("Untitled")
+	author		String?
+	pages		Int?
+	pageOffset	Int?	
+	doi 		String?	
+	uploaded	Boolean
+	url		String?
+	course 		Course 	@relation(fields: [courseId], references: [id])
+	courseId 	Int
+	lesson 		Lesson? @relation(fields: [lessonId], references: [id])
+	lessonId 	Int?
+}
+
+model Lesson {
+	id		Int	@id @default(autoincrement())
+	title		String	@default("Untitled")
+	articles	Article[]
+	sections	TextbookSection[]
+	notebookPages 	NotebookPage[]
+}
+
+model Question {
+	id 		Int 	@id @default(autoincrement())	
+	question	String
+	multiple	Boolean
+	answers 	Answer[]
+	choices		Choice[]
+}
+
+model Answer {
+	id 		Int 	@id @default(autoincrement())	
+	answer		String
+	question 	Question @relation(fields: [questionId], references: [id])
+	questionId 	Int
+}
+
+model Choice {
+	id 		Int 	@id @default(autoincrement())	
+	choice 		String
+	question 	Question @relation(fields: [questionId], references: [id])
+	questionId 	Int
+}
+
+model Goal {
+	id 		Int 	@id @default(autoincrement())	
+	variable	String
+	metric 		Int
+	goal		Int
+	course 		Course 	@relation(fields: [courseId], references: [id])
+	courseId 	Int
+}
+
+model NotebookPage {
+	id		Int @id @default(autoincrement())
+	page 		Int 
+	content		String?
+	lesson 		Lesson @relation(fields: [lessonId], references: [id])
+	lessonId 	Int
+}
+

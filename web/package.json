@@ -13,11 +13,21 @@
     ]
   },
   "dependencies": {
+    "@redwoodjs/auth": "2.0.0",
     "@redwoodjs/forms": "2.0.0",
     "@redwoodjs/router": "2.0.0",
     "@redwoodjs/web": "2.0.0",
     "prop-types": "15.8.1",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-beautiful-dnd": "^13.1.0",
+    "react-dom": "17.0.2",
+    "react-draggable": "^4.4.5",
+    "react-draggable-list": "^4.0.4",
+    "react-icons": "^4.4.0",
+    "react-modal": "^3.15.1"
+  },
+  "devDependencies": {
+    "sass": "^1.53.0",
+    "sass-loader": "^13.0.2"
   }
 }

@@ -1,0 +1,56 @@
+@use "../abstract/color";
+@use "../abstract/sizing";
+
+.mn-c-material-add {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	.icon {
+		width: calc(sizing.$main * 3);
+		height: calc(sizing.$main *3);
+		border: 1px solid color.$main3;
+		background-color: color.$background;
+		color: color.$main3;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		& > * {
+			width: calc(sizing.$main * 2);
+			height: calc(sizing.$main * 2);
+			stroke-width: 1.5;
+		}
+	}
+
+	.title {
+		width: calc(sizing.$main * 25);
+		height: calc(sizing.$main * 3);
+		border: 1px solid color.$main3;
+		color: color.$main3;
+		background-color: color.$background;
+		margin-left: -1px;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		padding: calc(sizing.$main * 0.5);
+	}
+
+	&:hover > div {
+		border-color: color.$main2;
+		color: color.$main2;
+		cursor: pointer;
+		background-color: color.$main3-5;
+	}
+	
+	&.mn-is-small {
+		.icon {
+			width: calc(sizing.$main * 2);
+			height: calc(sizing.$main * 2);
+		}
+
+		.title {
+			width: calc(sizing.$main * 23);	
+			height: calc(sizing.$main * 2);	
+		}
+	}
+}

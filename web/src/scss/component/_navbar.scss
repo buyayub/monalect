@@ -1,0 +1,54 @@
+@use "../abstract/sizing";
+@use "../abstract/color";
+
+nav {
+	display: flex;
+	flex-direction: row;
+	position: relative;
+	
+	& > *  {
+		margin-right: -1px;
+	}
+
+	.mn-is-parent {
+		display: flex;
+		flex-direction: row;
+		gap: 0px;
+		position: relative;
+		z-index: 0;
+	}
+
+	.mn-is-parent .breadcrumb {
+		z-index: 0;
+		position: absolute;
+		left: calc((sizing.$main * 12) - 1px);
+		content: "";
+		width: 0;
+		height: 0; 
+		border-top: calc(sizing.$main) solid transparent;
+		border-bottom: calc(sizing.$main) solid transparent;
+		border-left: calc(sizing.$main) solid color.$background;
+	}
+
+	.mn-is-parent select:hover ~ .breadcrumb {
+		border-left: calc(sizing.$main - 1px) solid color.$main3;
+		cursor: pointer;
+	}
+
+	.mn-is-parent .breadcrumb-bg {
+		z-index: -1;
+		position: absolute;
+		left: calc(sizing.$main * 12);
+		content: "";
+		width: 0;
+		height: 0; 
+		border-top: calc(sizing.$main) solid transparent;
+		border-bottom: calc(sizing.$main) solid transparent;
+		border-left: calc(sizing.$main) solid color.$main1;
+	}
+
+	.mn-is-nav-child {
+		position: absolute;
+		top: calc(sizing.$main * 3);
+	}
+}
