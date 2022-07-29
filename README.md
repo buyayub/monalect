@@ -16,7 +16,7 @@ I'm going to create a self-hosted version eventually for people to us.
 
 For now it'll eventually be hosted on https://www.monalect.com 
 
-It should be done by the end of August 2023, that's my last deadline.
+It should be done by the end of August 2022, that's my last deadline.
 
 ## To-Do
 
