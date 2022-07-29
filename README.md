@@ -22,7 +22,7 @@ It should be done by the end of August 2022, that's my last deadline.
 
 I'm quite a ways into programming it without a to-do list. I'm content this way. Not knowing how much left I have to do immensely helps with motivation productivity, because I just focus on the next immediate thing.
 
-When the first version comes out, I'll
+When the first version comes out, I'll start taking the features more seriously.
 
 ### Clean-Up
 
