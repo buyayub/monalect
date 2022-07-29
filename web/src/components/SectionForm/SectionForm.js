@@ -1,5 +1,5 @@
-import TextInput from 'src/components/TextInput';
-import Button from 'src/components/Button';
+import Button from 'src/components/Button'
+import TextInput from 'src/components/TextInput'
 
 const SectionForm = ({cancel, addSection, sectionRoot}) => {
 	const onSubmit = (e) => {
@@ -20,7 +20,7 @@ const SectionForm = ({cancel, addSection, sectionRoot}) => {
 		  <TextInput label="Title" />
 		  <div className="pages">
 			  <TextInput className="mn-is-numeric" type="numeric" />
-			  <p class="range"> to </p>
+			  <p className="range"> to </p>
 			  <TextInput className="mn-is-numeric" type="numeric" />
 		  </div>
 		  <div className="buttons">

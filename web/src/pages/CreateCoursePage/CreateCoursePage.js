@@ -1,6 +1,7 @@
 import NavBar from 'src/components/NavBar'
 import Button from 'src/components/Button'
 import MaterialWrapper from 'src/components/MaterialWrapper'
+import LessonWrapper from 'src/components/LessonWrapper'
 import LearningMaterialForm from 'src/components/LearningMaterialForm'
 import SectionForm from 'src/components/SectionForm'
 import Modal from 'src/components/Modal'
@@ -10,7 +11,7 @@ import { Link, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import { useState } from 'react';
 
-const items = [	
+const mockMaterials = [	
 	{
 		type: "textbook",
 		title: "Proof of Mathematics",
@@ -21,11 +22,13 @@ const items = [
 		sections: [
 			{
 				title: "Introduction",
+				lesson: null,
 				start: 1,
 				end: 16
 			},
 			{
 				title: "Set Theory",
+				lesson: null,
 				start: 42,
 				end: 62 
 			}
@@ -41,10 +44,28 @@ const items = [
 	}
 ]
 
+const mockLessons = [
+	{
+		title: "Intro to Mathematical Logic",
+		sections : [
+			{
+				materialId: 0,
+				id: 0,
+			}
+		]
+	},
+	{
+		title: "Set Theory",
+		sections : []
+	}
+]
+
+
 const CreateCoursePage = () => {
 	const [page, setPage] = useState(0);
 	const [title, setTitle] = useState("");
-	const [materials, setMaterial] = useState(items);
+	const [materials, setMaterial] = useState(mockMaterials);
+	const [lessons, setLessons] = useState(mockLessons);
 	const [showMaterialForm, setMaterialForm] = useState(false);
 	const [showSectionForm, setSectionForm] = useState(false);
 	const [sectionRoot, setRoot] = useState(0);
@@ -76,14 +97,20 @@ const CreateCoursePage = () => {
     <>
       <MetaTags title="CreateCourse" description="CreateCourse page" />
 	<NavBar breadcrumbs={[bcMain]} />
-	    <MaterialWrapper 
-	    	materials={materials} 
-	    	showForm={() => setMaterialForm(true)} 
-		showSection={() => setSectionForm(true)}
-		materialDelete={materialDelete} 
-		sectionDelete={sectionDelete}
-		setRoot={setRoot}
-	    />
+	    <div class="mn-c-page">
+		    <MaterialWrapper 
+			materials={materials} 
+			showForm={() => setMaterialForm(true)} 
+			showSection={() => setSectionForm(true)}
+			materialDelete={materialDelete} 
+			sectionDelete={sectionDelete}
+			setRoot={setRoot}
+		    />
+		    <LessonWrapper
+			lessons={lessons}
+			materials={materials}
+		    />
+	    </div>
 	    <Modal show={showMaterialForm} changeState={() => setMaterialForm(false)}>
 		    <LearningMaterialForm 
 		    	cancel={() => {setMaterialForm(false)}} 
