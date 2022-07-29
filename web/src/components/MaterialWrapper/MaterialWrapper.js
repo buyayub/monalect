@@ -11,7 +11,7 @@ const LearningMaterialSection = ({
 	sectionDelete,
 	materialDelete,
 	index,
-	setRoot,
+	setSectionRoot,
 	showSection,
 }) => {
 	return (
@@ -43,7 +43,7 @@ const LearningMaterialSection = ({
 			{type == 'textbook' && (
 				<MaterialSectionAdd
 					onClick={() => {
-						setRoot(index)
+						setSectionRoot(index)
 						showSection(true)
 					}}
 				/>
@@ -58,7 +58,7 @@ const MaterialWrapper = ({
 	showSection,
 	sectionDelete,
 	materialDelete,
-	setRoot,
+	setSectionRoot,
 }) => {
 	return (
 		<div className="mn-c-material-whole">
@@ -77,7 +77,7 @@ const MaterialWrapper = ({
 							sections={sections}
 							sectionDelete={sectionDelete}
 							materialDelete={materialDelete}
-							setRoot={setRoot}
+							setSectionRoot={setSectionRoot}
 							showSection={showSection}
 						/>
 					)

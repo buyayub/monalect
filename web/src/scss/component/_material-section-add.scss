@@ -53,4 +53,10 @@
 			height: calc(sizing.$main * 2);	
 		}
 	}
+
+	&.mn-is-large {
+		.title {
+			width: calc(sizing.$main * 26);	
+		}
+	}
 }

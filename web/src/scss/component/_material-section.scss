@@ -54,4 +54,8 @@
 	&:hover > button {
 		visibility: visible;
 	}
+
+	&.mn-is-large .title {
+		width: sizing.$main * 26;
+	}	
 }
