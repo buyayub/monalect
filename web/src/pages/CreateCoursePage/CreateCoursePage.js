@@ -50,9 +50,14 @@ const mockLessons = [
 		title: 'Intro to Mathematical Logic',
 		sections: [
 			{
+				type: "section",
 				materialId: 0,
 				id: 0,
 			},
+			{
+				type: "article",
+				materialId: 1
+			}
 		],
 	},
 	{
@@ -64,8 +69,8 @@ const mockLessons = [
 const CreateCoursePage = () => {
 	const [page, setPage] = useState(0)
 	const [title, setTitle] = useState('')
-	const [materials, setMaterial] = useState(mockMaterials)
-	const [lessons, setLessons] = useState(mockLessons)
+	const [materials, setMaterial] = useState([])
+	const [lessons, setLessons] = useState([])
 
 	const [showMaterialForm, setMaterialForm] = useState(false)
 	const [showSectionForm, setSectionForm] = useState(false)
@@ -73,6 +78,8 @@ const CreateCoursePage = () => {
 
 	const [sectionRoot, setSectionRoot] = useState(0)
 	const [lessonRoot, setLessonRoot] = useState(0)
+
+	const [linkMode, setLinkMode] = useState(false)
 
 	const materialDelete = (id) => {
 		setMaterial(materials.filter((element, index) => index != id))
@@ -106,6 +113,50 @@ const CreateCoursePage = () => {
 		setLessons(lessons.filter((element, index) => index != id))
 	}
 
+
+	const linkSection = (lesson, sectionType, materialId, sectionId=null) => {
+		let lessonsCopy = lessons;
+
+		if (sectionType == "section") { 
+				for (const section of lessons[lesson].sections) {
+					if (section.materialId == materialId && section.id == sectionId) {
+						return null;
+					}
+				}
+
+				lessonsCopy[lesson].sections.push({
+						type: "section", 
+						materialId: materialId,
+						id: sectionId,
+					})
+		}
+
+		else if (sectionType == "article") {
+				for (const section of lessons[lesson].sections) {
+					if ((section.type == sectionType) && (section.materialId == materialId)) {
+						return null;
+					}
+				}
+
+				lessonsCopy[lesson].sections.push({
+						type: "article", 
+						materialId: materialId
+					})
+		}
+		setLessons([...lessonsCopy])
+	}
+
+	const unlinkSection = (lessonIndex, i) =>  {
+		let lessonsCopy = lessons 
+		lessonsCopy[lessonIndex].sections = lessonsCopy[
+			lessonIndex	
+		].sections.filter((element, index) => index != i)
+
+		// recreate the array so react knows to re-render
+		setLessons([...lessonsCopy])
+		}
+	
+
 	return (
 		<>
 			<MetaTags title="CreateCourse" description="CreateCourse page" />
@@ -118,12 +169,20 @@ const CreateCoursePage = () => {
 					materialDelete={materialDelete}
 					sectionDelete={sectionDelete}
 					setSectionRoot={setSectionRoot}
+					linkMode={linkMode}
+					lessonRoot={lessonRoot}
+					linkSection={linkSection}
 				/>
 				<LessonWrapper
 					lessons={lessons}
 					materials={materials}
 					setLessonForm={setLessonForm}
+					setLessonRoot={setLessonRoot}
 					deleteLesson={deleteLesson}
+					setLinkMode={setLinkMode}
+					linkMode={linkMode}
+					lessonRoot={lessonRoot}
+					unlinkSection={unlinkSection}
 				/>
 			</div>
 			<Modal show={showMaterialForm} changeState={() => setMaterialForm(false)}>

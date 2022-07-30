@@ -13,13 +13,21 @@ const LearningMaterialSection = ({
 	index,
 	setSectionRoot,
 	showSection,
+	linkMode,
+	lessonRoot,
+	linkSection
 }) => {
 	return (
 		<div className="mn-c-learning-material-section">
 			<LearningMaterial
 				type={type}
+					className={linkMode && type=="textbook" ? "mn-is-inactive" : ""}
 				title={title}
 				pages={pages}
+				onClick={(e) => { 
+						if (linkMode && type=="article") { linkSection(lessonRoot, "article", index); }
+						return null
+				}}
 				handleDelete={() => {
 					materialDelete(index)
 				}}
@@ -34,6 +42,10 @@ const LearningMaterialSection = ({
 									start={section.start}
 									end={section.end}
 									title={section.title}
+									onClick={(e) => { 
+												if (linkMode) { linkSection(lessonRoot, "section", index, i); }
+												return null
+										}}
 									handleDelete={() => sectionDelete(index, i)}
 								/>
 							)
@@ -42,10 +54,12 @@ const LearningMaterialSection = ({
 			)}
 			{type == 'textbook' && (
 				<MaterialSectionAdd
-					onClick={() => {
-						setSectionRoot(index)
-						showSection(true)
-					}}
+					className={linkMode ? "mn-is-inactive" : ""}
+						onClick={!linkMode ? () => { 
+								setSectionRoot(index)
+								showSection(true)
+						} : null
+					}
 				/>
 			)}
 		</div>
@@ -59,6 +73,9 @@ const MaterialWrapper = ({
 	sectionDelete,
 	materialDelete,
 	setSectionRoot,
+	linkMode,
+	lessonRoot,
+	linkSection
 }) => {
 	return (
 		<div className="mn-c-material-whole">
@@ -79,11 +96,17 @@ const MaterialWrapper = ({
 							materialDelete={materialDelete}
 							setSectionRoot={setSectionRoot}
 							showSection={showSection}
+							linkMode={linkMode}
+							lessonRoot={lessonRoot}
+							linkSection={linkSection}
 						/>
 					)
 				})}
 				<div className="mn-c-learning-material-section">
-					<LearningMaterialAdd onClick={showForm} />
+				<LearningMaterialAdd 
+						className={linkMode ? "mn-is-inactive" : ""} 
+						onClick={!linkMode ? showForm : null} 
+						/>
 				</div>
 			</div>
 		</div>

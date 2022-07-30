@@ -53,4 +53,11 @@
 			height: calc(sizing.$main * 2);	
 		}
 	}
+
+	&.mn-is-inactive:hover > div {
+		border-color: color.$main3-5; 
+		color: color.$main3-5;
+		cursor: default;
+		background-color: color.$main4;
+	}
 }

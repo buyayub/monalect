@@ -39,6 +39,7 @@ I'm in the middle of writing the first working version of the app, so I can't ca
 
 + [ ] Add CSS transitions for smoother UI
 + [ ] Make personally designed dropdown menu, instead of the browser provided one.
++ [ ] Ensure important delete actions have confirmation prompts.
 
 ### Immediate Future Features
 

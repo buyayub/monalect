@@ -58,4 +58,8 @@
 	&.mn-is-large .title {
 		width: sizing.$main * 26;
 	}	
+
+	&.mn-is-active .main > * {
+		border-color: color.$main1;
+	}
 }

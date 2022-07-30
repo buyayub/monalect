@@ -54,4 +54,26 @@
 	&:hover > button {
 		visibility: visible;
 	}
+
+	&.mn-is-inactive {
+		.icon, .title {
+			border-color: color.$main3-5;
+			color: color.$main3-5;
+
+			> * {
+				color: color.$main3-5;
+
+			}
+		}
+
+		&:hover  {
+			.icon, .title {
+					border-color: color.$main3-5;
+					color: color.$main3-5;
+					background-color: color.$background;
+					cursor: default;
+			}
+		}
+	}
+
 }

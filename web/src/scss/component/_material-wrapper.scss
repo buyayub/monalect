@@ -17,8 +17,8 @@
 		}
 	}
 
-	&:hover .mn-c-material-section-add, 
-	&:hover .mn-c-material-add, 
+	&:hover .mn-c-material-section-add:not(.mn-is-inactive), 
+	&:hover .mn-c-material-add:not(.mn-is-inactive), 
 	{
 		.icon, .title {
 			transition: color 0.1s, border-color 0.1s;

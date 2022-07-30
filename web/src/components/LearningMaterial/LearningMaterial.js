@@ -1,10 +1,10 @@
 import { FiBook, FiFileText, FiX} from 'react-icons/fi';
 import IconButton from 'src/components/IconButton';
 
-const LearningMaterial = ({className="", title="Untitled", pages=0, type="textbook", handleDelete} ) => {
+const LearningMaterial = ({className="", title="Untitled", pages=0, type="textbook", handleDelete, onClick} ) => {
   return (
-    <div className={"mn-c-learning-material " + className} >
-	    <div className="main handle">
+    <div className={"mn-c-learning-material " + className}>
+	    <div className="main handle" onClick={onClick}>
 		    <div className="icon">
 			    {type == "article" ? <FiFileText /> : ""} 
 			    {type == "textbook" ? <FiBook /> : ""} 
