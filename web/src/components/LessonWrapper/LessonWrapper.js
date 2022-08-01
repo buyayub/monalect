@@ -37,13 +37,12 @@ const LessonNode = ({
 					let sectionTitle = ''
 					let startPage = 0
 					let endPage = 0
-					let display = null
 
 					// Check if the section exists, and isn't an article. If it goes through, then assign values to variables.
 					if (materials != null) {
 						if (materials[section.materialId].type != 'article') {
 							if (materials[section.materialId].sections.length > 0) {
-								display = materials[section.materialId].sections[section.id]
+								let display = materials[section.materialId].sections[section.sectionId]
 								sectionTitle = display.title
 								startPage = display.start
 								endPage = display.end

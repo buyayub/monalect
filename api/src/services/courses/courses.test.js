@@ -1,9 +1,9 @@
 import {
-  courses,
-  course,
-  createCourse,
-  updateCourse,
-  deleteCourse,
+	courses,
+	course,
+	createCourse,
+	updateCourse,
+	deleteCourse,
 } from './courses'
 
 // Generated boilerplate tests do not account for all circumstances
@@ -13,41 +13,41 @@ import {
 // https://redwoodjs.com/docs/testing#jest-expect-type-considerations
 
 describe('courses', () => {
-  scenario('returns all courses', async (scenario) => {
-    const result = await courses()
+	scenario('returns all courses', async (scenario) => {
+		const result = await courses()
 
-    expect(result.length).toEqual(Object.keys(scenario.course).length)
-  })
+		expect(result.length).toEqual(Object.keys(scenario.course).length)
+	})
 
-  scenario('returns a single course', async (scenario) => {
-    const result = await course({ id: scenario.course.one.id })
+	scenario('returns a single course', async (scenario) => {
+		const result = await course({ id: scenario.course.one.id })
 
-    expect(result).toEqual(scenario.course.one)
-  })
+		expect(result).toEqual(scenario.course.one)
+	})
 
-  scenario('creates a course', async (scenario) => {
-    const result = await createCourse({
-      input: { title: 'String', userId: scenario.course.two.userId },
-    })
+	scenario('creates a course', async (scenario) => {
+		const result = await createCourse({
+			input: { userId: scenario.course.two.userId, title: 'String' },
+		})
 
-    expect(result.title).toEqual('String')
-    expect(result.userId).toEqual(scenario.course.two.userId)
-  })
+		expect(result.userId).toEqual(scenario.course.two.userId)
+		expect(result.title).toEqual('String')
+	})
 
-  scenario('updates a course', async (scenario) => {
-    const original = await course({ id: scenario.course.one.id })
-    const result = await updateCourse({
-      id: original.id,
-      input: { title: 'String2' },
-    })
+	scenario('updates a course', async (scenario) => {
+		const original = await course({ id: scenario.course.one.id })
+		const result = await updateCourse({
+			id: original.id,
+			input: { title: 'String2' },
+		})
 
-    expect(result.title).toEqual('String2')
-  })
+		expect(result.title).toEqual('String2')
+	})
 
-  scenario('deletes a course', async (scenario) => {
-    const original = await deleteCourse({ id: scenario.course.one.id })
-    const result = await course({ id: original.id })
+	scenario('deletes a course', async (scenario) => {
+		const original = await deleteCourse({ id: scenario.course.one.id })
+		const result = await course({ id: original.id })
 
-    expect(result).toEqual(null)
-  })
+		expect(result).toEqual(null)
+	})
 })

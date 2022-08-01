@@ -9,7 +9,8 @@ const TextInput = ({
 	minlength,
 	maxlength,
 	pattern,
-	type="text"
+	type="text",
+	onChange
 }) => {
 return (
         
@@ -24,6 +25,7 @@ return (
 		pattern={pattern}
 		required={required}
 		inputMode={inputmode}
+			onChange={onChange}
 	  ></input>
 		{description != null && <p> {description} </p>}
       </div>

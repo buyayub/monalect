@@ -6,8 +6,9 @@ const SectionForm = ({cancel, addSection, sectionRoot}) => {
 		e.preventDefault()
 		const section = {
 			title: e.target[0].value,
-			start: e.target[1].value,
-			end: e.target[2].value
+			start: parseInt(e.target[1].value),
+			end: parseInt(e.target[2].value),
+			id: null
 		}
 
 		addSection(section, sectionRoot);

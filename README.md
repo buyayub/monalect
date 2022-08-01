@@ -28,18 +28,25 @@ When the first version comes out, I'll start taking the features more seriously.
 
 I don't use a linter, and I appropriately suffer for it. There are also some design inefficiencies, quite a bit of the styling is repeated, the components can be simplified, and less specialized.
 
-I'm in the middle of writing the first working version of the app, so I can't care for it, but it needs to be done soon after before I regret it.
+It will be the most horrendous spaggheti code you've ever seen., but I'm in the middle of writing the first working version of the app, so I can't care for it. It does need to be done before I regret it, but I'll do it after I build a MVP.
 
 + [ ] Outline new component structure
 + [ ] Implement structure w/ SCSS
 + [ ] Standardize component names
 + [ ] Standardize function and variable names
  
+#### Stuff I thought of while programming
+
++ [ ] move gql queries into a shared file
++ [ ] change plural names (ex. lessons) to 'all' (ex. allLesson) and keep everything singular so I stop making typos and confusing myself
++ [ ] switch to object parameters, so arguments can be order agnostic
+
 ### Polishing 
 
 + [ ] Add CSS transitions for smoother UI
 + [ ] Make personally designed dropdown menu, instead of the browser provided one.
 + [ ] Ensure important delete actions have confirmation prompts.
++ [ ] Frontend Validation for more soft things like textbook ISBN and what not
 
 ### Immediate Future Features
 
@@ -47,6 +54,8 @@ I'm avoiding thinking long term on this thing. These are just the immediate feat
 
 + [ ] Drag & Drop functionality 
 + [ ] Import & Export functionality
++ [ ] Ditch the Apollo Client, create my own graphql library that isn't insane.
+
 
 ## Thank Yous
 

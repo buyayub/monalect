@@ -29,7 +29,8 @@ const LearningMaterialForm = ({cancel, addMaterial}) => {
 				isbn: identifier,
 				pages: pages,
 				offset: offset,
-				sections: []
+				sections: [],
+				id: null
 			}
 			addMaterial(textbook);
 		}
@@ -40,7 +41,8 @@ const LearningMaterialForm = ({cancel, addMaterial}) => {
 				doi: identifier,
 				author: author,
 				pages: pages,
-				offset: offset
+				offset: offset,
+				id: null
 			}
 			addMaterial(article);
 		}

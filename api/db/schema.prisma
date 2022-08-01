@@ -17,27 +17,53 @@ model User {
 	resetToken	String?
 	resetTokenExpiresAt DateTime?
 	courses		Course[]
+	lessons		Lesson[]
+	textbooks	Textbook[]
+	textbookSections	TextbookSection[]
+	articles	Article[]
+	questions	Question[]	
+	answers		Answer[]
+	choices		Choice[]
+	goals		Goal[]
+	notebookPages NotebookPage[]
 }
 
 model Course {
 	id		Int	@id @default(autoincrement())
-	title		String
-	createdAt 	DateTime 	@default(now())
 	user		User	@relation(fields: [userId], references: [id])
 	userId		Int
+	title		String
+	createdAt 	DateTime 	@default(now())
+	lessons		Lesson[]
 	textbooks 	Textbook[]
 	articles	Article[]
 	goals		Goal[]
 }
 
+model Lesson {
+	id			Int	@id @default(autoincrement())
+	user		User	@relation(fields: [userId], references: [id])
+	userId		Int
+	course 		Course @relation(fields: [courseId], references: [id])
+	courseId 	Int
+	title		String	@default("Untitled")
+	notebookPages 	NotebookPage[]
+	sections 	SectionOnLesson[]
+	article		ArticleOnLesson[]
+		
+}
+
 model Textbook {
 	id		Int 	@id @default(autoincrement())
+	user		User	@relation(fields: [userId], references: [id])
+	userId		Int
 	title		String	@default("Untitled")
 	author		String?
 	pages		Int?
 	pageOffset	Int?	
 	isbn		String?	
-	url		String?
+	uploaded	Boolean	
+	url			String?
 	course 		Course 	@relation(fields: [courseId], references: [id])
 	courseId 	Int
 	sections	TextbookSection[]
@@ -45,40 +71,53 @@ model Textbook {
 
 model TextbookSection {
 	id		Int	@id @default(autoincrement())
+	user		User	@relation(fields: [userId], references: [id])
+	userId		Int
 	title		String	@default("Untitled")
 	start		Int
-	end		Int
-	lesson 		Lesson? @relation(fields: [lessonId], references: [id])
-	lessonId 	Int?
+	end			Int
+	lessons		SectionOnLesson[]
 	textbook 	Textbook @relation(fields: [textbookId], references: [id])
 	textbookId 	Int
 }
 
 model Article {
 	id		Int 	@id @default(autoincrement())
+	user		User	@relation(fields: [userId], references: [id])
+	userId		Int
 	title		String	@default("Untitled")
 	author		String?
 	pages		Int?
 	pageOffset	Int?	
 	doi 		String?	
 	uploaded	Boolean
-	url		String?
+	url			String?
 	course 		Course 	@relation(fields: [courseId], references: [id])
 	courseId 	Int
-	lesson 		Lesson? @relation(fields: [lessonId], references: [id])
-	lessonId 	Int?
+	lessons		ArticleOnLesson[]
 }
 
-model Lesson {
-	id		Int	@id @default(autoincrement())
-	title		String	@default("Untitled")
-	articles	Article[]
-	sections	TextbookSection[]
-	notebookPages 	NotebookPage[]
+
+model SectionOnLesson {
+	id			Int 	@id @default(autoincrement())
+	lesson 		Lesson @relation(fields: [lessonId], references: [id])
+	lessonId 	Int
+	section  	TextbookSection @relation(fields: [sectionId], references: [id])
+	sectionId 	Int
+}
+
+model ArticleOnLesson {
+	id			Int 	@id @default(autoincrement())
+	lesson 		Lesson @relation(fields: [lessonId], references: [id])
+	lessonId 	Int
+	article 	Article @relation(fields: [articleId], references: [id])
+	articleId 	Int
 }
 
 model Question {
 	id 		Int 	@id @default(autoincrement())	
+	user		User	@relation(fields: [userId], references: [id])
+	userId		Int
 	question	String
 	multiple	Boolean
 	answers 	Answer[]
@@ -87,6 +126,8 @@ model Question {
 
 model Answer {
 	id 		Int 	@id @default(autoincrement())	
+	user		User	@relation(fields: [userId], references: [id])
+	userId		Int
 	answer		String
 	question 	Question @relation(fields: [questionId], references: [id])
 	questionId 	Int
@@ -94,6 +135,8 @@ model Answer {
 
 model Choice {
 	id 		Int 	@id @default(autoincrement())	
+	user		User	@relation(fields: [userId], references: [id])
+	userId		Int
 	choice 		String
 	question 	Question @relation(fields: [questionId], references: [id])
 	questionId 	Int
@@ -101,6 +144,8 @@ model Choice {
 
 model Goal {
 	id 		Int 	@id @default(autoincrement())	
+	user		User	@relation(fields: [userId], references: [id])
+	userId		Int
 	variable	String
 	metric 		Int
 	goal		Int
@@ -110,6 +155,8 @@ model Goal {
 
 model NotebookPage {
 	id		Int @id @default(autoincrement())
+	user		User	@relation(fields: [userId], references: [id])
+	userId		Int
 	page 		Int 
 	content		String?
 	lesson 		Lesson @relation(fields: [lessonId], references: [id])

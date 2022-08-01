@@ -6,7 +6,8 @@ const LessonForm = ({cancel, addLesson}) => {
 		e.preventDefault()
 		const lesson = {
 			title: e.target[0].value,
-			sections: []
+			sections: [],
+			id: null
 		}
 
 		addLesson(lesson);

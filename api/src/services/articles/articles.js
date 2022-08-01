@@ -1,37 +1,39 @@
 import { db } from 'src/lib/db'
 
 export const articles = () => {
-  return db.article.findMany()
+	return db.article.findMany()
 }
 
 export const article = ({ id }) => {
-  return db.article.findUnique({
-    where: { id },
-  })
+	return db.article.findUnique({
+		where: { id },
+	})
 }
 
 export const createArticle = ({ input }) => {
-  return db.article.create({
-    data: input,
-  })
+	return db.article.create({
+		data: input,
+	})
 }
 
 export const updateArticle = ({ id, input }) => {
-  return db.article.update({
-    data: input,
-    where: { id },
-  })
+	return db.article.update({
+		data: input,
+		where: { id },
+	})
 }
 
 export const deleteArticle = ({ id }) => {
-  return db.article.delete({
-    where: { id },
-  })
+	return db.article.delete({
+		where: { id },
+	})
 }
 
 export const Article = {
-  course: (_obj, { root }) =>
-    db.article.findUnique({ where: { id: root.id } }).course(),
-  lesson: (_obj, { root }) =>
-    db.article.findUnique({ where: { id: root.id } }).lesson(),
+	user: (_obj, { root }) =>
+		db.article.findUnique({ where: { id: root.id } }).user(),
+	course: (_obj, { root }) =>
+		db.article.findUnique({ where: { id: root.id } }).course(),
+	lessons: (_obj, { root }) =>
+		db.article.findUnique({ where: { id: root.id } }).lessons(),
 }
