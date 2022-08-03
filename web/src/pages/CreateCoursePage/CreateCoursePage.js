@@ -19,21 +19,21 @@ const mockMaterials = [
 	{
 		type: 'textbook',
 		title: 'Proof of Mathematics',
-		isbn: '9780989472128',
+		localId: 1,
+		identifier: '9780989472128',
 		author: 'Richard Hammack',
 		pages: 315,
 		offset: 12,
 		sections: [
 			{
 				title: 'Introduction',
-				id: null,
-				lesson: null,
+				localId: 2,
 				start: 1,
 				end: 16,
 			},
 			{
 				title: 'Set Theory',
-				id: null,
+				localId: 3,
 				start: 42,
 				end: 62,
 			},
@@ -42,7 +42,8 @@ const mockMaterials = [
 	{
 		type: 'article',
 		title: 'Summation',
-		doi: 'https://doi.org/10.1016/S0747-7171(85)80038-9',
+		localId: 4,
+		identifier: 'https://doi.org/10.1016/S0747-7171(85)80038-9',
 		author: 'Anonymous',
 		offset: 0,
 		pages: 14,
@@ -52,71 +53,30 @@ const mockMaterials = [
 const mockLessons = [
 	{
 		title: 'Intro to Mathematical Logic',
-		id: null,
+		localId: 5,
 		sections: [
 			{
 				type: 'section',
 				materialId: 0,
 				sectionId: 0,
-				id: null,
 			},
 			{
 				type: 'article',
 				materialId: 1,
-				id: null,
 			},
 		],
 	},
 	{
 		title: 'Set Theory',
-		id: null,
+		localId: 6,
 		sections: [],
 	},
 ]
 
-const CREATE_COURSE = gql`
-	mutation CreateCourseMutation($input: CreateCourseInput!) {
-		createCourse(input: $input) {
+const CREATE_BATCH = gql`
+	mutation CreateBatchCourseMutation($input: CreateBatchCourseInput!) {
+		createBatchCourse(input: $input) {
 			id
-		}
-	}
-`
-
-const CREATE_LESSON = gql`
-	mutation CreateLessonMutation($input: CreateLessonInput!) {
-		createLesson(input: $input) {
-			id
-		}
-	}
-`
-
-const CREATE_TEXTBOOK = gql`
-	mutation CreateTextbookMutation($input: CreateTextbookInput!) {
-		createTextbook(input: $input) {
-			id
-		}
-	}
-`
-const CREATE_TEXTBOOK_SECTION = gql`
-	mutation CreateTextbookSectionMutation($input: CreateTextbookSectionInput!) {
-		createTextbookSection(input: $input) {
-			id
-		}
-	}
-`
-const CREATE_ARTICLE = gql`
-	mutation CreateArticleMutation($input: CreateArticleInput!) {
-		createArticle(input: $input) {
-			id
-		}
-	}
-`
-
-const CREATE_SECTION_ON_LESSON = gql`
-	mutation CreateSectionOnLessonMutation($input: CreateSectionOnLessonInput!) {
-		createSectionOnLesson(input: $input) {
-			lessonId
-			sectionId
 		}
 	}
 `
@@ -138,6 +98,7 @@ const CreateCoursePage = () => {
 	const [lessonRoot, setLessonRoot] = useState(0)
 
 	const [linkMode, setLinkMode] = useState(false)
+	const [identifier, setIdentifier] = useState(0)
 
 	const materialDelete = (id) => {
 		setMaterial(materials.filter((element, index) => index != id))
@@ -172,32 +133,30 @@ const CreateCoursePage = () => {
 	}
 
 	const linkSection = (lesson, sectionType, materialId, sectionId = null) => {
-		let lessonsCopy = lessons
 
+		let lessonsCopy = lessons
 		if (sectionType == 'section') {
-			for (const section of lessons[lesson].sections) {
-				if (section.materialId == materialId && section.id == sectionId) {
+			for (const section of lessons[lesson].material) {
+				if (section.materialId == materialId && section.sectionId == sectionId) {
 					return null
 				}
 			}
 
-			lessonsCopy[lesson].sections.push({
+			lessonsCopy[lesson].material.push({
 				type: 'section',
 				materialId: materialId,
 				sectionId: sectionId,
-				id: null
 			})
 		} else if (sectionType == 'article') {
-			for (const section of lessons[lesson].sections) {
-				if (section.type == sectionType && section.materialId == materialId) {
+			for (const section of lessons[lesson].material) {
+				if (section.materialId == materialId) {
 					return null
 				}
 			}
 
-			lessonsCopy[lesson].sections.push({
+			lessonsCopy[lesson].material.push({
 				type: 'article',
 				materialId: materialId,
-				id: null
 			})
 		}
 		setLessons([...lessonsCopy])
@@ -205,182 +164,48 @@ const CreateCoursePage = () => {
 
 	const unlinkSection = (lessonIndex, i) => {
 		let lessonsCopy = lessons
-		lessonsCopy[lessonIndex].sections = lessonsCopy[
+		lessonsCopy[lessonIndex].material = lessonsCopy[
 			lessonIndex
-		].sections.filter((element, index) => index != i)
+		].material.filter((element, index) => index != i)
 
 		// recreate the array so react knows to re-render
 		setLessons([...lessonsCopy])
 	}
 
-	/* --------------- */
-	/* API INTERACTION */
-	/* --------------- */
+	const [createBatch] = useMutation(CREATE_BATCH)
 
-	// these are all async, so we await later when submitting a course
-	const [createCourse] = useMutation(CREATE_COURSE)
-	const [createLesson] = useMutation(CREATE_LESSON)
-	const [createTextbook] = useMutation(CREATE_TEXTBOOK)
-	const [createTextbookSection] = useMutation(CREATE_TEXTBOOK_SECTION)
-	const [createArticle] = useMutation(CREATE_ARTICLE)
-	const [createSectionOnLesson] = useMutation(CREATE_SECTION_ON_LESSON)
+	const submitCourse = (courseTitle, courseMaterials, courseLessons) => {
+		//We have to translate all the ids in the lesson material from their location in the array, to their local identifiers
+		// We have to deepcopy here, so it doesn't overwrite the actual lessons state
+		let linkedLessons = JSON.parse(JSON.stringify(lessons))
 
-	const submitCourse = async () => {
-		//create course, then set course id
-		createCourse({
-			variables: { input: { title: title, userId: currentUser.id } },
-		}).then((response) => {
-			const newId = response.data.createCourse.id
-			setCourseId(newId)
-		})
-
-		await submitTextbook(materials[0].title, 0);
-		await submitTextbookSection(
-				materials[0].sections[0].title, 
-				materials[0].sections[0].start,
-				materials[0].sections[0].end,
-				materials[0].id,
-				0,
-				0
-		)
-		await linkSectionLesson(lessons[0].id, materials[0].sections[0].id, 0, 0)
-		console.log(lessons);
-		console.log(material);
-	}
-
-	useEffect(() => {
-		submitLesson(lessons[0].title, 0);
-	}, [courseId])
-
-	useEffect(() => {
-		submitTextbook(materials[0].title, 0);
-	}, [lessons.id])
-
-	useEffect(() => {
-		submitTextbook(materials[0].title, 0);
-	}, [lessons])
-
-	const submitLesson = async (lessonTitle, lessonId) => {
-		//create lesson, and update the id
-
-		await createLesson({
-			variables: {
-				input: {
-					title: lessonTitle,
-					courseId: courseId,
-					userId: currentUser.id,
-				},
-			},
-		}).then((response) => {
-			const newId = response.data.createLesson.id
-			let lessonsCopy = lessons
-			lessonsCopy[lessonId].id = newId
-			setLessons([...lessonsCopy])
-		})
-	}
-
-	const submitTextbook = async (
-		textbookTitle,
-		materialId,
-		isbn = null,
-		author = null,
-		pages = null,
-		pageOffset = null
-	) => {
-		//create textbook, and update the id
-		//i'd use rest parameters but screw it
-
-		let input = {
-			title: textbookTitle,
-			courseId: courseId,
-			userId: currentUser.id,
-		}
-
-		if (isbn) {
-			input.isbn = isbn
-		}
-		if (author) {
-			input.author = author
-		}
-		if (pages) {
-			input.pages = pages
-		}
-		if (pageOffset) {
-			input.pageOffset = pageOffset
-		}
-
-		createTextbook({
-			variables: { input: input },
-		}).then((response) => {
-			const newId = response.data.createTextbook.id
-			let materialsCopy = materials
-			materialsCopy[materialId].id = newId
-			setMaterial([...materialsCopy])
-		})
-	}
-
-	const submitTextbookSection = async (
-		sectionTitle,
-		sectionStart,
-		sectionEnd,
-		textbookId,
-		materialId,
-		sectionId
-	) => {
-		createTextbookSection({
-			variables: {
-				input: {
-					userId: currentUser.id,
-					title: sectionTitle,
-					start: sectionStart,
-					end: sectionEnd,
-					textbookId: textbookId,
-				},
-			},
-		}).then((response) => {
-			const newId = response.data.createTextbookSection.id
-			let materialsCopy = materials
-			materialsCopy[materialId].sections[sectionId].id = newId
-			setMaterial([...materialsCopy])
-		})
-	}
-
-	const submitArticle = async (articleTitle, materialId, uploaded = false) => {
-		createArticle({
-			variables: {
-				input: {
-					userId: currentUser.id,
-					title: articleTitle,
-					uploaded: uploaded,
-					courseId: courseId,
-				},
-			},
-		})
-		.then((response) => {
-			const newId = response.data.createArticle.id	
-			let materialsCopy = materials
-			materialsCopy[materialId].id = newId
-			setMaterial([...materialsCopy])
-		})
-	}
-	
-	const linkSectionLesson = async (lessonId, sectionId, frontLessonId, frontSectionId) => {
-		createSectionOnLesson({
-				variables: {
-					input: {
-						lessonId: lessonId,
-						sectionId: sectionId
+		for (let lesson of linkedLessons) {
+			let links = []
+			if (lesson.material.length > 0) {
+				for (const reference of lesson.material) {
+					if (reference.type == 'section') {
+						links.push(
+							materials[reference.materialId].sections[reference.sectionId]
+								.localId
+						)
+					} else if (reference.type == 'article') {
+						links.push(materials[reference.materialId].localId)
 					}
 				}
-		})
-		.then((response) => {
-			const newId = response.data.createSectionOnLesson.id	
-			let lessonsCopy = lessons
-			lessonsCopy[frontLessonId].sections[frontSectionId].id = newId
-			setLessons([...lessonsCopy])
-		})
+			}
+			lesson.material = links
+		}
+
+		let input = {
+			userId: currentUser.id,
+			title: title,
+			material: materials,
+			lesson: linkedLessons,
+		}
+		createBatch({ variables: { input: input } }).then((response) =>
+			console.log(response)
+		)
 	}
-	
 
 	return (
 		<>
@@ -426,6 +251,8 @@ const CreateCoursePage = () => {
 						setMaterialForm(false)
 					}}
 					addMaterial={addMaterial}
+					identifier={identifier}
+					setIdentifier={setIdentifier}
 				/>
 			</Modal>
 			<Modal show={showSectionForm} changeState={() => setSectionForm(false)}>
@@ -433,10 +260,17 @@ const CreateCoursePage = () => {
 					cancel={() => setSectionForm(false)}
 					addSection={addSection}
 					sectionRoot={sectionRoot}
+					identifier={identifier}
+					setIdentifier={setIdentifier}
 				/>
 			</Modal>
 			<Modal show={showLessonForm} changeState={() => setLessonForm(false)}>
-				<LessonForm cancel={() => setLessonForm(false)} addLesson={addLesson} />
+				<LessonForm
+					cancel={() => setLessonForm(false)}
+					addLesson={addLesson}
+					identifier={identifier}
+					setIdentifier={setIdentifier}
+				/>
 			</Modal>
 		</>
 	)

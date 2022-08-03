@@ -1,16 +1,16 @@
 import Button from 'src/components/Button'
 import TextInput from 'src/components/TextInput'
 
-const LessonForm = ({cancel, addLesson}) => {
+const LessonForm = ({cancel, addLesson, identifier, setIdentifier}) => {
 	const onSubmit = (e) => {
 		e.preventDefault()
 		const lesson = {
 			title: e.target[0].value,
-			sections: [],
-			id: null
+			material: [],
+			localId: identifier
 		}
-
 		addLesson(lesson);
+		setIdentifier(identifier + 1);
 		e.target.reset();
 		cancel();
 	};

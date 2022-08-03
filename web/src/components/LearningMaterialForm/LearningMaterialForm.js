@@ -4,7 +4,7 @@ import Dropdown from 'src/components/Dropdown';
 import Button from 'src/components/Button';
 import {useState} from 'react';
 
-const LearningMaterialForm = ({cancel, addMaterial}) => {
+const LearningMaterialForm = ({cancel, addMaterial, identifier, setIdentifier}) => {
 	const [fileName, fileNameSet] = useState("Browse...");
 	const fileChange = (e) => {
 		const arr = e.target.value.split('\\');
@@ -14,39 +14,25 @@ const LearningMaterialForm = ({cancel, addMaterial}) => {
 	const onSubmit = (e) => {
 		e.preventDefault();
 		
-		const type = e.target[0].value;
-		const title = e.target[1].value;
-		const author = e.target[2].value;
-		const identifier = e.target[3].value;
-		const pages = e.target[5].value;
-		const offset = e.target[6].value;
-
-		if (type == "textbook") {
-			const textbook = {
-				type: "textbook",
+		const type = e.target[0].value
+		const title = e.target[1].value
+		const author = e.target[2].value
+		const standardId = e.target[3].value
+		const pages = parseInt(e.target[5].value)
+		const offset = parseInt(e.target[6].value)
+		
+		const textbook = {
+				type: type,
 				title: title,
 				author: author,
-				isbn: identifier,
-				pages: pages,
+				identifier: standardId,
+				pages: parseInt(pages),
 				offset: offset,
 				sections: [],
-				id: null
+				localId: identifier 
 			}
-			addMaterial(textbook);
-		}
-		else if (type == "article") {
-			const article = {
-				type: "article",
-				title: title,
-				doi: identifier,
-				author: author,
-				pages: pages,
-				offset: offset,
-				id: null
-			}
-			addMaterial(article);
-		}
-
+		addMaterial(textbook);
+		setIdentifier(identifier + 1);
 		e.target.reset();
 		cancel();
 	}
