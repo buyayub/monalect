@@ -34,10 +34,14 @@ model Course {
 	userId		Int
 	title		String
 	createdAt 	DateTime 	@default(now())
+	mark		Int @default(0)
+	active 		Boolean @default(true)
 	lessons		Lesson[]
+	notebookPages 	NotebookPage[]
 	textbooks 	Textbook[]
 	articles	Article[]
 	goals		Goal[]
+	questions	Question[]	
 }
 
 model Lesson {
@@ -47,10 +51,11 @@ model Lesson {
 	course 		Course @relation(fields: [courseId], references: [id])
 	courseId 	Int
 	title		String	@default("Untitled")
+	index		Int?
 	notebookPages 	NotebookPage[]
 	sections 	SectionOnLesson[]
-	article		ArticleOnLesson[]
-		
+	articles		ArticleOnLesson[]
+	questions	Question[]	
 }
 
 model Textbook {
@@ -58,11 +63,11 @@ model Textbook {
 	user		User	@relation(fields: [userId], references: [id])
 	userId		Int
 	title		String	@default("Untitled")
-	author		String?
-	pages		Int?
+	author		String? 
+	pages		Int? 	@default(0)
 	pageOffset	Int?	
 	isbn		String?	
-	uploaded	Boolean	
+	uploaded	Boolean	@default(false)
 	url			String?
 	course 		Course 	@relation(fields: [courseId], references: [id])
 	courseId 	Int
@@ -122,6 +127,10 @@ model Question {
 	multiple	Boolean
 	answers 	Answer[]
 	choices		Choice[]
+	lesson 		Lesson @relation(fields: [lessonId], references: [id])
+	lessonId 	Int
+	course 		Course @relation(fields: [courseId], references: [id])
+	courseId 	Int
 }
 
 model Answer {
@@ -146,11 +155,13 @@ model Goal {
 	id 		Int 	@id @default(autoincrement())	
 	user		User	@relation(fields: [userId], references: [id])
 	userId		Int
-	variable	String
-	metric 		Int
-	goal		Int
 	course 		Course 	@relation(fields: [courseId], references: [id])
 	courseId 	Int
+	completed 	Boolean
+	type		String
+	goal		Int
+	lessonId 	Int
+	allLessons	Boolean
 }
 
 model NotebookPage {
@@ -158,8 +169,11 @@ model NotebookPage {
 	user		User	@relation(fields: [userId], references: [id])
 	userId		Int
 	page 		Int 
+	words		Int @default(0)
 	content		String?
 	lesson 		Lesson @relation(fields: [lessonId], references: [id])
 	lessonId 	Int
+	course 		Course @relation(fields: [courseId], references: [id])
+	courseId 	Int
 }
 

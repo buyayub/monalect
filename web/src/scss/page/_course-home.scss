@@ -1,0 +1,23 @@
+@use "../abstract/sizing";
+@use "../abstract/color";
+
+#mn-i-course-title {
+	
+	.course-stats {
+		display: flex;
+		flex-direction: row;
+		gap: sizing.$main;
+
+		svg {
+			width: sizing.$main * 1.5;
+			height: sizing.$main * 1.5;
+			color: color.$main2;
+		}
+
+		&> span {
+			display: flex;
+			flex-direction: row;
+			gap: sizing.$main * 0.5;
+		}
+	}
+}

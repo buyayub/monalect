@@ -1,7 +1,6 @@
 import { db } from 'src/lib/db'
 
 export const createBatchCourse = async ({ input }) => {
-	console.log(JSON.stringify(input, null, 4))
 	let record = []
 
 	const course = await db.course.create({
@@ -13,14 +12,13 @@ export const createBatchCourse = async ({ input }) => {
 
 	for (material of input.material) {
 		if (material.type == 'textbook') {
-			console.log('textbook created')
 			const textbook = await db.textbook.create({
 				data: {
 					userId: input.userId,
 					courseId: course.id,
 					title: material.title,
 					isbn: material.identifier,
-					//uploaded: false,
+					uploaded: false,
 					pages: material.pages,
 					author: material.author,
 				},
@@ -58,7 +56,7 @@ export const createBatchCourse = async ({ input }) => {
 		}
 	}
 
-	// Create lessons
+	// Create lessons and notebookPages
 	
 	for (lesson of input.lesson)
 	{
@@ -66,6 +64,7 @@ export const createBatchCourse = async ({ input }) => {
 			data: {
 				userId: input.userId,
 				courseId: course.id,
+				index: lesson.index,
 				title: lesson.title
 			}
 		})
@@ -76,6 +75,7 @@ export const createBatchCourse = async ({ input }) => {
 
 	// Create many-to-many relations
 	// We first check the type of the relation, if it's an article, we create an ArticleOnLesson object, otherwise SectionOnLesson
+	// Lots of for loops to optimize later
 
 	const findType = (material, localId) => {
 		for (const material of input.material) {

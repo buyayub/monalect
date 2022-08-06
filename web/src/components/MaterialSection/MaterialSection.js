@@ -25,8 +25,7 @@ const MaterialSection = ({
 			</div>
 			<IconButton className="mn-is-danger mn-is-small" onClick={handleDelete}>
 				{' '}
-				<FiX />
-				{' '}
+				<FiX />{' '}
 			</IconButton>
 		</div>
 	)

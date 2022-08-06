@@ -11,10 +11,21 @@ export const schema = gql`
 		goals: [Goal]!
 	}
 
-	type Query {
-		courses: [Course!]! @requireAuth
-		course(id: Int!): Course @requireAuth
+	type Card {
+		id: Int!
+		title: String!
+		notebookWords: Int
+		questionCount: Int!
+		mark: Int!
 	}
+
+	type Query {
+		courses(userId: Int!): [Course!]! @requireAuth
+		course(id: Int!): Course @requireAuth
+		cards(userId: Int!): [Card!]! @requireAuth
+		card(courseId: Int!): Card! @requireAuth
+	}
+
 
 	input CreateCourseInput {
 		userId: Int!

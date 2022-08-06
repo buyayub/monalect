@@ -11,6 +11,14 @@ export const schema = gql`
 		article: [ArticleOnLesson]!
 	}
 
+	type Display {
+		id: Int!
+		index: Int!
+		notebookPages: Int
+		questionCount: Int
+		mark: Int
+	}	
+
 	type Query {
 		lessons: [Lesson!]! @requireAuth
 		lesson(id: Int!): Lesson @requireAuth

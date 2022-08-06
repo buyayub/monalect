@@ -10,6 +10,68 @@ export const course = ({ id }) => {
 	})
 }
 
+export const cards = async ({ userId }) => {
+	let courseCards = await db.course.findMany({
+		where: {
+			userId: userId
+		},
+		select: {
+			id: true,
+			title: true,
+			mark: true
+	}})
+
+	for (const courseCard of courseCards) {
+		const notebookWords = await db.notebookPage.aggregate({
+			_sum : {
+				words: true
+			},
+			where: {
+				courseId: card.id
+			}
+		})
+
+		const questionCount = await db.question.count({
+			where: {
+				courseId: card.id
+			}
+		})
+
+		courseCard.notebookWords = notebookWords.words;
+		courseCard.questionCount = questionCount;
+	}
+	return courseCards;
+}
+
+export const card = async ({courseId}) => {
+	let courseCard = await db.course.findUnique({
+		where: {
+			id: courseId
+		},
+		select: {
+			id: true,
+			title: true,
+			mark: true
+	}})
+
+	courseCard.notebookWords = (await db.notebookPage.aggregate({
+			_sum : {
+				words: true
+			},
+			where: {
+				courseId: card.id
+		}
+	})).words
+
+		courseCard.questionCount = await db.question.count({
+			where: {
+				courseId: card.id
+			}
+		})
+
+	return courseCard
+}
+
 export const createCourse = ({ input }) => {
 	return db.course.create({
 		data: input,

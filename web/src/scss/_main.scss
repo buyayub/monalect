@@ -2,6 +2,7 @@
 @use "./base/core";
 
 @use "./abstract/typography";
+@use "./abstract/sizing";
 @use "./abstract/color";
 
 @use "./component/button";
@@ -21,8 +22,25 @@
 @use "./component/section-form";
 @use "./component/file-upload";
 @use "./component/modal";
+@use "./component/course-card";
+
+@use "./component/goal-display";
+@use "./component/lesson-display";
+
+@use "./page/course-home";
 
 body {
 	background-color: color.$background;
 	box-sizing: border-box;
 }
+h2 {
+	font-size: sizing.$fs-h2;
+	font-weight: 300;
+}
+
+h4 {
+	font-size: sizing.$fs-h4;
+	font-weight: 300;
+}
+
+

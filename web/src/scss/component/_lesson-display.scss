@@ -1,0 +1,11 @@
+@use "../abstract/sizing";
+@use "../abstract/color";
+
+.mn-c-lesson-display {
+	display: flex;
+	flex-direction: row;
+
+	.lesson-stats {
+		
+	}
+}

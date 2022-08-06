@@ -10,7 +10,7 @@ import Modal from 'src/components/Modal'
 
 import { bcMain } from 'src/shared/breadcrumbs'
 
-import { Link, routes } from '@redwoodjs/router'
+import { Link, routes, navigate } from '@redwoodjs/router'
 import { MetaTags, useMutation } from '@redwoodjs/web'
 import { useAuth } from '@redwoodjs/auth'
 import { useState } from 'react'
@@ -105,6 +105,7 @@ const CreateCoursePage = () => {
 	}
 
 	const sectionDelete = (materialId, id) => {
+		// remove material
 		let materialsCopy = materials
 		materialsCopy[materialId].sections = materialsCopy[
 			materialId
@@ -112,6 +113,31 @@ const CreateCoursePage = () => {
 
 		// recreate the array so react knows to re-render
 		setMaterial([...materialsCopy])
+
+		//remove section links
+		let lessonsCopy = lessons
+		let lessonIndex = 0
+		let materialIndex = 0
+
+		for (lesson of lessonsCopy) {
+			for (lessonMaterial of lesson.material) {
+				if (lessonMaterial.type == 'section') {
+					if (
+						lessonMaterial.materialId == materialId &&
+						lessonMaterial.sectionId == id
+					) {
+						unlinkSection(lessonIndex, materialIndex)
+					}
+				} else if (lessonMAterial.type == 'article') {
+					if (lessonMaterial.materialId == materialId) {
+						unlinkSection(lessonIndex, materialIndex)
+					}
+				}
+				materialIndex += 1
+			}
+			lessonIndex += 1
+			materialIndex = 0
+		}
 	}
 
 	const addMaterial = (material) => {
@@ -133,11 +159,13 @@ const CreateCoursePage = () => {
 	}
 
 	const linkSection = (lesson, sectionType, materialId, sectionId = null) => {
-
 		let lessonsCopy = lessons
 		if (sectionType == 'section') {
 			for (const section of lessons[lesson].material) {
-				if (section.materialId == materialId && section.sectionId == sectionId) {
+				if (
+					section.materialId == materialId &&
+					section.sectionId == sectionId
+				) {
 					return null
 				}
 			}
@@ -196,15 +224,25 @@ const CreateCoursePage = () => {
 			lesson.material = links
 		}
 
+		let index = 0
+
+		for (lesson of linkedLessons) {
+			lesson.index = index
+			index += 1
+		}
+
 		let input = {
 			userId: currentUser.id,
 			title: title,
 			material: materials,
 			lesson: linkedLessons,
 		}
-		createBatch({ variables: { input: input } }).then((response) =>
-			console.log(response)
-		)
+
+		createBatch({ variables: { input: input } }).then((response) => {
+			navigate(
+				routes.courseHome({ courseId: response.data.createBatchCourse.id })
+			)
+		})
 	}
 
 	return (

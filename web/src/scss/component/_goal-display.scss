@@ -1,0 +1,49 @@
+@use '../abstract/sizing';
+@use '../abstract/color';
+
+.mn-c-goal-display {
+	display: flex;
+	flex-direction: row;
+
+	color: color.$main1;
+
+	.progress-bar {
+		width: sizing.$main * 6;
+		height: sizing.$main * 2;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border: 1px solid color.$main3;
+	}
+
+	.main {
+		width: sizing.$main * 32;
+		height: sizing.$main * 2;
+		display: flex;
+		align-items: center;
+		justify-content: start;
+		padding: sizing.$main * 0.5;
+		border: 1px solid color.$main3;
+		margin-left: -1px;
+	}
+
+	progress {
+		height: sizing.$main;
+		width: sizing.$main * 5;
+		color: color.$main2;
+		border-color: color.$main2;
+		background-color: color.$background;
+
+		-webkit-appearance: none;
+		-moz-appearance: none;
+		appearance: none;
+
+		&::-moz-progress-bar {
+			background: color.$main2;
+		}
+
+		&::-webkit-progress-bar {
+			background: color.$main2;
+		}
+	}
+}

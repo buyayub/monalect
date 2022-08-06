@@ -1,0 +1,52 @@
+@use "../abstract/color";
+@use "../abstract/sizing";
+
+.mn-c-course-card-container
+{
+	display: flex;
+	flex-direction: row;	
+	flex-wrap: wrap;
+	margin: sizing.$main * 2;
+	width: sizing.$main * 38;
+	gap: sizing.$main;
+	overflow-wrap: break-word;
+
+
+	.mn-c-course-card {
+		padding: sizing.$main;
+		width: sizing.$main * 12;
+		height: sizing.$main * 12;
+		background-color: color.$background;
+		border: 1px solid color.$main2;
+		
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+
+		.bottom {
+			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
+			align-items: end;
+		}
+
+		.aggregates {
+			display: flex;
+			flex-direction: column;
+			gap: sizing.$main * 0.5;
+
+			&> * {
+				display: flex;
+				flex-direction: row;
+				gap: sizing.$main * 0.5;
+			}
+		}
+
+		&:hover {
+			cursor: pointer;
+			background-color: color.$main3-5;
+		}
+	}
+}
+
+
