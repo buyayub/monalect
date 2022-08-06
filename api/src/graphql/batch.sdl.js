@@ -20,6 +20,7 @@ export const schema = gql`
 
 	input BatchLesson {
 			title: String!
+			index: Int!
 			localId: Int!
 			material: [Int]
 	}

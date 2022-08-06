@@ -4,9 +4,11 @@ import { MetaTags } from '@redwoodjs/web'
 import { FiHelpCircle } from 'react-icons/fi'
 import { RiBook2Line } from 'react-icons/ri'
 import { useState } from 'react'
+import { useAuth } from '@redwoodjs/auth'
 
 import NavBar from 'src/components/NavBar'
 import CourseTitleCell from 'src/components/CourseTitleCell'
+import LessonDisplayCell from 'src/components/LessonDisplayCell'
 
 const CourseHomePage = ({
 	courseId,
@@ -15,6 +17,8 @@ const CourseHomePage = ({
 	questionCount,
 }) => {
 	bcMain.selected = '/monalect'
+
+	const { currentUser } = useAuth()
 
 	return (
 		<>
@@ -37,6 +41,7 @@ const CourseHomePage = ({
 			) : (
 				<CourseTitleCell courseId={parseInt(courseId)} />
 			)}
+			<LessonDisplayCell courseId={parseInt(courseId)} userId={currentUser.id}/>
 		</>
 	)
 }

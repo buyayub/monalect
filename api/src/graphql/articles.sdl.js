@@ -3,7 +3,7 @@ export const schema = gql`
 		id: Int!
 		user: User!
 		userId: Int!
-		title: String!
+		title: String
 		author: String
 		pages: Int
 		pageOffset: Int

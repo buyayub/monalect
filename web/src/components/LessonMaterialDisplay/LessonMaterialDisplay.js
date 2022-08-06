@@ -8,9 +8,12 @@ const LessonMaterialDisplay = ({ type, title, start, end }) => {
 			</div>
 			<div className="main">
 				<p>{title}</p>
-				<p>
+				{type == 'section' ? <p>
 					{start} - {end}
 				</p>
+				:
+						""
+				}
 			</div>
 		</div>
 	)

@@ -2,26 +2,41 @@ export const schema = gql`
 	type Lesson {
 		id: Int!
 		user: User!
+		sections: [TextbookSection]!
 		userId: Int!
 		course: Course!
 		courseId: Int!
+		index: Int
 		title: String!
+		notebookWords: Int
+		questionCount: Int
 		notebookPages: [NotebookPage]!
-		sections: [SectionOnLesson]!
-		article: [ArticleOnLesson]!
+		articles: [Article]!
+		mark: Int
 	}
 
-	type Display {
+
+	# I have absolutely no clue why this one works but Lesson doesn't. Not a single fucking clue. 
+	# It's a phantom bug, no matter how deep I searched I couldn't find a reason.
+	# Sign of the end times.
+	type LessonDisplay {
 		id: Int!
-		index: Int!
-		notebookPages: Int
+		user: User!
+		userId: Int!
+		course: Course!
+		courseId: Int!
+		index: Int
+		title: String!
+		notebookWords: Int
 		questionCount: Int
+		articles: [Article]!
+		sections: [TextbookSection]!
 		mark: Int
-	}	
+	}
 
 	type Query {
-		lessons: [Lesson!]! @requireAuth
-		lesson(id: Int!): Lesson @requireAuth
+		lessons(courseId:Int!, userId: Int!): [LessonDisplay!]! @requireAuth
+		lesson(userId: Int!, id: Int!): Lesson @requireAuth
 	}
 
 	input CreateLessonInput {

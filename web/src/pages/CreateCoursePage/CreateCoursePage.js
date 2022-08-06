@@ -226,7 +226,7 @@ const CreateCoursePage = () => {
 
 		let index = 0
 
-		for (lesson of linkedLessons) {
+		for (let lesson of linkedLessons) {
 			lesson.index = index
 			index += 1
 		}

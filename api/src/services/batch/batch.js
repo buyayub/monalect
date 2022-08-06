@@ -68,6 +68,16 @@ export const createBatchCourse = async ({ input }) => {
 				title: lesson.title
 			}
 		})
+		
+		await db.notebookPage.create({
+			data: {
+				page: 0,
+				words: 0,
+				lessonId: newLesson.id,
+				courseId: course.id,
+				userId: input.userId
+			}
+		})
 
 		record.push([lesson.localId, newLesson.id])
 	}
