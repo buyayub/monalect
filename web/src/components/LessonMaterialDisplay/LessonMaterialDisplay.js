@@ -7,7 +7,7 @@ const LessonMaterialDisplay = ({ type, title, start, end }) => {
 				{type == 'section' ? <FiBook /> : <FiFileText />}
 			</div>
 			<div className="main">
-				<h2>{title}</h2>
+				<p>{title}</p>
 				<p>
 					{start} - {end}
 				</p>

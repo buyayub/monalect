@@ -25,7 +25,7 @@ const LessonDisplay = ({
 				</div>
 			</div>
 			<div className="mark">
-				{mark}
+				{mark}%
 			</div>
 		</div>
 	)
