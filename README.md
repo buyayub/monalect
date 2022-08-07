@@ -40,6 +40,7 @@ It will be the most horrendous spaggheti code you've ever seen., but I'm in the 
 + [ ] move gql queries into a shared file
 + [ ] change plural names (ex. lessons) to 'all' (ex. allLesson) and keep everything singular so I stop making typos and confusing myself
 + [ ] switch to object parameters, so arguments can be order agnostic
++ [ ] I'm going to make goal generation use a seperate query, but in the future mix it in with the other initialization queries. In fact, mix all initialization queries into a single one and handle it that way.
 
 ### Polishing 
 
@@ -54,7 +55,7 @@ I'm avoiding thinking long term on this thing. These are just the immediate feat
 
 + [ ] Drag & Drop functionality 
 + [ ] Import & Export functionality
-+ [ ] Ditch the Apollo Client, create my own graphql library that isn't insane.
++ [ ] Faster, more lightweight PDF viewer
 
 
 ## Thank Yous

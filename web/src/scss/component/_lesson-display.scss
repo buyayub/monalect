@@ -13,8 +13,6 @@
 	flex-direction: row;
 	color: color.$main1;
 
-	width: sizing.$main * 38; 
-
 	.index {
 		@include container;
 

@@ -1,0 +1,7 @@
+@use "../abstract/sizing";
+@use "../abstract/color";
+
+.webviewer {
+	height: sizing.$main * 35;
+	width: sizing.$main * 40;
+}

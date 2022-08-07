@@ -21,20 +21,3 @@
 		}
 	}
 }
-
-
-.mn-c-lesson-display-container {
-	display: flex;
-	flex-direction: column;
-	gap: sizing.$main;
-
-	.material-container {
-		display: flex;
-		flex-direction: column;
-		gap: sizing.$main * 0.5;
-		margin-top: sizing.$main * 0.5;
-	}
-	.mn-c-lesson-material-display {
-		margin-left: sizing.$main * 2;
-	}
-}

@@ -13,18 +13,30 @@
     ]
   },
   "dependencies": {
+    "@babel/runtime": "^7.18.9",
+    "@emotion/react": "^11.10.0",
+    "@emotion/styled": "^11.10.0",
+    "@mui/material": "^5.9.3",
+    "@pdftron/pdfjs-express": "^8.7.0",
     "@redwoodjs/auth": "2.0.0",
     "@redwoodjs/forms": "2.0.0",
     "@redwoodjs/router": "2.0.0",
     "@redwoodjs/web": "2.0.0",
+    "bulma": "^0.9.4",
+    "bulma-helpers": "^0.4.2",
+    "material-design-icons": "^3.0.1",
+    "pdf-viewer-reactjs": "^2.2.3",
+    "pdfjs-dist": "^2.15.349",
     "prop-types": "15.8.1",
     "react": "17.0.2",
     "react-beautiful-dnd": "^13.1.0",
+    "react-doc-viewer": "^0.1.5",
     "react-dom": "17.0.2",
     "react-draggable": "^4.4.5",
     "react-draggable-list": "^4.0.4",
     "react-icons": "^4.4.0",
-    "react-modal": "^3.15.1"
+    "react-modal": "^3.15.1",
+    "react-pdf": "^5.7.2"
   },
   "devDependencies": {
     "sass": "^1.53.0",

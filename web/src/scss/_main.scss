@@ -29,6 +29,7 @@
 @use "./component/lesson-material-display";
 
 @use "./page/course-home";
+@use "./page/course-study";
 
 body {
 	background-color: color.$background;

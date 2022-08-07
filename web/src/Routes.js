@@ -22,7 +22,8 @@ const Routes = () => {
 			<Private unauthenticated="home">
 				<Route path="/monalect" page={MonalectPage} name="monalect" />
 				<Route path="/monalect/create" page={CreateCoursePage} name="createCourse" />
-				<Route path="/monalect/course/{courseId}" page={CourseHomePage} name="courseHome" />
+				<Route path="/monalect/{courseId}" page={CourseHomePage} name="courseHome" />
+				<Route path="/monalect/{courseId}/study" page={CourseStudyPage} name="study" />
 			</Private>
 			<Route notfound page={NotFoundPage} />
 		</Router>
