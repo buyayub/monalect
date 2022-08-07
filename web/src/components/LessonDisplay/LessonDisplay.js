@@ -6,10 +6,11 @@ const LessonDisplay = ({
 	title,
 	notebookWords,
 	questionCount,
-	mark,
+	mark=0,
+	onClick
 }) => {
 	return (
-		<div className="mn-c-lesson-display">
+		<div onClick={onClick} className="mn-c-lesson-display">
 			<div className="index">{index}</div>
 			<div className="main">
 				<p> {title} </p>

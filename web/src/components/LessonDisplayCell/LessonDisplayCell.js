@@ -1,5 +1,4 @@
-import LessonDisplay from 'src/components/LessonDisplay'
-import LessonMaterialDisplay from 'src/components/LessonMaterialDisplay'
+import LessonBlock from 'src/components/LessonBlock'
 
 export const QUERY = gql`
 	query FindLessonDisplayQuery($courseId: Int!, $userId: Int!) {
@@ -35,29 +34,7 @@ export const Success = ({ lessons }) => {
 		<div className="mn-c-lesson-display-container">
 			{lessons.map((lesson, i) => {
 				return (
-					<div className="lesson-block">
-					<LessonDisplay
-						index={lesson.index + 1}
-						title={lesson.title}
-						notebookWords={lesson.notebookWords}
-						questionCount={lesson.questionCount}
-					/>
-						<div className="material-container">
-							{ lesson.articles.map((article) => <LessonMaterialDisplay 
-								type="article"
-								title={article.title}
-							/>) }
-							{ lesson.sections.map((section) => 
-								<LessonMaterialDisplay
-								type="section"
-								title={section.title}
-								start={section.start}
-								end={section.end}
-								/>
-							)}
-						</div>
-					</div>
-					
+					<LessonBlock lesson={lesson} />
 				)
 			})}
 		</div>
