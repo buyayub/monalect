@@ -13,7 +13,6 @@ const MonalectPage = () => {
 	return (
 		<>
 			<MetaTags title="Monalect" description="Monalect page" />
-			<NavBar breadcrumbs={[bcMain]} />
 			<div>
 				<h2>Active</h2>
 				<Link to={routes.createCourse()}>

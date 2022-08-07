@@ -41,6 +41,7 @@ It will be the most horrendous spaggheti code you've ever seen., but I'm in the 
 + [ ] change plural names (ex. lessons) to 'all' (ex. allLesson) and keep everything singular so I stop making typos and confusing myself
 + [ ] switch to object parameters, so arguments can be order agnostic
 + [ ] I'm going to make goal generation use a seperate query, but in the future mix it in with the other initialization queries. In fact, mix all initialization queries into a single one and handle it that way.
++ [ ] use a layout for the header/navbar
 
 ### Polishing 
 

@@ -2,6 +2,56 @@
 @use "../abstract/color";
 
 .webviewer {
-	height: sizing.$main * 35;
-	width: sizing.$main * 40;
+	height: calc(100vh - (sizing.$main * 6));
+	width: 50vw;
+}
+
+.quill-page {
+	width: 45vw;
+	border: 1px solid color.$main2;
+}
+
+.ql-container {
+	min-height: sizing.$main * 4;
+	height: inherit !important;
+	overflow: visible;
+	p {
+		font-size: 16px;
+	}
+}	
+
+.ql-container, .ql-toolbar {
+	width: inherit !important;
+	border: none !important;
+}
+
+.ql-toolbar {
+	border-bottom: 1px solid color.$main3 !important;
+}
+
+.ql-list {
+	color: white !important;
+	background-color: black;
+}
+
+.mn-c-notebook-container {
+	display: flex;
+	flex-direction: column;
+	gap: sizing.$main * 3;
+	
+	.notebook-lesson {
+		h4 {
+			margin-bottom: sizing.$main * 0.5;
+		}	
+	}
+	
+	max-height: calc(100vh - (sizing.$main * 6));
+	overflow-y: scroll;
+	overflow-x: hidden;
+}
+
+main {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-evenly;
 }

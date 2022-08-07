@@ -248,7 +248,6 @@ const CreateCoursePage = () => {
 	return (
 		<>
 			<MetaTags title="CreateCourse" description="CreateCourse page" />
-			<NavBar breadcrumbs={[bcMain]} />
 			<TextInput
 				label="Title"
 				onChange={(e) => {

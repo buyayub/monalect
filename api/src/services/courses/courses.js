@@ -1,16 +1,9 @@
 import { db } from 'src/lib/db'
-
-export const courses = () => {
-	return db.course.findMany()
-}
-
-export const course = ({ id }) => {
-	return db.course.findUnique({
-		where: { id },
-	})
-}
+import { isOwner } from 'src/lib/auth'
 
 export const cards = async ({ userId }) => {
+	isOwner(userId)
+
 	let courseCards = await db.course.findMany({
 		where: {
 			userId: userId
@@ -46,13 +39,16 @@ export const cards = async ({ userId }) => {
 export const card = async ({courseId}) => {
 	let courseCard = await db.course.findUnique({
 		where: {
-			id: courseId
+			id: courseId,
 		},
 		select: {
 			id: true,
+			userId: true,
 			title: true,
 			mark: true
 	}})
+
+	isOwner(courseCard.userId)
 
 	courseCard.notebookWords = (await db.notebookPage.aggregate({
 			_sum : {
@@ -72,34 +68,3 @@ export const card = async ({courseId}) => {
 	return courseCard
 }
 
-export const createCourse = ({ input }) => {
-	return db.course.create({
-		data: input,
-	})
-}
-
-export const updateCourse = ({ id, input }) => {
-	return db.course.update({
-		data: input,
-		where: { id },
-	})
-}
-
-export const deleteCourse = ({ id }) => {
-	return db.course.delete({
-		where: { id },
-	})
-}
-
-export const Course = {
-	user: (_obj, { root }) =>
-		db.course.findUnique({ where: { id: root.id } }).user(),
-	lessons: (_obj, { root }) =>
-		db.course.findUnique({ where: { id: root.id } }).lessons(),
-	textbooks: (_obj, { root }) =>
-		db.course.findUnique({ where: { id: root.id } }).textbooks(),
-	articles: (_obj, { root }) =>
-		db.course.findUnique({ where: { id: root.id } }).articles(),
-	goals: (_obj, { root }) =>
-		db.course.findUnique({ where: { id: root.id } }).goals(),
-}

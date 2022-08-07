@@ -1,7 +1,10 @@
 import { db } from 'src/lib/db'
+import { isOwner } from 'src/lib/auth'
 
 export const createBatchCourse = async ({ input }) => {
 	let record = []
+
+	isOwner(input.userId) // this is basically just auth, i'm paranoid
 
 	const course = await db.course.create({
 		data: {

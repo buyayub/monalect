@@ -1,7 +1,7 @@
 import { FiUser, FiHome } from 'react-icons/fi';
 import IconButton from 'src/components/IconButton';
 
-const MainLayout = ({ children }) => {
+const CourseLayout = ({ children }) => {
 	return ( 
 	
 		<>
@@ -16,4 +16,4 @@ const MainLayout = ({ children }) => {
 	)
 }
 
-export default MainLayout
+export default CourseLayout

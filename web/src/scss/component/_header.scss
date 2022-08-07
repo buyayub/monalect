@@ -1,0 +1,11 @@
+@use "../abstract/color";
+@use "../abstract/sizing";
+
+header {
+	height: sizing.$main * 4;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	padding: sizing.$main;
+}

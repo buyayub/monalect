@@ -1,14 +1,18 @@
 import { db } from 'src/lib/db'
+import {isOwner} from 'src/lib/auth'
 
 export const lessons = async ({courseId, userId}) => {
+	isOwner(userId)
 
 	let payload = await db.lesson.findMany({where: {
+		courseId: courseId,
 		userId: userId
 		}
 	});
 
 	// Add linked lessons and sections
 	for (let item of payload) {
+		isOwner(item.userId)
 		item.notebookWords = (await db.notebookPage.aggregate({
 			_sum : {
 				words: true
@@ -47,40 +51,3 @@ export const lessons = async ({courseId, userId}) => {
 	return payload;
 }
 
-export const lesson = ({ id }) => {
-	return db.lesson.findUnique({
-		where: { id },
-	})
-}
-
-export const createLesson = ({ input }) => {
-	return db.lesson.create({
-		data: input,
-	})
-}
-
-export const updateLesson = ({ id, input }) => {
-	return db.lesson.update({
-		data: input,
-		where: { id },
-	})
-}
-
-export const deleteLesson = ({ id }) => {
-	return db.lesson.delete({
-		where: { id },
-	})
-}
-
-export const Lesson = {
-	user: (_obj, { root }) =>
-		db.lesson.findUnique({ where: { id: root.id } }).user(),
-	course: (_obj, { root }) =>
-		db.lesson.findUnique({ where: { id: root.id } }).course(),
-	notebookPages: (_obj, { root }) =>
-		db.lesson.findUnique({ where: { id: root.id } }).notebookPages(),
-	sections: (_obj, { root }) =>
-		db.lesson.findUnique({ where: { id: root.id } }).sections(),
-	article: (_obj, { root }) =>
-		db.lesson.findUnique({ where: { id: root.id } }).article(),
-}

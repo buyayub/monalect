@@ -8,23 +8,25 @@
 // 'src/pages/Admin/BooksPage/BooksPage.js' -> AdminBooksPage
 
 import { Set, Router, Route, Private } from '@redwoodjs/router'
+import MainLayout from 'src/layouts/MainLayout'
 
 const Routes = () => {
 	return (
 		<Router>
-			<Route path="/about" page={AboutPage} name="about" />
-			<Route path="/" page={HomePage} name="home" />
-			<Route path="/register" page={RegisterPage} name="register" />
 			<Route path="/admin/login" page={LoginPage} name="login" />
 			<Route path="/admin/signup" page={SignupPage} name="signup" />
 			<Route path="/admin/forgot-password" page={ForgotPasswordPage} name="forgotPassword" />
 			<Route path="/admin/reset-password" page={ResetPasswordPage} name="resetPassword" />
-			<Private unauthenticated="home">
-				<Route path="/monalect" page={MonalectPage} name="monalect" />
-				<Route path="/monalect/create" page={CreateCoursePage} name="createCourse" />
-				<Route path="/monalect/{courseId}" page={CourseHomePage} name="courseHome" />
-				<Route path="/monalect/{courseId}/study" page={CourseStudyPage} name="study" />
-			</Private>
+			<Set wrap={MainLayout}>
+				<Route path="/about" page={AboutPage} name="about" />
+				<Route path="/register" page={RegisterPage} name="register" />
+				<Private unauthenticated="login">
+					<Route path="/" page={MonalectPage} name="monalect" />
+					<Route path="/create" page={CreateCoursePage} name="createCourse" />
+					<Route path="/{courseId}" page={CourseHomePage} name="courseHome" />
+					<Route path="/{courseId}/study" page={CourseStudyPage} name="study" />
+				</Private>
+			</Set>
 			<Route notfound page={NotFoundPage} />
 		</Router>
 	)

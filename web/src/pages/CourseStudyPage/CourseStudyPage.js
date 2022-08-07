@@ -1,33 +1,36 @@
 import { Link, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
-import { bcMain } from 'src/shared/breadcrumbs'
+import { useAuth } from '@redwoodjs/auth'
+
 import WebViewer from '@pdftron/pdfjs-express'
 import {useRef, useEffect} from 'react'
-
 import NavBar from 'src/components/NavBar'
+import NotebookCell from 'src/components/NotebookCell'
 
-const CourseStudyPage = () => {
-	bcMain.selected = '/monalect'
+const CourseStudyPage = ({ courseId }) => {
+	const { currentUser } = useAuth() 
 	const viewer = useRef(null);
 
 	useEffect(() => {
 		WebViewer(
 			{
+				licenseKey: "dAbVz6SrdGktB4xTngTl",
 				path: '/',
-				initialDoc: '/book.pdf'
 			},
 			viewer.current
 		).then((instance) => {
-			instance.UI.loadDocument
 		});
 	}, []);
 
+
 	return (
-		<>
+		<div id="course-study-page">
 			<MetaTags title="CourseStudy" description="CourseStudy page" />
-			<NavBar breadcrumbs={[bcMain]} />
-			<div className="webviewer" ref={viewer}></div>
-		</>
+			<main>
+				<div className="webviewer" ref={viewer}></div>
+				<NotebookCell userId={currentUser.id} courseId={parseInt(courseId)} />
+			</main>
+		</div>
 	)
 }
 

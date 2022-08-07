@@ -1,5 +1,4 @@
 import { Link, routes } from '@redwoodjs/router'
-import { bcMain } from 'src/shared/breadcrumbs'
 import { MetaTags } from '@redwoodjs/web'
 import { FiHelpCircle } from 'react-icons/fi'
 import { RiBook2Line } from 'react-icons/ri'
@@ -16,14 +15,11 @@ const CourseHomePage = ({
 	notebookWords,
 	questionCount,
 }) => {
-	bcMain.selected = '/monalect'
-
 	const { currentUser } = useAuth()
 
 	return (
 		<>
 			<MetaTags title="CourseHome" description="CourseHome page" />
-			<NavBar breadcrumbs={[bcMain]} />
 			{!(courseTitle == undefined || questionCount == undefined) ? (
 				<div id="mn-i-course-title">
 					<h2>{courseTitle}</h2>

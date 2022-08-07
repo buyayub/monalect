@@ -27,6 +27,7 @@
 @use "./component/goal-display";
 @use "./component/lesson-display";
 @use "./component/lesson-material-display";
+@use "./component/header";
 
 @use "./page/course-home";
 @use "./page/course-study";
@@ -35,6 +36,8 @@ body {
 	background-color: color.$background;
 	box-sizing: border-box;
 }
+
+
 h2 {
 	font-size: sizing.$fs-h2;
 	font-weight: 300;
