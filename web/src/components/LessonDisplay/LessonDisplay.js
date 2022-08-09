@@ -16,11 +16,11 @@ const LessonDisplay = ({
 				<p> {title} </p>
 				<div className="lesson-stats">
 					<span>
-						<FiHelpCircle />
+						<RiBook2Line />
 						<p>{notebookWords == null ? 0 : notebookWords}</p>
 					</span>
 					<span>
-						<RiBook2Line />
+						<FiHelpCircle />
 						<p>{questionCount}</p>
 					</span>
 				</div>

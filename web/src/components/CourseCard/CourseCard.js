@@ -10,11 +10,11 @@ const CourseCard = ({courseId, courseTitle, notebookWords, questionCount, mark})
 			<div className="bottom">
 				<div className="aggregates">
 					<div>
-						<FiHelpCircle />
-						<p>{notebookWords == null ? 0 : notebookWords}</p>
+						<RiBook2Line />
+						<p>{notebookWords ? notebookWords : 0}</p>
 					</div>
 					<div>
-						<RiBook2Line />
+						<FiHelpCircle />
 						<p>{questionCount}</p>
 					</div>
 				</div>

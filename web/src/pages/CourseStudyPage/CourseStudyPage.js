@@ -26,6 +26,7 @@ const CourseStudyPage = ({ courseId }) => {
 	return (
 		<div id="course-study-page">
 			<MetaTags title="CourseStudy" description="CourseStudy page" />
+			<NavBar courseId={courseId} />
 			<main>
 				<div className="webviewer" ref={viewer}></div>
 				<NotebookCell userId={currentUser.id} courseId={parseInt(courseId)} />

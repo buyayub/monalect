@@ -26,7 +26,7 @@ export const Success = ({ notebookPages }) => {
 				return (
 					<div class="notebook-lesson">
 						<h4>{page.index + 1}. {page.lessonTitle}</h4>
-						<NotebookPage />
+						<NotebookPage content={page.content} id={page.id} />
 					</div>
 				)
 			})}

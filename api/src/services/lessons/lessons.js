@@ -11,20 +11,18 @@ export const lessons = async ({courseId, userId}) => {
 	});
 
 	// Add linked lessons and sections
-	for (let item of payload) {
-		isOwner(item.userId)
-		item.notebookWords = (await db.notebookPage.aggregate({
-			_sum : {
-				words: true
-			},
+	for (item of payload) {
+
+		item.notebookWords = (await db.notebookPage.findFirst({
 			where: {
-				lessonId: item.lessonId
+				lessonId: item.id
 			}
-		}))._sum.words
+		})).words
+
 
 		item.questionCount = await db.question.count({
 			where: {
-				lessonId: item.lessonId
+				lessonId: item.id
 			}
 		})
 

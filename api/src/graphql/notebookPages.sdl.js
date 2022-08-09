@@ -18,9 +18,8 @@ export const schema = gql`
 	}
 
 	input UpdateNotebookPageInput {
-		page: Int
+		words: Int
 		content: String
-		lessonId: Int
 	}
 
 	type Mutation {
@@ -28,8 +27,9 @@ export const schema = gql`
 			@requireAuth
 		updateNotebookPage(
 			id: Int!
+			userId: Int!
 			input: UpdateNotebookPageInput!
-		): NotebookPage! @requireAuth
+		): Int! @requireAuth
 		deleteNotebookPage(id: Int!): NotebookPage! @requireAuth
 	}
 `

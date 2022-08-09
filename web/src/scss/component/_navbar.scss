@@ -1,6 +1,7 @@
 @use "../abstract/sizing";
 @use "../abstract/color";
 
+/*
 nav {
 	display: flex;
 	flex-direction: row;
@@ -52,3 +53,22 @@ nav {
 		top: calc(sizing.$main * 3);
 	}
 }
+*/
+
+nav {
+	display: flex;
+	flex-direction: row;
+
+	&> * {
+		margin-left: -1px;
+	}
+}
+
+#mn-c-navbar {
+	position: absolute;	
+	right: sizing.$main;
+	top: sizing.$main;
+	display: flex;
+	flex-direction: row;
+}
+

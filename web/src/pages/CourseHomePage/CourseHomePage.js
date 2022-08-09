@@ -20,6 +20,7 @@ const CourseHomePage = ({
 	return (
 		<>
 			<MetaTags title="CourseHome" description="CourseHome page" />
+			<NavBar courseId={courseId} />
 			{!(courseTitle == undefined || questionCount == undefined) ? (
 				<div id="mn-i-course-title">
 					<h2>{courseTitle}</h2>

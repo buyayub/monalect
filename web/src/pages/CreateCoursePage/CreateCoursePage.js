@@ -8,70 +8,10 @@ import SectionForm from 'src/components/SectionForm'
 import LessonForm from 'src/components/LessonForm'
 import Modal from 'src/components/Modal'
 
-import { bcMain } from 'src/shared/breadcrumbs'
-
 import { Link, routes, navigate } from '@redwoodjs/router'
 import { MetaTags, useMutation } from '@redwoodjs/web'
 import { useAuth } from '@redwoodjs/auth'
 import { useState } from 'react'
-
-const mockMaterials = [
-	{
-		type: 'textbook',
-		title: 'Proof of Mathematics',
-		localId: 1,
-		identifier: '9780989472128',
-		author: 'Richard Hammack',
-		pages: 315,
-		offset: 12,
-		sections: [
-			{
-				title: 'Introduction',
-				localId: 2,
-				start: 1,
-				end: 16,
-			},
-			{
-				title: 'Set Theory',
-				localId: 3,
-				start: 42,
-				end: 62,
-			},
-		],
-	},
-	{
-		type: 'article',
-		title: 'Summation',
-		localId: 4,
-		identifier: 'https://doi.org/10.1016/S0747-7171(85)80038-9',
-		author: 'Anonymous',
-		offset: 0,
-		pages: 14,
-	},
-]
-
-const mockLessons = [
-	{
-		title: 'Intro to Mathematical Logic',
-		localId: 5,
-		sections: [
-			{
-				type: 'section',
-				materialId: 0,
-				sectionId: 0,
-			},
-			{
-				type: 'article',
-				materialId: 1,
-			},
-		],
-	},
-	{
-		title: 'Set Theory',
-		localId: 6,
-		sections: [],
-	},
-]
 
 const CREATE_BATCH = gql`
 	mutation CreateBatchCourseMutation($input: CreateBatchCourseInput!) {

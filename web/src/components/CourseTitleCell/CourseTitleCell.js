@@ -25,11 +25,11 @@ export const Success = ({ card }) => {
 			<h2>{card.title == '' ? 'Untitled' : card.title}</h2>
 			<div className="course-stats">
 				<span>
-					<FiHelpCircle />
+					<RiBook2Line />
 					<h4>{card.notebookWords == null ? 0 : notebookWords}</h4>
 				</span>
 				<span>
-					<RiBook2Line />
+					<FiHelpCircle />
 					<h4>{card.questionCount}</h4>
 				</span>
 			</div>

@@ -1,5 +1,6 @@
 import { FiUser, FiHome } from 'react-icons/fi';
 import IconButton from 'src/components/IconButton';
+import { Link, routes } from '@redwoodjs/router';
 
 const MainLayout = ({ children }) => {
 	return ( 
@@ -8,7 +9,9 @@ const MainLayout = ({ children }) => {
 			<header>
 				<nav>
 					<IconButton> <FiUser /> </IconButton>
-					<IconButton> <FiHome /> </IconButton>
+					<Link to={routes.home()}>
+						<IconButton> <FiHome /> </IconButton>
+					</Link>
 				</nav>
 			</header>
 			{children}

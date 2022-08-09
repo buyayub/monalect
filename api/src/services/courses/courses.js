@@ -15,14 +15,14 @@ export const cards = async ({ userId }) => {
 	}})
 
 	for (const courseCard of courseCards) {
-		const notebookWords = await db.notebookPage.aggregate({
+		const notebookWords = (await db.notebookPage.aggregate({
 			_sum : {
 				words: true
 			},
 			where: {
 				courseId: card.id
 			}
-		})
+		}))._sum.words
 
 		const questionCount = await db.question.count({
 			where: {
@@ -30,7 +30,7 @@ export const cards = async ({ userId }) => {
 			}
 		})
 
-		courseCard.notebookWords = notebookWords.words;
+		courseCard.notebookWords = notebookWords;
 		courseCard.questionCount = questionCount;
 	}
 	return courseCards;

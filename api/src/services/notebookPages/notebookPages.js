@@ -1,4 +1,5 @@
 import { db } from 'src/lib/db'
+import { isOwner } from 'src/lib/auth'
 
 export const notebookPages = async ({ userId, courseId }) => {
 	isOwner(userId)
@@ -38,3 +39,23 @@ export const notebookPages = async ({ userId, courseId }) => {
 	return payload
 }
 
+
+export const updateNotebookPage = async ({userId, id, input}) => {
+	isOwner(userId) 	
+	
+	page = await db.notebookPage.findUnique({where: { id: id}})
+
+	isOwner(page.userId)
+
+	await db.notebookPage.update({
+		where: {
+			id: id,
+		},
+		data: {
+			words: input.words,
+			content: input.content
+		}
+	})
+
+	return true;
+}
