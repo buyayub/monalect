@@ -29,7 +29,7 @@ export const schema = gql`
 			id: Int!
 			userId: Int!
 			input: UpdateNotebookPageInput!
-		): Int! @requireAuth
+		): Boolean! @requireAuth
 		deleteNotebookPage(id: Int!): NotebookPage! @requireAuth
 	}
 `

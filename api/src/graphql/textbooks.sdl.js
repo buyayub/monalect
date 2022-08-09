@@ -17,6 +17,7 @@ export const schema = gql`
 	type Query {
 		textbooks: [Textbook!]! @requireAuth
 		textbook(id: Int!): Textbook @requireAuth
+		textbookURL(userId: Int!, id: Int!): String! @requireAuth
 	}
 
 	input CreateTextbookInput {

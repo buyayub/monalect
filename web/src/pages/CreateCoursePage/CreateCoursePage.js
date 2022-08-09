@@ -16,17 +16,19 @@ import { useState } from 'react'
 const CREATE_BATCH = gql`
 	mutation CreateBatchCourseMutation($input: CreateBatchCourseInput!) {
 		createBatchCourse(input: $input) {
-			id
+			materialId
+			localId
+			presigned
 		}
 	}
 `
 
 const CreateCoursePage = () => {
 	const { currentUser } = useAuth()
-
 	const [page, setPage] = useState(0)
 	const [title, setTitle] = useState('')
 	const [materials, setMaterial] = useState([])
+	const [uploaded, setUploaded] = useState([])
 	const [lessons, setLessons] = useState([])
 	const [courseId, setCourseId] = useState(null)
 
@@ -41,6 +43,7 @@ const CreateCoursePage = () => {
 	const [identifier, setIdentifier] = useState(0)
 
 	const materialDelete = (id) => {
+		setUploaded(uploaded.filter((element) => element.localId != materials[id].localId))
 		setMaterial(materials.filter((element, index) => index != id))
 	}
 
@@ -140,6 +143,12 @@ const CreateCoursePage = () => {
 		setLessons([...lessonsCopy])
 	}
 
+	const addUploaded = (file, localId) => {
+		const newUploaded = uploaded
+		newUploaded.push({ file: file, localId: localId })
+		setUploaded([...newUploaded])
+	}
+
 	const [createBatch] = useMutation(CREATE_BATCH)
 
 	const submitCourse = (courseTitle, courseMaterials, courseLessons) => {
@@ -179,10 +188,29 @@ const CreateCoursePage = () => {
 		}
 
 		createBatch({ variables: { input: input } }).then((response) => {
-			navigate(
-				routes.courseHome({ courseId: response.data.createBatchCourse.id })
-			)
+			// Upload textbook, send success
+			const uploadArray = response.data.createBatchCourse
+
+			// search through uploaded record, get the file
+			for (let item of uploadArray) {
+				const stuff = uploaded.find((e) => e.localId == item.localId)
+				uploadTextbook(stuff.file, item.presigned)
+			}
 		})
+	}
+
+	const uploadTextbook = (file, url) => {
+		console.log(url)
+		var data = new FormData()
+		data.append('file', file)
+		fetch(url, {
+			mode: 'cors',
+			method: 'PUT',
+			body: data
+		}).then((response) => 
+			{
+				console.log(response)
+			})
 	}
 
 	return (
@@ -218,7 +246,7 @@ const CreateCoursePage = () => {
 					unlinkSection={unlinkSection}
 				/>
 			</div>
-			<Button>Cancel</Button>
+			<Button onClick={() => {}}>Cancel</Button>
 			<Button onClick={() => submitCourse(title, materials, lessons)}>
 				Create
 			</Button>
@@ -230,6 +258,7 @@ const CreateCoursePage = () => {
 					addMaterial={addMaterial}
 					identifier={identifier}
 					setIdentifier={setIdentifier}
+					addUploaded={addUploaded}
 				/>
 			</Modal>
 			<Modal show={showSectionForm} changeState={() => setSectionForm(false)}>

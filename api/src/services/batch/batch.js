@@ -1,8 +1,31 @@
 import { db } from 'src/lib/db'
 import { isOwner } from 'src/lib/auth'
+import { PutObjectCommand } from '@aws-sdk/client-s3'
+import { s3Client } from 'src/lib/aws'
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
+import { fetch } from 'node-fetch'
+
+const getPresigned = async () => {
+	const crypto = require('crypto')
+	const url = crypto.randomBytes(12).toString('hex')
+
+	const bucketParams = {
+		Bucket: 'monalectpdf',
+		Key: url,
+		ContentType: 'application/pdf'
+	}
+
+	const command = new PutObjectCommand(bucketParams)
+	const signedUrl = await getSignedUrl(s3Client, command, { expiresIn: 3600 })
+
+	console.log(signedUrl)
+
+	return [url, signedUrl]
+}
 
 export const createBatchCourse = async ({ input }) => {
 	let record = []
+	let payload = []
 
 	isOwner(input.userId) // this is basically just auth, i'm paranoid
 
@@ -21,11 +44,30 @@ export const createBatchCourse = async ({ input }) => {
 					courseId: course.id,
 					title: material.title,
 					isbn: material.identifier,
-					uploaded: false,
+					uploaded: material.uploaded,
 					pages: material.pages,
 					author: material.author,
 				},
 			})
+
+			// if the user wants this uploaded, we'll update textbook with the url or key, and then add the presigned URL to the payload for them to upload
+			if (material.uploaded) {
+				const [url, signedUrl] = await getPresigned()
+				await db.textbook.update({
+					where: {
+						id: textbook.id,
+					},
+					data: {
+						url: url,
+					},
+				})
+
+				payload.push({
+					materialId: textbook.id,
+					localId: material.localId,
+					presigned: signedUrl
+				})
+			}
 
 			record.push([material.localId, textbook.id])
 
@@ -55,36 +97,53 @@ export const createBatchCourse = async ({ input }) => {
 					author: material.author,
 				},
 			})
+
+			if (material.uploaded) {
+				const [url, signedUrl] = await getPresigned()
+				await db.article.update({
+					where: {
+						id: article.id,
+					},
+					data: {
+						url: url,
+					},
+				})
+
+				payload.push({
+					materialId: article.id,
+					localId: material.localId,
+					presigned: signedUrl
+				})
+			}
+
 			record.push([material.localId, article.id])
 		}
 	}
 
 	// Create lessons and notebookPages
-	
-	for (lesson of input.lesson)
-	{
+
+	for (lesson of input.lesson) {
 		let newLesson = await db.lesson.create({
 			data: {
 				userId: input.userId,
 				courseId: course.id,
 				index: lesson.index,
-				title: lesson.title
-			}
+				title: lesson.title,
+			},
 		})
-		
+
 		await db.notebookPage.create({
 			data: {
 				page: 0,
 				words: 0,
 				lessonId: newLesson.id,
 				courseId: course.id,
-				userId: input.userId
-			}
+				userId: input.userId,
+			},
 		})
 
 		record.push([lesson.localId, newLesson.id])
 	}
-	
 
 	// Create many-to-many relations
 	// We first check the type of the relation, if it's an article, we create an ArticleOnLesson object, otherwise SectionOnLesson
@@ -126,8 +185,7 @@ export const createBatchCourse = async ({ input }) => {
 						articleId: articleId,
 					},
 				})
-			}
-			else if (linkType == 'section') {
+			} else if (linkType == 'section') {
 				let sectionId = findRealId(link)
 				let lessonId = findRealId(lesson.localId)
 				await db.sectionOnLesson.create({
@@ -140,5 +198,5 @@ export const createBatchCourse = async ({ input }) => {
 		}
 	}
 
-	return { id: course.id }
+	return payload
 }

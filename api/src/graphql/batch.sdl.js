@@ -5,6 +5,7 @@ export const schema = gql`
 		localId: Int!
 		title: String!
 		identifier: String
+		uploaded: Boolean
 		author: String
 		pages: Int
 		offset: Int
@@ -32,8 +33,13 @@ export const schema = gql`
 		lesson: [BatchLesson]
 	}
 
+	type Uploaded {
+		materialId: Int!
+		localId: Int!
+		presigned: String!
+	}
 
 	type Mutation {
-		createBatchCourse(input: CreateBatchCourseInput!): Course! @requireAuth
+		createBatchCourse(input: CreateBatchCourseInput!): [Uploaded]! @requireAuth
 	}
 `

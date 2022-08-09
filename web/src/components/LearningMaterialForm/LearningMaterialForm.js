@@ -4,7 +4,7 @@ import Dropdown from 'src/components/Dropdown';
 import Button from 'src/components/Button';
 import {useState} from 'react';
 
-const LearningMaterialForm = ({cancel, addMaterial, identifier, setIdentifier}) => {
+const LearningMaterialForm = ({cancel, addMaterial, identifier, setIdentifier, addUploaded}) => {
 	const [fileName, fileNameSet] = useState("Browse...");
 	const fileChange = (e) => {
 		const arr = e.target.value.split('\\');
@@ -18,8 +18,11 @@ const LearningMaterialForm = ({cancel, addMaterial, identifier, setIdentifier}) 
 		const title = e.target[1].value
 		const author = e.target[2].value
 		const standardId = e.target[3].value
+		const file = e.target[4].files[0]
+		const uploaded = (file != undefined) ? true : false
 		const pages = parseInt(e.target[5].value)
 		const offset = parseInt(e.target[6].value)
+
 		
 		const textbook = {
 				type: type,
@@ -28,10 +31,13 @@ const LearningMaterialForm = ({cancel, addMaterial, identifier, setIdentifier}) 
 				identifier: standardId,
 				pages: parseInt(pages),
 				offset: offset,
+				uploaded: uploaded,
 				sections: [],
 				localId: identifier 
 			}
 		addMaterial(textbook);
+		addUploaded(file, identifier);
+
 		setIdentifier(identifier + 1);
 		e.target.reset();
 		cancel();
