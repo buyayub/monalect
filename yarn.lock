@@ -4862,6 +4862,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@pdftron/pdfjs-express-viewer@npm:^8.7.0":
+  version: 8.7.0
+  resolution: "@pdftron/pdfjs-express-viewer@npm:8.7.0"
+  checksum: b2c0b98ab1b80627059b06bff0a76a63fc81bc51a40f4e5610ec60400f0d161d69739fd849f1938ae604735725da6fb751a1cd51db39cedd346e59e2c159995b
+  languageName: node
+  linkType: hard
+
 "@pdftron/pdfjs-express@npm:^8.7.0":
   version: 8.7.0
   resolution: "@pdftron/pdfjs-express@npm:8.7.0"
@@ -26176,6 +26183,7 @@ __metadata:
     "@emotion/styled": ^11.10.0
     "@mui/material": ^5.9.3
     "@pdftron/pdfjs-express": ^8.7.0
+    "@pdftron/pdfjs-express-viewer": ^8.7.0
     "@redwoodjs/auth": 2.0.0
     "@redwoodjs/forms": 2.0.0
     "@redwoodjs/router": 2.0.0

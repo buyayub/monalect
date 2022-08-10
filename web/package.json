@@ -18,6 +18,7 @@
     "@emotion/styled": "^11.10.0",
     "@mui/material": "^5.9.3",
     "@pdftron/pdfjs-express": "^8.7.0",
+    "@pdftron/pdfjs-express-viewer": "^8.7.0",
     "@redwoodjs/auth": "2.0.0",
     "@redwoodjs/forms": "2.0.0",
     "@redwoodjs/router": "2.0.0",

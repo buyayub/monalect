@@ -14,8 +14,14 @@ export const schema = gql`
 		sections: [TextbookSection]!
 	}
 
+	type UploadedMaterial {
+		id: Int!,
+		url: String!,
+		title: String!
+	}
+
 	type Query {
-		textbooks: [Textbook!]! @requireAuth
+		textbooks(userId: Int!, courseId: Int!): [UploadedMaterial] @requireAuth
 		textbook(id: Int!): Textbook @requireAuth
 		textbookURL(userId: Int!, id: Int!): String! @requireAuth
 	}

@@ -207,10 +207,7 @@ const CreateCoursePage = () => {
 			mode: 'cors',
 			method: 'PUT',
 			body: data
-		}).then((response) => 
-			{
-				console.log(response)
-			})
+		})	
 	}
 
 	return (
