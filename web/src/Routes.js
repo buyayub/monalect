@@ -25,6 +25,7 @@ const Routes = () => {
 					<Route path="/create" page={CreateCoursePage} name="createCourse" />
 					<Route path="/{courseId}" page={CourseHomePage} name="courseHome" />
 					<Route path="/{courseId}/study" page={CourseStudyPage} name="study" />
+					<Route path="/{courseId}/question" page={CourseQuestionPage} name="courseQuestion" />
 				</Private>
 			</Set>
 			<Route notfound page={NotFoundPage} />

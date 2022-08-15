@@ -11,7 +11,7 @@ const getPresigned = async () => {
 
 	const bucketParams = {
 		Bucket: 'monalectpdf',
-		Key: url,
+		Key: url + ".pdf",
 		ContentType: 'application/pdf'
 	}
 

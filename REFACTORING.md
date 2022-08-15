@@ -26,3 +26,6 @@ I'll also be refactoring this page as well, as I think out ideas.
 + [ ] use a layout for the header/navbar
 
 ## SCSS
+
++ [ ] replace the weird sizing system with simple variables at the start of each component file.
++ [ ] create shared classes for similar things, for example all the lesson and section displays the same height, have the same colors depending on whether they're active or not. The only large difference is their width, and internal makeup, which can be ignored.

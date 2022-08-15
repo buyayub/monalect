@@ -1,0 +1,119 @@
+@use '../abstract/sizing';
+@use '../abstract/color';
+
+.mn-c-question {
+	display: flex;
+	flex-direction: column;
+	gap: sizing.$main;
+
+	&.mn-is-active .question {
+		.title {
+			color: color.$main0;
+		}
+		.multiple > span, .word {
+			border-color: color.$main2;
+			color: color.$main0;
+		}
+	}
+
+	.question {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+
+		.button-delete {
+			color: color.$red2;
+			&:hover {
+				color: color.$red1;	
+				cursor: pointer;
+			}
+		}
+	}
+
+	.question-title {
+		display: flex;
+		flex-direction: row;
+		height: sizing.$main * 1.5;
+		align-items: center;
+
+		.title {
+			margin-left: sizing.$main * 0.75;
+			color: color.$main1;
+		}
+
+		&:hover {
+			.title {
+				color: color.$main0;
+			}
+			cursor: pointer;
+			.multiple > span, .word {
+				border-color: color.$main2;
+				color: color.$main0;
+			}
+		}
+
+		.multiple {
+			display: flex;
+			flex-direction: row;
+			color: color.$main1;
+
+			> span {
+				height: sizing.$main * 1.5;
+				min-width: sizing.$main * 1.5;
+				margin-left: -1px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				border: 1px solid color.$main3;
+			}
+		}
+
+		.word {
+			color: color.$main1;
+			height: sizing.$main * 1.5;
+			min-width: sizing.$main * 1.5;
+			border: 1px solid color.$main3;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+	}
+
+	&.mn-is-active .answers {
+		display: flex;
+		flex-direction: column;
+		gap: sizing.$main * 0.5;
+	}
+
+	.answers {
+		display: none;
+		margin-left: sizing.$main * 2;
+		.correct,
+		.incorrect {
+			display: flex;
+			flex-direction: row;
+			gap: sizing.$main * 0.5;
+			align-items: center;
+		}
+
+		.correct .icon {
+			color: color.$green0;
+		}
+
+		.incorrect .icon {
+			color: color.$red1;
+		}
+
+		.add {
+			color: color.$main1;
+			&:hover {
+				color: color.$main0;
+				cursor: pointer;
+			}
+			svg {
+				width: sizing.$main * 1.25;
+				height: sizing.$main * 1.25;
+			}
+		}
+	}
+}

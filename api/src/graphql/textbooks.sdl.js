@@ -17,6 +17,7 @@ export const schema = gql`
 	type UploadedMaterial {
 		id: Int!,
 		url: String!,
+		presigned: String!,
 		title: String!
 	}
 

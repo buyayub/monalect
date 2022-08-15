@@ -206,6 +206,9 @@ const CreateCoursePage = () => {
 		fetch(url, {
 			mode: 'cors',
 			method: 'PUT',
+			headers: {
+				"Content-Type" : "application/pdf"
+			},
 			body: data
 		})	
 	}

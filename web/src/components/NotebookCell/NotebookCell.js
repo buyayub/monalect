@@ -21,12 +21,12 @@ export const Failure = ({ error }) => (
 
 export const Success = ({ notebookPages }) => {
 	return (
-		<div class="mn-c-notebook-container">
+		<div className="mn-c-notebook-container">
 			{ notebookPages.map((page, i) => {
 				return (
-					<div class="notebook-lesson">
+					<div className="notebook-lesson">
 						<h4>{page.index + 1}. {page.lessonTitle}</h4>
-						<NotebookPage content={page.content} id={page.id} />
+						<NotebookPage title={page.lessonTitle} content={page.content} id={page.id} />
 					</div>
 				)
 			})}

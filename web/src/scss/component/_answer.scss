@@ -1,0 +1,84 @@
+@use '../abstract/sizing';
+@use '../abstract/color';
+
+.mn-c-answer {
+	color: color.$red2;
+	display: inline-flex;
+	flex-direction: row;
+	align-items: center;
+	
+	height: sizing.$main * 1.5;
+
+	.icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: sizing.$main * 1.5;
+		width: sizing.$main * 1.5;
+		margin-right: sizing.$main * 0.5;
+		svg {
+			height: sizing.$main * 1.25;
+			width: sizing.$main * 1.25;
+		}
+	}
+
+	&:hover {
+		color: color.$red1;
+		cursor: pointer;
+		.delete {
+			display: inline-block;
+		}
+
+		.buttons {
+			display: flex;
+		}
+
+		.main {
+			border: 1px solid color.$red1;
+		}
+	}
+
+	.main {
+		display: flex;
+		align-items: center;	
+		border: 1px solid color.$red2;
+		height: sizing.$main * 1.5;
+		padding-left: sizing.$main * 0.5;
+		padding-right: sizing.$main * 1.5;
+		padding-bottom: sizing.$main * 0.1;
+	}
+
+	.delete {
+		display: none;
+		color: color.$red1;
+	}
+
+	.buttons {
+		display: none;
+		height: sizing.$main * 1.5;
+		width: sizing.$main * 2;
+		margin-left: sizing.$main * 0.5;
+		align-items: center;
+		justify-content: start;
+
+		svg {
+			height: sizing.$main * 1.25;
+			width: sizing.$main * 1.25;
+		}
+	}
+
+	&.mn-is-correct {
+		color: color.$green1;
+
+		.main {
+			border: 1px solid color.$green1;
+		}
+
+		&:hover {
+			color: color.$green0;
+			.main {
+				border: 1px solid color.$green0;
+			}
+		}
+	}
+}

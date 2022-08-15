@@ -2,7 +2,7 @@ import { FiUser, FiHome } from 'react-icons/fi'
 import { useState } from 'react'
 import { Link, routes } from '@redwoodjs/router'
 import { useAuth } from '@redwoodjs/auth'
-import { FiMenu, FiBook } from 'react-icons/fi'
+import { FiMenu, FiBook, FiHelpCircle} from 'react-icons/fi'
 
 import IconButton from 'src/components/IconButton'
 
@@ -17,6 +17,11 @@ const NavBar = ({ courseId }) => {
 			<Link to={routes.study({ courseId: courseId })}>
 				<IconButton>
 					<FiBook />
+				</IconButton>
+			</Link>
+			<Link to={routes.courseQuestion({ courseId: courseId})}>
+				<IconButton>
+					<FiHelpCircle />
 				</IconButton>
 			</Link>
 		</div>

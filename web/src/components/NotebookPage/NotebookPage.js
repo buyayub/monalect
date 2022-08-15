@@ -3,7 +3,7 @@ import 'quill/dist/quill.snow.css'
 import { useState, useEffect } from 'react'
 import { useMutation } from '@redwoodjs/web'
 import { useAuth } from '@redwoodjs/auth'
-import { useParams } from '@redwoodjs/router'
+import { useParams, useLocation } from '@redwoodjs/router'
 
 const SAVE_CONTENT = gql`
 	mutation UpdateNotebookPage(
@@ -21,7 +21,9 @@ const NotebookPage = ({ title, content, id }) => {
 	const [saved, setSaved] = useState(true)
 	const [saveContent] = useMutation(SAVE_CONTENT)
 	const { currentUser } = useAuth()
-	const [initContent, setInitContent] = useState(content)
+	const [updateStuff, setUpdateStuff] = useState(false)
+
+	const { pathname } = useLocation()
 
 	const { quill, quillRef } = useQuill({
 		modules: {
@@ -50,12 +52,6 @@ const NotebookPage = ({ title, content, id }) => {
 			.split(/\n| |\t/)
 			.filter((e) => e != '').length
 		let newContent = JSON.stringify(quill.getContents())
-
-		// just in case the component re-renders
-		if (quill) {
-			setInitContent(newContent)
-		}
-
 		saveContent({
 			variables: {
 				userId: currentUser.id,
@@ -90,15 +86,24 @@ const NotebookPage = ({ title, content, id }) => {
 	// reset timer to 5 on change
 	// quill initialization
 
+	console.log(title, " Update: ", content)
+
 	useEffect(() => {
 		if (quill) {
-			quill.setContents(JSON.parse(initContent))
+			console.log(title, " Effect: ", content)
+			quill.setContents(JSON.parse(content))
 			quill.on('text-change', () => {
 				setTimer(timeout)
 				setSaved(false)
 			})
 		}
-	}, [quill])
+	}, [quill, updateStuff])
+
+	useEffect(() => {
+		if (quill && content != quill.getContents()) {
+			setUpdateStuff(!updateStuff)
+		}
+	}, [content])
 
 	return (
 		<>

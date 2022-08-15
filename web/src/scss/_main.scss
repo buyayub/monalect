@@ -29,6 +29,9 @@
 @use "./component/lesson-material-display";
 @use "./component/header";
 
+@use "./component/answer";
+@use "./component/question";
+
 @use "./page/course-home";
 @use "./page/course-study";
 
