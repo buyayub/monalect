@@ -3,7 +3,13 @@ import { FiPlusSquare } from 'react-icons/fi'
 import { FiXCircle, FiCheckCircle, FiMinusSquare } from 'react-icons/fi'
 import { useState } from 'react'
 
-const Question = ({ question, deleteAnswer, createAnswer, deleteQuestion, setQuestionSelect}) => {
+const Question = ({
+	question,
+	deleteAnswer,
+	createAnswer,
+	deleteQuestion,
+	setQuestionSelect,
+}) => {
 	const [active, setActive] = useState(false)
 
 	const incorrectQuestions =
@@ -12,17 +18,21 @@ const Question = ({ question, deleteAnswer, createAnswer, deleteQuestion, setQue
 				<div className="icon">
 					<FiXCircle />
 				</div>
-				{question.answers.incorrect.map((e, i) => {
-					return (
-						<QuestionAnswer
-							title={e}
-							correct={false}
-							handleDelete={deleteAnswer}
-						/>
-					)
-				})}
+				{question.answers
+					.filter((e) => {
+						return e.correct == false
+					})
+					.map((e, i) => {
+						return (
+							<QuestionAnswer
+								title={e.answer}
+								correct={false}
+								handleDelete={deleteAnswer}
+							/>
+						)
+					})}
 				<div className="add">
-					<FiPlusSquare onClick={() => setQuestionSelect(question.id)}/>
+					<FiPlusSquare onClick={() => setQuestionSelect(question.id)} />
 				</div>
 			</div>
 		) : (
@@ -57,7 +67,7 @@ const Question = ({ question, deleteAnswer, createAnswer, deleteQuestion, setQue
 					}}
 				>
 					{questionIcon}
-					<p className="title">{question.title}</p>
+					<p className="title">{question.question}</p>
 				</div>
 				<div className="question-buttons">
 					<div className="button-delete">
@@ -70,15 +80,19 @@ const Question = ({ question, deleteAnswer, createAnswer, deleteQuestion, setQue
 					<div className="icon">
 						<FiCheckCircle />
 					</div>
-					{question.answers.correct.map((e, i) => {
-						return (
-							<QuestionAnswer
-								title={e}
-								correct={true}
-								handleDelete={deleteAnswer}
-							/>
-						)
-					})}
+					{question.answers
+						.filter((e) => {
+							return e.correct
+						})
+						.map((e, i) => {
+							return (
+								<QuestionAnswer
+									title={e.answer}
+									correct={true}
+									handleDelete={deleteAnswer}
+								/>
+							)
+						})}
 					<div className="add">
 						<FiPlusSquare />
 					</div>

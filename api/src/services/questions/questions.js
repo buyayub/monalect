@@ -39,7 +39,7 @@ export const questionsByLesson = async ({userId, courseId}) => {
 		questions: (await db.question.findMany({
 			where: {
 				courseId: courseId,
-				lessonId: undefined
+				lessonId: null
 			},
 			select: {
 				id: true,
@@ -54,16 +54,26 @@ export const questionsByLesson = async ({userId, courseId}) => {
 
 }
 
-export const createQuestion = async ( { userid, input } ) => {
+export const createQuestion = async ( { userId, input } ) => {
+	isOwner(userId)
+
 	const question = await db.question.create({
 		data: {
+			userId: userId,
 			courseId: input.courseId,
 			lessonId: input.lessonId,
 			question: input.question,
-			choices: input.int,
-			multiple: input.boolean
+			choices: input.choices,
+			multiple: input.multiple
+		},
+		select: {
+			id: true,
+			lessonId: true,
+			question: true,
+			multiple: true,
+			choices: true
 		}
 	})
 
-	return question.id
+	return question
 }

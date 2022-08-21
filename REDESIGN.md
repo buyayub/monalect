@@ -18,4 +18,8 @@ I think I'll stick with batch creation in the beginning. For now, I can scrutini
 
 The creation uses modal forms for the user to enter it in. This is easy to implement for me, and I reused code from a different project so I'm proud, but it's not "quick".
 
+... 
+
+Me from the future, I'll move onto dynamic creation. It's just more CRUD operations, it's nothing heavy. 
+
 

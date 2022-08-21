@@ -1,6 +1,7 @@
 export const schema = gql`
 	type Question {
 		id: Int!
+		lessonId: Int
 		question: String!
 		multiple: Boolean!
 		answers: [Answer]!

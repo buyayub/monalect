@@ -124,10 +124,10 @@ model Question {
 	userId		Int
 	question	String
 	multiple	Boolean
-	count		Int
+	choices 	Int?
 	answers 	Answer[]
-	lesson 		Lesson @relation(fields: [lessonId], references: [id])
-	lessonId 	Int
+	lesson 		Lesson? @relation(fields: [lessonId], references: [id])
+	lessonId 	Int?
 	course 		Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 	courseId 	Int
 }

@@ -1,5 +1,6 @@
 import { useQuery, useMutation } from '@apollo/client'
 import QuestionLesson from 'src/components/QuestionLesson'
+import QuestionForm from 'src/components/QuestionForm'
 import { useState, useEffect } from 'react'
 import { useAuth } from '@redwoodjs/auth'
 import Modal from 'src/components/Modal'
@@ -66,21 +67,64 @@ const QuestionWrapper = ({ courseId }) => {
 
 	const [questionForm, setQuestionForm] = useState(false)
 	const [answerForm, setAnswerForm] = useState(false)
-	const toggleQuestionForm = () => {setQuestionForm(!questionForm)}
-	const toggleAnswerForm = () => {setQuestionForm(!answerForm)}
+	const toggleQuestionForm = () => {
+		setQuestionForm(!questionForm)
+	}
+	const toggleAnswerForm = () => {
+		setQuestionForm(!answerForm)
+	}
 
 	const [lessonSelect, setLessonSelect] = useState(undefined)
 	const [questionSelect, setQuestionSelect] = useState(undefined)
 
-
 	useEffect(() => {
 		if (questionLessons) {
 			setLessons(questionLessons.questionsByLesson)
+			console.log(questionLessons)
 		}
 	}, [questionLessons])
 
 	if (loading) return 'Loading'
 	if (error) return `Error! ${error}`
+
+	const submitQuestion = (questionType, question, choices = null) => {
+		let input = {}
+
+		if (questionType == 'multiple') {
+			input = {
+				courseId: courseId,
+				lessonId: lessonSelect,
+				question: question,
+				multiple: true,
+				choices: choices,
+			}
+		}
+
+		else if (questionType == 'word') {
+			input = {
+				courseId: courseId,
+				lessonId: lessonSelect,
+				question: question,
+				multiple: false,
+			}
+		}
+
+
+		createQuestion({
+			variables: {
+				userId: currentUser.id,
+				input: input,
+			},
+		}).then((response) => {
+			const question = response.data.createQuestion
+			let lessonsCopy = lessons
+			lessonsCopy
+				.find((o) => o.id == question.lessonId)
+				.questions.push(question)
+
+			setLessons([...lessonsCopy])
+		})
+	}
 
 	return (
 		<div>
@@ -100,7 +144,10 @@ const QuestionWrapper = ({ courseId }) => {
 			<p> Lesson Select: {lessonSelect} </p>
 			<p> Question Select: {questionSelect} </p>
 			<Modal show={questionForm} changeState={() => toggleQuestionForm()}>
-				<p> Hello </p>
+				<QuestionForm
+					cancel={() => toggleQuestionForm()}
+					submitQuestion={submitQuestion}
+				/>
 			</Modal>
 		</div>
 	)

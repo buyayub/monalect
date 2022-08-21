@@ -23,7 +23,17 @@ I'll also be refactoring this page as well, as I think out ideas.
 + [ ] change plural names (ex. lessons) to 'all' (ex. allLesson) and keep everything singular so I stop making typos and confusing myself
 + [ ] switch to object parameters, so arguments can be order agnostic
 + [ ] I'm going to make goal generation use a seperate query, but in the future mix it in with the other initialization queries. In fact, mix all initialization queries into a single one and handle it that way.
-+ [ ] use a layout for the header/navbar
++ [ ] ~~use a layout for the header/navbar~~
++ [ ] when there's no correct answer for a multiple choice question, select "none of the above"
++ [ ] handle case where there's more choices then there are answers; duplicate answers and ensure they end up correct
++ [ ] organize components, use indexes and curly brace imports.
++ [ ] switch Question `multiple: Boolean` to `type: String` because somehow i forgot i'll add more question types in the future
+
+
+### Optimizations 
+
++ [ ] Prefetch requests + ~~Localstorage caching~~ (Apollo Client already handles caching)
++ [ ] switch the `.filter().map()` to `.reduce()`
 
 ## SCSS
 

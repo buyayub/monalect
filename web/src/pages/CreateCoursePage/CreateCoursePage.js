@@ -191,7 +191,7 @@ const CreateCoursePage = () => {
 			// Upload textbook, send success
 			const uploadArray = response.data.createBatchCourse
 
-			// search through uploaded record, get the file
+			// search through uploaded record, get the file, upload it
 			for (let item of uploadArray) {
 				const stuff = uploaded.find((e) => e.localId == item.localId)
 				uploadTextbook(stuff.file, item.presigned)
