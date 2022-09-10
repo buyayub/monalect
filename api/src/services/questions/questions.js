@@ -24,9 +24,11 @@ export const questionsByLesson = async ({userId, courseId}) => {
 			},
 			select: {
 				id: true,
+				lessonId: true,
 				question: true,
 				multiple: true,
-				answers: true
+				answers: true,
+				choices: true
 			}
 		})
 	}
@@ -43,9 +45,11 @@ export const questionsByLesson = async ({userId, courseId}) => {
 			},
 			select: {
 				id: true,
+				lessonId: true,
 				question: true,
 				multiple: true,
-				answers: true
+				answers: true,
+				choices: true
 			}
 		}))
 	})
@@ -71,9 +75,20 @@ export const createQuestion = async ( { userId, input } ) => {
 			lessonId: true,
 			question: true,
 			multiple: true,
-			choices: true
+			choices: true,
+			answers: true
 		}
 	})
 
 	return question
+}
+
+export const deleteQuestion = ({userId, questionId}) => {
+	isOwner(userId)
+	return db.question.delete({
+		where: {
+			userId: userID,
+			id: questionId
+		},
+	})
 }

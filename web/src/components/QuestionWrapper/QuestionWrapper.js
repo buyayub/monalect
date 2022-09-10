@@ -4,55 +4,9 @@ import QuestionForm from 'src/components/QuestionForm'
 import { useState, useEffect } from 'react'
 import { useAuth } from '@redwoodjs/auth'
 import Modal from 'src/components/Modal'
+import { LOAD_QUESTIONS } from 'src/shared/queries'
 
-const LOAD_QUESTIONS = gql`
-	query LoadQuestions($userId: Int!, $courseId: Int!) {
-		questionsByLesson(userId: $userId, courseId: $courseId) {
-			id
-			title
-			index
-			questions {
-				id
-				question
-				multiple
-				answers {
-					id
-					answer
-					correct
-				}
-			}
-		}
-	}
-`
 
-const CREATE_QUESTION = gql`
-	mutation CreateQuestionMutation($userId: Int!, $input: CreateQuestionInput!) {
-		createQuestion(userId: $userId, input: $input) {
-			id
-		}
-	}
-`
-
-/*
-const DELETE_QUESTION = gql`
-	mutation DeleteQuestionMutation($userId: Int!, $questionId: Int!) {
-		deleteQuestion(userId: $userId, questionId: $questionId)
-	}
-`
-
-const CREATE_ANSWER = gql`
-	mutation CreateAnswerMutation($userId: Int!, $input: CreateAnswerInput!) {
-		createAnswer(userId: $userId, input: $input) {
-			id
-		}
-	}
-`
-const DELETE_ANSWER = gql`
-	mutation DeleteAnswerMutation($userId: Int!, $id: Int!) {
-		deleteAnswer(userId: $userId, id: $id)
-	}
-`
-*/
 const QuestionWrapper = ({ courseId }) => {
 	const { currentUser } = useAuth()
 	const {
@@ -62,7 +16,6 @@ const QuestionWrapper = ({ courseId }) => {
 	} = useQuery(LOAD_QUESTIONS, {
 		variables: { userId: currentUser.id, courseId: courseId },
 	})
-	const [createQuestion, { data: questionId }] = useMutation(CREATE_QUESTION)
 	const [lessons, setLessons] = useState(undefined)
 
 	const [questionForm, setQuestionForm] = useState(false)
@@ -86,44 +39,17 @@ const QuestionWrapper = ({ courseId }) => {
 
 	if (loading) return 'Loading'
 	if (error) return `Error! ${error}`
+	
+	const appendQuestion = (question) => {
+		//deep copy
+		let lessonsCopy = JSON.parse(JSON.stringify(lessons))
 
-	const submitQuestion = (questionType, question, choices = null) => {
-		let input = {}
+		lessonsCopy.find(lesson => lesson.id == question.lessonId).questions.push(question)
+		setLessons([...lessonsCopy])
+	}
 
-		if (questionType == 'multiple') {
-			input = {
-				courseId: courseId,
-				lessonId: lessonSelect,
-				question: question,
-				multiple: true,
-				choices: choices,
-			}
-		}
-
-		else if (questionType == 'word') {
-			input = {
-				courseId: courseId,
-				lessonId: lessonSelect,
-				question: question,
-				multiple: false,
-			}
-		}
-
-
-		createQuestion({
-			variables: {
-				userId: currentUser.id,
-				input: input,
-			},
-		}).then((response) => {
-			const question = response.data.createQuestion
-			let lessonsCopy = lessons
-			lessonsCopy
-				.find((o) => o.id == question.lessonId)
-				.questions.push(question)
-
-			setLessons([...lessonsCopy])
-		})
+	const handleQuestionDelete = (question) => {
+		
 	}
 
 	return (
@@ -137,6 +63,7 @@ const QuestionWrapper = ({ courseId }) => {
 								setQuestionSelect={setQuestionSelect}
 								toggleQuestionForm={toggleQuestionForm}
 								toggleAnswerForm={toggleAnswerForm}
+								handleQuestionDelete={handleQuestionDelete}
 							/>
 						)
 				  })
@@ -146,7 +73,10 @@ const QuestionWrapper = ({ courseId }) => {
 			<Modal show={questionForm} changeState={() => toggleQuestionForm()}>
 				<QuestionForm
 					cancel={() => toggleQuestionForm()}
-					submitQuestion={submitQuestion}
+					returnQuestion={appendQuestion}
+					currentUser={currentUser}
+					courseId={courseId}
+					lessonSelect={lessonSelect}
 				/>
 			</Modal>
 		</div>

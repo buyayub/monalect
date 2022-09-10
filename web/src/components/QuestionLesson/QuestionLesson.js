@@ -11,7 +11,8 @@ const QuestionLesson = ({
 	setLessonSelect,
 	setQuestionSelect,
 	toggleQuestionForm,
-	toggleAnswerForm
+	toggleAnswerForm,
+	returnQuestion
 }) => {
 	const showUnsorted =
 		lesson.id == null && lesson.questions == [] ? false : true

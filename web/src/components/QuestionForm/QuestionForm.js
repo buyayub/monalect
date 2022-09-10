@@ -1,11 +1,15 @@
 import TextInput from 'src/components/TextInput'
 import Dropdown from 'src/components/Dropdown'
 import Button from 'src/components/Button'
+import { useMutation } from '@apollo/client'
+
+import { CREATE_QUESTION } from 'src/shared/queries'
 
 import { useState } from 'react'
 
-const QuestionForm = ({ cancel, submitQuestion = null }) => {
+const QuestionForm = ({ cancel, returnQuestion=null, currentUser, courseId, lessonSelect}) => {
 	const [questionType, setQuestionType] = useState()
+	const [createQuestion] = useMutation(CREATE_QUESTION)
 
 	const onSubmit = (e) => {
 		e.preventDefault()
@@ -15,10 +19,47 @@ const QuestionForm = ({ cancel, submitQuestion = null }) => {
 
 		let choices = null
 		if (questionType == "multiple")
-			choices = e.target[2].value;
+			choices = parseInt(e.target[2].value);
 		
 		submitQuestion(questionType, question, choices)
 		cancel()
+	}
+
+	const submitQuestion = (questionType, question, choices = null) => {
+		let input = {}
+
+
+		if (questionType == 'multiple') {
+			input = {
+				courseId: courseId,
+				lessonId: lessonSelect,
+				question: question,
+				multiple: true,
+				choices: choices,
+			}
+		}
+
+		else if (questionType == 'word') {
+			input = {
+				courseId: courseId,
+				lessonId: lessonSelect,
+				question: question,
+				multiple: false,
+			}
+		}
+
+
+		createQuestion({
+			variables: {
+				userId: currentUser.id,
+				input: input,
+			},
+		}).then((response) => {
+			const question = response.data.createQuestion
+			if (returnQuestion) {
+				returnQuestion(question)				
+			}
+		})
 	}
 
 	return (

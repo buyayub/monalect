@@ -22,4 +22,3 @@ The creation uses modal forms for the user to enter it in. This is easy to imple
 
 Me from the future, I'll move onto dynamic creation. It's just more CRUD operations, it's nothing heavy. 
 
-
