@@ -1,14 +1,13 @@
 import {FiPlus} from 'react-icons/fi';
+import IconButton from 'src/components/IconButton';
   
 const LearningMaterialAdd = ({onClick, label="Add Material", className=""}) => {
   return (
-    <div className={"mn-c-material-add " + className} onClick={onClick}>
-	    <div className="icon">
+    <div className={"mn-flex-row mn-align-center mn-gap-medium mn-clickable " + className} onClick={onClick}>
+	    <IconButton className="mn-is-secondary mn-icon-medium">
 		    <FiPlus />
-	    </div>
-	    <div className="title">
-		    <p>{label}</p>
-	    </div>
+	    </IconButton>
+		<h3 className="mn-text-blue">{label}</h3>
     </div>
   )
 }

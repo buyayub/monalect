@@ -21,14 +21,14 @@ export const Failure = ({ error }) => (
 
 export const Success = ({ card }) => {
 	return (
-		<div id="mn-i-course-title">
+		<div className="mn-flex-row mn-gap-small mn-align-end">
 			<h2>{card.title == '' ? 'Untitled' : card.title}</h2>
-			<div className="course-stats">
-				<span>
+			<div className="mn-flex-row mn-gap-small">
+				<span className="mn-flex-row mn-gap-small">
 					<RiBook2Line />
 					<h4>{card.notebookWords == null ? 0 : notebookWords}</h4>
 				</span>
-				<span>
+				<span className="mn-flex-row mn-gap-small">
 					<FiHelpCircle />
 					<h4>{card.questionCount}</h4>
 				</span>

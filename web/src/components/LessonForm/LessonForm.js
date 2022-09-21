@@ -15,9 +15,9 @@ const LessonForm = ({cancel, addLesson, identifier, setIdentifier}) => {
 		cancel();
 	};
   return (
-	  <form className="mn-c-section-form" onSubmit={onSubmit}>
+	  <form className="mn-flex-column mn-gap-large mn-form-width-medium" onSubmit={onSubmit}>
 		  <TextInput label="Title" />
-		  <div className="buttons">
+		  <div className="mn-align-self-center mn-flex-row mn-gap-medium">
 			<Button className="mn-is-secondary mn-is-small" type="reset" onClick={cancel}>Cancel</Button>
 			<Button className="mn-is-small" type="submit">Add</Button>
 		  </div>

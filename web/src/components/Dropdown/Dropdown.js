@@ -1,9 +1,10 @@
+import {FiChevronDown} from 'react-icons/fi';
+
 const Dropdown = ({
 	name,
 	label = null,
 	items,
 	id,
-	icon=null,
 	className,
 	selected,
 	onChange
@@ -22,9 +23,6 @@ const Dropdown = ({
 		    	})
 		    }
 	    </select>
-	    <div className="icon">{icon}</div>
-	    <div className="breadcrumb-bg" />
-	    <div className="breadcrumb" />
     </div>
   )
 }

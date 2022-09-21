@@ -1,3 +1,5 @@
+import  Button from 'src/components/Button';
+
 const GoalDisplay = ({type, completed, lessonIndex, allLessons, measure, goal}) => {
 
 	let title = ''
@@ -14,13 +16,16 @@ const GoalDisplay = ({type, completed, lessonIndex, allLessons, measure, goal}) 
 	title += `in ${allLessons ? `all lessons.` : `lesson ${lessonIndex}.` } `
 
 	return (
-		<div className="mn-c-goal-display">
-			<div className="progress-bar">
-				<progress max={goal} value={measure} />
-			</div>
+		<div className="mn-flex-row mn-gap-small mn-justify-space-between mn-hover">
+			<div className="mn-flex-row mn-gap-small mn-hover">
+			<progress max={goal} value={measure} />
 			<div className="main">
 				<p>{title}</p>
 			</div>
+			</div>
+			<Button className="mn-is-tertiary mn-on-hover">
+				Fail?	
+			</Button>
 		</div>
 	)
 }

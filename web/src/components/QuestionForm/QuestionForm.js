@@ -7,7 +7,13 @@ import { CREATE_QUESTION } from 'src/shared/queries'
 
 import { useState } from 'react'
 
-const QuestionForm = ({ cancel, returnQuestion=null, currentUser, courseId, lessonSelect}) => {
+const QuestionForm = ({
+	cancel,
+	returnQuestion = null,
+	currentUser,
+	courseId,
+	lessonSelect,
+}) => {
 	const [questionType, setQuestionType] = useState()
 	const [createQuestion] = useMutation(CREATE_QUESTION)
 
@@ -18,16 +24,14 @@ const QuestionForm = ({ cancel, returnQuestion=null, currentUser, courseId, less
 		const question = e.target[1].value
 
 		let choices = null
-		if (questionType == "multiple")
-			choices = parseInt(e.target[2].value);
-		
+		if (questionType == 'multiple') choices = parseInt(e.target[2].value)
+
 		submitQuestion(questionType, question, choices)
 		cancel()
 	}
 
 	const submitQuestion = (questionType, question, choices = null) => {
 		let input = {}
-
 
 		if (questionType == 'multiple') {
 			input = {
@@ -37,9 +41,7 @@ const QuestionForm = ({ cancel, returnQuestion=null, currentUser, courseId, less
 				multiple: true,
 				choices: choices,
 			}
-		}
-
-		else if (questionType == 'word') {
+		} else if (questionType == 'word') {
 			input = {
 				courseId: courseId,
 				lessonId: lessonSelect,
@@ -47,7 +49,6 @@ const QuestionForm = ({ cancel, returnQuestion=null, currentUser, courseId, less
 				multiple: false,
 			}
 		}
-
 
 		createQuestion({
 			variables: {
@@ -57,18 +58,20 @@ const QuestionForm = ({ cancel, returnQuestion=null, currentUser, courseId, less
 		}).then((response) => {
 			const question = response.data.createQuestion
 			if (returnQuestion) {
-				returnQuestion(question)				
+				returnQuestion(question)
 			}
 		})
 	}
 
 	return (
-		<form className="mn-c-question-form" onSubmit={onSubmit}>
+		<form className="mn-flex-column mn-form-width-medium mn-gap-medium" onSubmit={onSubmit}>
 			<Dropdown
+				required
 				selected="word"
+				label="Type"
 				items={[
 					{ title: 'Word', value: 'word' },
-					{ title: 'Multiple', value: 'multiple' },
+					{ title: 'Multiple Choice', value: 'multiple' },
 				]}
 				onChange={(e) => {
 					setQuestionType(e.target.value)
@@ -85,17 +88,19 @@ const QuestionForm = ({ cancel, returnQuestion=null, currentUser, courseId, less
 			) : (
 				''
 			)}
-			<Button
-				className="mn-is-secondary mn-is-small"
-				type="reset"
-				onClick={cancel}
-			>
-				Cancel
-			</Button>
-			<Button className="mn-is-small" type="submit">
-				{' '}
-				Add{' '}
-			</Button>
+			<div className="mn-flex-row mn-gap-medium mn-align-self-center">
+				<Button
+					className="mn-is-secondary" 
+					type="reset"
+					onClick={cancel}
+				>
+					Cancel
+				</Button>
+				<Button className="" type="submit">
+					{' '}
+					Add{' '}
+				</Button>
+			</div>
 		</form>
 	)
 }

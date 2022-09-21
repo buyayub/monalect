@@ -15,25 +15,27 @@ const LearningMaterialSection = ({
 	showSection,
 	linkMode,
 	lessonRoot,
-	linkSection
+	linkSection,
 }) => {
 	return (
-		<div className="mn-c-learning-material-section">
+		<div className="mn-flex-column mn-gap-medium">
 			<LearningMaterial
 				type={type}
-					className={linkMode && type=="textbook" ? "mn-is-inactive" : ""}
+				className={linkMode && type == 'textbook' ? 'mn-is-inactive' : ''}
 				title={title}
 				pages={pages}
-				onClick={(e) => { 
-						if (linkMode && type=="article") { linkSection(lessonRoot, "article", index); }
-						return null
+				onClick={(e) => {
+					if (linkMode && type == 'article') {
+						linkSection(lessonRoot, 'article', index)
+					}
+					return null
 				}}
 				handleDelete={() => {
 					materialDelete(index)
 				}}
 			/>
-			{sections != null && sections.length != 0 && (
-				<div className="section-list">
+			{sections != null && (
+				<div className="mn-flex-column mn-gap-small mn-indent">
 					{sections != null &&
 						sections.map((section, i) => {
 							return (
@@ -42,25 +44,32 @@ const LearningMaterialSection = ({
 									start={section.start}
 									end={section.end}
 									title={section.title}
-									onClick={(e) => { 
-												if (linkMode) { linkSection(lessonRoot, "section", index, i); }
-												return null
-										}}
+									onClick={(e) => {
+										if (linkMode) {
+											linkSection(lessonRoot, 'section', index, i)
+										}
+										return null
+									}}
 									handleDelete={() => sectionDelete(index, i)}
 								/>
 							)
 						})}
+					{type == 'textbook' ? (
+							<MaterialSectionAdd
+								className={linkMode ? 'mn-inactive-text' : ''}
+								onClick={
+									!linkMode
+										? () => {
+												setSectionRoot(index)
+												showSection(true)
+										  }
+										: null
+								}
+							/>
+					) : (
+						''
+					)}
 				</div>
-			)}
-			{type == 'textbook' && (
-				<MaterialSectionAdd
-					className={linkMode ? "mn-is-inactive" : ""}
-						onClick={!linkMode ? () => { 
-								setSectionRoot(index)
-								showSection(true)
-						} : null
-					}
-				/>
 			)}
 		</div>
 	)
@@ -75,12 +84,13 @@ const MaterialWrapper = ({
 	setSectionRoot,
 	linkMode,
 	lessonRoot,
-	linkSection
+	linkSection,
 }) => {
+	console.log(materials)
 	return (
-		<div className="mn-c-material-whole">
-			<h2 className="mn-is-secondary"> Learning Material </h2>
-			<div className="mn-c-material-wrapper">
+		<div className="mn-flex-column mn-gap-medium">
+			<h2 className="mn-text-blue"> Learning Material </h2>
+			<div className="mn-flex-column mn-gap-large mn-c-card">
 				{materials.map((material, i) => {
 					const sections =
 						material.type == 'textbook' ? material.sections : null
@@ -102,12 +112,10 @@ const MaterialWrapper = ({
 						/>
 					)
 				})}
-				<div className="mn-c-learning-material-section">
-				<LearningMaterialAdd 
-						className={linkMode ? "mn-is-inactive" : ""} 
-						onClick={!linkMode ? showForm : null} 
-						/>
-				</div>
+				<LearningMaterialAdd
+					className={linkMode ? 'mn-is-inactive' : ''}
+					onClick={!linkMode ? showForm : null}
+				/>
 			</div>
 		</div>
 	)

@@ -6,27 +6,32 @@ const LessonDisplay = ({
 	title,
 	notebookWords,
 	questionCount,
-	mark=0,
-	onClick
+	mark = 0,
+	onClick,
+	active = false,
 }) => {
 	return (
-		<div onClick={onClick} className="mn-c-lesson-display">
+		<div onClick={onClick} className="mn-flex-row mn-gap-medium mn-clickable">
 			<div className="index">{index}</div>
-			<div className="main">
+			<div
+				className={`mn-flex-row mn-gap-large mn-grow mn-justify-space-between mn-text-padding ${
+					active ? 'mn-border-left mn-border-bottom' : 'mn-border-left'
+				}`}
+			>
 				<p> {title} </p>
-				<div className="lesson-stats">
-					<span>
-						<RiBook2Line />
-						<p>{notebookWords == null ? 0 : notebookWords}</p>
-					</span>
-					<span>
-						<FiHelpCircle />
-						<p>{questionCount}</p>
-					</span>
+				<div className="mn-flex-row mn-gap-x-large">
+					<div className="mn-flex-row mn-is-inactive mn-gap-small">
+						<span className="mn-flex-row mn-gap-x-small">
+							<RiBook2Line />
+							<p>{notebookWords == null ? 0 : notebookWords}</p>
+						</span>
+						<span className="mn-flex-row mn-gap-x-small">
+							<FiHelpCircle />
+							<p>{questionCount}</p>
+						</span>
+					</div>
+					<div className="mark">{mark}%</div>
 				</div>
-			</div>
-			<div className="mark">
-				{mark}%
 			</div>
 		</div>
 	)

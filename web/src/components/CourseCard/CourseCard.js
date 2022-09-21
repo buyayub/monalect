@@ -1,26 +1,48 @@
-import { Link, routes } from "@redwoodjs/router"
-import {FiHelpCircle} from 'react-icons/fi';
-import {RiBook2Line} from 'react-icons/ri';
+import { Link, routes } from '@redwoodjs/router'
+import { FiHelpCircle, FiList } from 'react-icons/fi'
+import { RiBook2Line } from 'react-icons/ri'
 
-const CourseCard = ({courseId, courseTitle, notebookWords, questionCount, mark}) => {
+const CourseCard = ({
+	courseId,
+	courseTitle = 'Untitled',
+	description = 'No description.',
+	notebookWords = 0,
+	questionCount = 0,
+	mark = 0,
+	lessons = 0,
+}) => {
 	return (
-		<Link to={routes.courseHome({courseId: courseId, courseTitle: courseTitle, questionCount: questionCount, notebookWord: notebookWords})}>
-		<div className="mn-c-course-card">
-			<h4>{courseTitle}</h4>
-			<div className="bottom">
-				<div className="aggregates">
-					<div>
-						<RiBook2Line />
-						<p>{notebookWords ? notebookWords : 0}</p>
+		<Link
+			to={routes.courseHome({
+				courseId: courseId,
+				courseTitle: courseTitle,
+				questionCount: questionCount,
+				notebookWord: notebookWords,
+			})}
+		>
+			<div className="mn-c-card">
+				<div className="mn-flex-column mn-gap-small">
+					<div className="mn-flex-row mn-justify-space-between">
+						<h2>{courseTitle}</h2>
+						<h3>{mark}%</h3>
 					</div>
-					<div>
-						<FiHelpCircle />
-						<p>{questionCount}</p>
+					<div>{description}</div>
+					<div className="mn-flex-row mn-gap-large mn-justify-end">
+						<div className="mn-flex-row mn-gap-small">
+							<FiList />
+							<p>{lessons}</p>
+						</div>
+						<div className="mn-flex-row mn-gap-small">
+							<RiBook2Line />
+							<p>{notebookWords}</p>
+						</div>
+						<div className="mn-flex-row mn-gap-small">
+							<FiHelpCircle />
+							<p>{questionCount}</p>
+						</div>
 					</div>
 				</div>
-				<h4>{mark}%</h4>
 			</div>
-		</div>
 		</Link>
 	)
 }

@@ -1,5 +1,5 @@
-import { Loading, Empty, Failure, Success } from './PdFviewerCell'
-import { standard } from './PdFviewerCell.mock'
+import { Loading, Empty, Failure, Success } from './PDFviewerCell'
+import { standard } from './PDFviewerCell.mock'
 
 export const loading = () => {
 	return Loading ? <Loading /> : null
@@ -17,4 +17,4 @@ export const success = () => {
 	return Success ? <Success {...standard()} /> : null
 }
 
-export default { title: 'Cells/PdFviewerCell' }
+export default { title: 'Cells/PDFviewerCell' }

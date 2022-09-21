@@ -22,7 +22,7 @@ export const Failure = ({ error }) => (
 
 export const Success = ({ cards }) => {
 	return (
-		<div className="mn-c-course-card-container">
+		<div className="mn-flex-column mn-gap-medium">
 			{cards.map((item) => {
 				return (
 					<CourseCard

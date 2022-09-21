@@ -1,0 +1,23 @@
+.mn-c-text-input {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+
+	&.mn-is-column {
+		flex-direction: column;
+		align-items: start;
+		gap: 4px;
+	}
+
+	&.mn-is-numeric {
+		input {
+			width: 48px;
+		}
+	}
+
+	input {
+		height: 32px;
+		width: 240px;
+	}
+}

@@ -1,0 +1,129 @@
+@use '../abstract/color';
+
+.mn-c-button {
+	background-color: color.$blue;
+	color: color.$white;
+	border: none;
+	min-width: 120px;
+	padding-left: 16px;
+	padding-right: 16px;
+	height: 32px;
+
+	&.mn-is-small {
+		min-width: 80px;
+		height: 24px;
+	}
+
+	&.mn-is-highlight {
+		background-color: color.$red;
+	}
+
+	&.mn-is-secondary {
+		background-color: color.$white;
+		border: color.$blue 1px solid;
+		color: color.$black;
+		&:hover {
+			border-color: color.$white;
+		}
+	}
+
+	&.mn-is-tertiary {
+		background-color: transparent;
+		padding: 0;
+		width: auto;
+		min-height: auto;
+		min-width: auto;
+		height: auto;
+		color: color.$dark-blue;
+		text-decoration: underline;
+
+		&:hover {
+			cursor: pointer;
+		}
+
+	}
+
+	&:hover {
+		border-color: color.$white;
+		cursor: pointer;
+	}
+
+	&.mn-is-danger {
+		border: 1px color.$caution-button-border solid;
+		color: color.$caution-button-text;
+		background-color: color.$caution-button;
+		&:hover {
+			border-color: color.$white;
+		}
+	}
+}
+
+.mn-c-button.mn-is-secondary-bg {
+	background-color: color.$pale-blue;
+	color: color.$black;
+
+	&:hover {
+			border-color: color.$white;
+	}
+}
+
+.mn-c-icon-button {
+	background-color: color.$blue;
+	color: color.$white;
+	border: none;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	height: 32px;
+	width: 32px;
+
+	&.mn-is-secondary {
+		background-color: color.$white;
+		border: color.$blue 1px solid;
+		color: color.$black;
+		&:hover {
+			border-color: color.$white;
+		}
+	}
+
+	&.mn-is-tertiary {
+		background-color: transparent;
+		padding: 0;
+		width: auto;
+		min-height: auto;
+		min-width: auto;
+		height: auto;
+		color: color.$dark-blue;
+		text-decoration: underline;
+
+		&:hover {
+			cursor: pointer;
+		}
+
+	}
+
+	&:hover {
+		border-color: color.$white;
+		cursor: pointer;
+	}
+
+	&.mn-is-danger {
+		border: 1px color.$caution-button-border solid;
+		color: color.$caution-button-text;
+		background-color: color.$caution-button;
+		&:hover {
+			border-color: color.$white;
+		}
+	}
+
+	&.mn-is-small {
+		height: 16px;
+		width: 16px;
+
+		svg {
+			scale: 2;
+		}
+	}
+}
+

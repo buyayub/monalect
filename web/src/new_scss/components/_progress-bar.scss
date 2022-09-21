@@ -1,0 +1,21 @@
+@use '../abstract/color';
+
+progress {
+	height: 16px;
+	width: 80px;
+	color: color.$blue;
+	border-color: color.$blue;
+	background-color: color.$white;
+
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+
+	&::-moz-progress-bar {
+		background: color.$blue;
+	}
+
+	&::-webkit-progress-bar {
+		background: color.$blue;
+	}
+}

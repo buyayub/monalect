@@ -11,14 +11,22 @@ const MonalectPage = () => {
 	return (
 		<>
 			<MetaTags title="Monalect" description="Monalect page" />
-			<div>
-				<h2>Active</h2>
-				<Link to={routes.createCourse()}>
-					{' '}
-					<Button> Create </Button>
-				</Link>
-				<div className="Active Lessons">
-				<CourseCardsCell userId={currentUser.id}/>
+			<div className="mn-flex-row mn-justify-space-around">
+				<div className="mn-layout-hlf">
+					<h2>Community Updates</h2>
+					<p>Yo</p>
+				</div>
+				<div className="mn-flex-column mn-gap-medium">
+					<div className="mn-flex-row mn-justify-space-between">
+						<h2>Courses</h2>
+						<Link to={routes.createCourse()}>
+							{' '}
+							<Button> Create </Button>
+						</Link>
+					</div>
+					<div className="Active Lessons">
+						<CourseCardsCell userId={currentUser.id} />
+					</div>
 				</div>
 			</div>
 		</>

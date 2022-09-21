@@ -2,7 +2,6 @@ import TextInput from 'src/components/TextInput'
 import FileUpload from 'src/components/FileUpload'
 import Dropdown from 'src/components/Dropdown'
 import Button from 'src/components/Button'
-import { useState } from 'react'
 
 const LearningMaterialForm = ({
 	cancel,
@@ -11,15 +10,8 @@ const LearningMaterialForm = ({
 	setIdentifier,
 	addUploaded,
 }) => {
-	const [fileName, fileNameSet] = useState('Browse...')
-	const fileChange = (e) => {
-		const arr = e.target.value.split('\\')
-		fileNameSet(arr[arr.length - 1])
-	}
-
 	const onSubmit = (e) => {
 		e.preventDefault()
-
 		const materialType = e.target[0].value
 		const title = e.target[1].value
 		const author = e.target[2].value
@@ -49,28 +41,29 @@ const LearningMaterialForm = ({
 	}
 
 	return (
-		<form className="mn-c-material-form" onSubmit={onSubmit}>
+		<form
+			className="mn-c-material-form mn-flex-column mn-gap-large mn-form-width-medium"
+			onSubmit={onSubmit}
+		>
 			<Dropdown
 				items={[
 					{ title: 'Textbook', value: 'textbook' },
 					{ title: 'Article', value: 'article' },
 				]}
+				className="mn-align-self-center"
 			/>
-			<TextInput required label="Title" name="title" />
-			<TextInput label="Author*" name="author" />
-			<TextInput label="ISBN/doi*" name="isbn" />
-			<div className="pdf-upload">
+			<div className="mn-flex-column mn-gap-small">
+				<TextInput required label="Title" name="title" />
+				<TextInput label="Author*" name="author" />
+				<TextInput label="ISBN/doi*" name="isbn" />
 				<FileUpload
 					label="File*"
 					name="file"
 					className="mn-is-small"
-					title={fileName}
-					onChange={fileChange}
 					accept=".pdf"
 				/>
 				<TextInput
-					required
-					label="Pages"
+					label="Pages*"
 					name="pages"
 					className="mn-is-numeric"
 					inputmode="numeric"
@@ -82,17 +75,11 @@ const LearningMaterialForm = ({
 					inputmode="numeric"
 				/>
 			</div>
-			<div className="button">
-				<Button
-					className="mn-is-secondary mn-is-small"
-					type="reset"
-					onClick={cancel}
-				>
+			<div className="mn-flex-row mn-gap-medium mn-align-self-center">
+				<Button className="mn-is-secondary" type="reset" onClick={cancel}>
 					Cancel
 				</Button>
-				<Button className="mn-is-small" type="submit">
-					Add
-				</Button>
+				<Button type="submit">Add</Button>
 			</div>
 		</form>
 	)

@@ -1,6 +1,7 @@
 import QuestionAnswer from 'src/components/QuestionAnswer'
-import { FiPlusSquare } from 'react-icons/fi'
-import { FiXCircle, FiCheckCircle, FiMinusSquare } from 'react-icons/fi'
+import IconButton from 'src/components/IconButton'
+import { FiPlus } from 'react-icons/fi'
+import { FiXCircle, FiCheckCircle, FiX } from 'react-icons/fi'
 import { useState } from 'react'
 import { useAuth } from '@redwoodjs/auth'
 
@@ -31,52 +32,52 @@ const Question = ({
 		})
 	}
 
-	const incorrectQuestions = question.multiple ? (
-		<div className="incorrect">
-			<div className="icon">
-				<FiXCircle />
+	const incorrectQuestions =
+		question.multiple ? (
+			<div className="mn-is-incorrect mn-flex-row mn-gap-medium mn-indent mn-align-center">
+				<FiXCircle className="mn-icon-small mn-icon-thick" />
+				{question.answers
+					.filter((e) => {
+						return !e.correct
+					})
+					.map((e, i) => {
+						return (
+							<QuestionAnswer
+								title={e.answer}
+								correct={false}
+								handleDelete={deleteAnswer}
+							/>
+						)
+					})}
+				<div
+					className="mn-text-underline mn-flex-row mn-align-center mn-clickable"
+					onClick={() => setQuestionSelect(question.id)}
+				>
+					<FiPlus />
+					Add
+				</div>
 			</div>
-			{question.answers
-				.filter((e) => {
-					return e.correct == false
-				})
-				.map((e, i) => {
-					return (
-						<QuestionAnswer
-							title={e.answer}
-							correct={false}
-							handleDelete={deleteAnswer}
-						/>
-					)
-				})}
-			<div className="add">
-				<FiPlusSquare onClick={() => setQuestionSelect(question.id)} />
-			</div>
-		</div>
-	) : (
-		''
-	)
+		) : (
+			''
+		)
 
-	const questionIcon = question.multiple ? (
-		<div className="multiple">
-			<span>
+	const questionIcon =
+		question.multiple ? (
+			<div className="mn-flex-row mn-gap-small">
 				<p>M</p>
-			</span>
-			<span>
-				<p>{question.choices}</p>
-			</span>
-		</div>
-	) : (
-		<div className="word">
-			<p>W</p>
-		</div>
-	)
+				<p className="mn-border-left">&nbsp; {question.choices}</p>
+			</div>
+		) : (
+			<div className="word">
+				<p>W</p>
+			</div>
+		)
 
 	return (
-		<div className={'mn-c-question ' + (active ? 'mn-is-active' : '')}>
-			<div className="question">
+		<div className="mn-flex-column mn-gap-small ">
+			<div className="mn-hover mn-clickable mn-flex-row mn-gap-medium mn-justify-space-between">
 				<div
-					className="question-title"
+					className="mn-flex-row mn-gap-medium"
 					onClick={() => {
 						setActive(!active)
 					}}
@@ -85,16 +86,18 @@ const Question = ({
 					<p className="title">{question.question}</p>
 				</div>
 				<div className="question-buttons">
-					<div className="button-delete">
-						<FiMinusSquare />
-					</div>
+					<IconButton className="mn-is-danger mn-is-small mn-on-hover">
+						<FiX />
+					</IconButton>
 				</div>
 			</div>
-			<div className="answers">
-				<div className="correct">
-					<div className="icon">
-						<FiCheckCircle />
-					</div>
+			<div
+				className={
+					'mn-flex-column mn-gap-small ' + (!active ? 'mn-is-hidden' : '')
+				}
+			>
+				<div className="mn-flex-row mn-indent mn-gap-medium">
+					<FiCheckCircle className="mn-icon-small mn-icon-thick mn-is-correct" />
 					{question.answers
 						.filter((e) => {
 							return e.correct
@@ -108,8 +111,12 @@ const Question = ({
 								/>
 							)
 						})}
-					<div className="add">
-						<FiPlusSquare />
+					<div
+						className="mn-is-correct mn-text-underline mn-flex-row mn-clickable"
+						onClick={() => setQuestionSelect(question.id)}
+					>
+						<FiPlus />
+						<p>Add</p>
 					</div>
 				</div>
 				{incorrectQuestions}

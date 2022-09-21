@@ -17,7 +17,7 @@ export const everything = () => {
 }
 
 export const error = () => {
-  return <TextInput required={true} />
+  return <TextInput className="mn-c-column" label="Label" required={true} />
 }
 
 export default { title: 'Components/TextInput' }

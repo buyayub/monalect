@@ -1,0 +1,21 @@
+@use '../abstract/typography';
+@use '../abstract/color';
+
+.mn-c-nav ul {
+	display: flex;
+	flex-direction: row;
+	gap: 16px;
+	font-size: typography.$normal;
+
+	.mn-is-active {
+		color: color.$black;
+		text-decoration: underline;
+	}
+
+	li {
+		color: color.$grey;
+		&:hover {
+			color: color.$black;
+		}
+	}
+}

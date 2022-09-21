@@ -1,0 +1,53 @@
+@use '../abstract/color';
+
+.mn-c-file-upload {
+	color: color.$black;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: 16px;
+
+	justify-content: space-between;
+
+	label {
+		color: color.$black;
+	}
+
+	input {
+		display: none;
+	}
+
+
+	.input {
+		background-color: color.$white;
+		border: 1px color.$light-blue solid;
+		height: 32px;
+		width: 240px;
+		.icon  {
+			border-left: 1px color.$light-blue solid;
+			padding-left: 4px;
+			padding-right: 4px;
+		}
+
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+
+		&:hover {
+			cursor: pointer
+		}
+
+		gap: 8px;
+
+		.title {
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+			padding-left: 8px;
+			padding-right: 8px;
+		}
+	}
+
+
+}

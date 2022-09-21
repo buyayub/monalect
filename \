@@ -1,0 +1,7 @@
+@use '../abstract/color';
+
+.mn-is-danger {
+	border: 1px color.$caution-button-border solid;
+	color: color.$caution-button-text;
+	background-color: color.$caution-button-border;
+}

@@ -11,22 +11,30 @@ const MaterialSection = ({
 	icon = null,
 }) => {
 	return (
-		<div className={'mn-c-material-section ' + className}>
-			<div className="main" onClick={onClick}>
-				<div className="icon">{icon == null ? <FiFileText /> : icon}</div>
-				<div className="title">
-					<p> {title} </p>
-					{start != 0 && end != 0 && (
-						<p className="mn-is-secondary">
-							{start} - {end}
-						</p>
-					)}
-				</div>
+		<div
+			className={
+				'mn-flex-row mn-align-center mn-justify-space-between mn-hover mn-clickable ' +
+				className
+			}
+		>
+			<div className="mn-flex-row mn-gap-small mn-align-center" onClick={onClick}>
+				<div>{icon == null ? <FiFileText /> : icon}</div>
+				<p> {title} </p>
 			</div>
-			<IconButton className="mn-is-danger mn-is-small" onClick={handleDelete}>
-				{' '}
-				<FiX />{' '}
-			</IconButton>
+			<div className="mn-flex-row mn-gap-large mn-align-center">
+				{start != 0 && end != 0 && (
+					<p className="mn-is-secondary">
+						{start} - {end}
+					</p>
+				)}
+				<IconButton
+					className="mn-is-danger mn-is-small mn-on-hover "
+					onClick={handleDelete}
+				>
+					{' '}
+					<FiX />{' '}
+				</IconButton>
+			</div>
 		</div>
 	)
 }

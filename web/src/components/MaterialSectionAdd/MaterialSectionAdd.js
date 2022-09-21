@@ -1,16 +1,24 @@
-import {FiPlus} from 'react-icons/fi';
-  
-const LearningMaterialAdd = ({onClick, label="Add Section", className=""}) => {
-  return (
-    <div className={"mn-c-material-section-add " + className} onClick={onClick}>
-	    <div class="icon">
-		    <FiPlus />
-	    </div>
-	    <div class="title">
-		    <p>{label}</p>
-	    </div>
-    </div>
-  )
+import { FiPlus } from 'react-icons/fi'
+import IconButton from 'src/components/IconButton'
+
+const LearningMaterialAdd = ({
+	onClick,
+	label = 'Add Section',
+	className = '',
+}) => {
+	return (
+		<div
+			className={
+				'mn-text-blue mn-flex-row mn-gap-small mn-clickable mn-align-center ' + className
+			}
+			onClick={onClick}
+		>
+			<IconButton className="mn-is-small mn-is-secondary">
+				<FiPlus />
+			</IconButton>
+			<p>{label}</p>
+		</div>
+	)
 }
 
 export default LearningMaterialAdd

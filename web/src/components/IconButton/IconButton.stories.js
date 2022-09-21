@@ -21,4 +21,12 @@ export const secondary = () => {
 	);
 }
 
+export const danger = () => {
+	return (
+	<IconButton className="mn-is-danger"> 
+		<FiUser />
+	</IconButton>	
+	);
+}
+
 export default { title: 'Components/IconButton' }

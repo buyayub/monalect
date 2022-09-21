@@ -1,37 +1,44 @@
-import {FiUpload} from 'react-icons/fi';
+import { FiUpload } from 'react-icons/fi'
+import { useState } from 'react'
 
 const FileUpload = ({
-	name, 
-	label, 
-	title,
-	description, 
-	accept="",
-	className="", 
-	required=false,
-	onChange
+	name,
+	label,
+	description,
+	accept = '',
+	className = '',
+	required = false,
+	onChange,
 }) => {
-return (
-        
-        <div className={"mn-c-file-upload " + className}>
-      	  <label htmlFor={name} className="label"> {label} </label>
-	<label className="input" title={title}>
-		  <input 
-			type="file"
-			name={name} 
-			required={required}
-			  accept={accept}
-			  onChange={onChange}
-		  />
-		<div className="title">
-			<p>{title}</p>
+	const [fileName, fileNameSet] = useState('Browse...')
+	const fileChange = (e) => {
+		const arr = e.target.value.split('\\')
+		fileNameSet(arr[arr.length - 1])
+	}
+	return (
+		<div className={'mn-c-file-upload ' + className}>
+			<label htmlFor={name} className="label">
+				{' '}
+				{label}{' '}
+			</label>
+			<div>
+				<label className="input" title={fileName}>
+					<input
+						type="file"
+						name={name}
+						required={required}
+						accept={accept}
+						onChange={fileChange}
+					/>
+					<p className="title">{fileName}</p>
+					<div className="icon">
+						<FiUpload />
+					</div>
+				</label>
+				<p>{description}</p>
+			</div>
 		</div>
-		<div className="icon">
-			<FiUpload />
-		</div>
-	</label>
-      	<p> {description}</p>
-      </div>
-)
+	)
 }
 
 export default FileUpload

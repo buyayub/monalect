@@ -22,12 +22,14 @@ const LoginForm = ({
 	}
 
   return (
-	  <form className={"mn-c-login-form " + className} onSubmit={handleSubmit}>
-		  <TextInput label="Email:" name="username"/>
-		  <TextInput label="Password:" type="password" name="password"/>
-		  <div className="buttons">
-			  <Button className="mn-is-small" type="submit" > Login </Button>
+	  <form className={"mn-flex-column mn-gap-medium mn-form-width-medium mn-align-center mn-c-card  mn-is-red " + className} onSubmit={handleSubmit}>
+		  <div className="mn-flex-column mn-gap-small">
+		  <TextInput className="mn-is-column" label="Email:" name="username"/>
+		  <TextInput className="mn-is-column" label="Password:" type="password" name="password"/>
+		  </div>
+		  <div className="mn-flex-row mn-gap-small">
 			  <Button className="mn-is-secondary mn-is-small" onClick={cancel}> Cancel </Button>
+			  <Button className="mn-is-small mn-is-highlight" type="submit" > Login </Button>
 		  </div>
 		  <Button className="mn-is-tertiary">
 			  <Link to={routes.register()}> 

@@ -1,6 +1,7 @@
 import Question from 'src/components/Question'
-import IconButton from 'src/components/IconButton'
+import Button from 'src/components/Button'
 import { FiPlusSquare } from 'react-icons/fi'
+import { useState } from 'react'
 
 const QuestionLesson = ({
 	lesson,
@@ -12,22 +13,56 @@ const QuestionLesson = ({
 	setQuestionSelect,
 	toggleQuestionForm,
 	toggleAnswerForm,
-	returnQuestion
+	returnQuestion,
 }) => {
 	const showUnsorted =
 		lesson.id == null && lesson.questions == [] ? false : true
 
+	const [active, setActive] = useState(false)
+
 	return (
-		<div className="mn-c-question-lesson">
-			<div className="lesson-bar">
-				<div className="lesson-index">
-					<p>{lesson.index}</p>
-				</div>
-				<div className="lesson-title">
-					<p>{lesson.title == null ? 'Unsorted' : lesson.title}</p>
+		<div className="mn-flex-column mn-gap-small">
+			<div
+				onClick={() => {
+					setActive(!active)
+				}}
+				className="mn-flex-row mn-gap-small mn-clickable mn-hover"
+			>
+				<p>{lesson.index + 1}.</p>
+				<div
+					className={
+						'mn-grow mn-flex-row mn-justify-space-between mn-border-left mn-text-padding mn-align-center ' +
+						(active ? 'mn-border-bottom' : '')
+					}
+				>
+					<div className="mn-flex-row mn-gap-large">
+						<p>{lesson.title == null ? 'Unsorted' : lesson.title}</p>
+						<p className="mn-inactive-text">
+							{lesson.questions.length} questions
+						</p>
+					</div>
+					{lesson.id != null ? (
+						<Button
+							onClick={(e) => {
+								e.stopPropagation() // No bubbling
+								setLessonSelect(lesson.id)
+								toggleQuestionForm()
+							}}
+							className="mn-is-small mn-is-secondary mn-on-hover"
+						>
+							Add
+						</Button>
+					) : (
+						''
+					)}
 				</div>
 			</div>
-			<div className="question-container">
+			<div
+				className={
+					'mn-flex-column mn-gap-small mn-indent ' +
+					(active ? '' : 'mn-is-hidden')
+				}
+			>
 				{lesson.questions.map((question) => {
 					return (
 						<Question
@@ -36,13 +71,6 @@ const QuestionLesson = ({
 						/>
 					)
 				})}
-				{lesson.id != null ? (
-					<div className="add" onClick={() => {setLessonSelect(lesson.id); toggleQuestionForm()}}>
-						<FiPlusSquare />
-					</div>
-				) : (
-					''
-				)}
 			</div>
 		</div>
 	)

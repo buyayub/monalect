@@ -1,0 +1,13 @@
+@use '../abstract/color';
+
+.mn-c-card {
+	padding: 16px;
+	border-top: 4px color.$blue solid;
+	background-color: color.$white;
+	filter: drop-shadow(0px 4px 4px rgba(0,0,0, 0.1));
+
+	&.mn-is-red {
+		border-color: color.$red;
+	}
+}
+
