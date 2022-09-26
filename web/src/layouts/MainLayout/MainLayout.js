@@ -6,14 +6,6 @@ const MainLayout = ({ children }) => {
 	return ( 
 	
 		<>
-			<header>
-				<nav>
-					<IconButton> <FiUser /> </IconButton>
-					<Link to={routes.home()}>
-						<IconButton> <FiHome /> </IconButton>
-					</Link>
-				</nav>
-			</header>
 			{children}
 		</>
 	)

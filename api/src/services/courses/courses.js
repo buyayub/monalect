@@ -20,13 +20,13 @@ export const cards = async ({ userId }) => {
 				words: true
 			},
 			where: {
-				courseId: card.id
+				courseId: courseCard.id
 			}
 		}))._sum.words
 
 		const questionCount = await db.question.count({
 			where: {
-				courseId: card.id
+				courseId: courseCard.id
 			}
 		})
 
@@ -68,3 +68,17 @@ export const card = async ({courseId}) => {
 	return courseCard
 }
 
+export const courses = async ({ userId }) => {
+	isOwner(userId)
+
+	let courses = await db.course.findMany({
+		where: {
+			userId: userId
+		},
+		select: {
+			id: true,
+			title: true,
+	}})
+
+	return courses;
+}

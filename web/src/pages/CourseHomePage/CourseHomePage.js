@@ -5,7 +5,7 @@ import { RiBook2Line } from 'react-icons/ri'
 import { useState } from 'react'
 import { useAuth } from '@redwoodjs/auth'
 
-import NavBar from 'src/components/NavBar'
+import CourseNavBar from 'src/components/CourseNavBar'
 import CourseTitleCell from 'src/components/CourseTitleCell'
 import LessonDisplayCell from 'src/components/LessonDisplayCell'
 
@@ -14,27 +14,31 @@ const CourseHomePage = ({
 	courseTitle,
 	notebookWords,
 	questionCount,
+	mark,
 }) => {
 	const { currentUser } = useAuth()
 
 	return (
 		<>
 			<MetaTags title="CourseHome" description="CourseHome page" />
-			<NavBar courseId={courseId} />
-			<div className="mn-main-layout mn-flex-column mn-gap-medium">
+			<CourseNavBar courseId={courseId} userId={currentUser.id} />
+			<div className="mn-main-layout mn-flex-column mn-gap-medium mn-padding-page mn-page-height-100">
 				{!(courseTitle == undefined || questionCount == undefined) ? (
-					<div className="mn-c-header mn-flex-row mn-gap-medium">
-						<h2>{courseTitle}</h2>
+					<div className="mn-c-course-header mn-align-center mn-flex-row mn-justify-space-between">
 						<div className="mn-flex-row mn-gap-small mn-align-end">
-							<span className="mn-flex-row mn-gap-small">
-								<FiHelpCircle />
-								<h4>{notebookWords == null ? 0 : notebookWords}</h4>
-							</span>
-							<span className="mn-flex-row mn-gap-small">
-								<RiBook2Line />
-								<h4>{questionCount}</h4>
-							</span>
+							<h2>{courseTitle == '' ? 'Untitled' : courseTitle}</h2>
+							<div className="mn-flex-row mn-gap-small">
+								<span className="mn-flex-row mn-gap-small">
+									<RiBook2Line />
+									<h4>{notebookWords == null ? 0 : notebookWords}</h4>
+								</span>
+								<span className="mn-flex-row mn-gap-small">
+									<FiHelpCircle />
+									<h4>{questionCount}</h4>
+								</span>
+							</div>
 						</div>
+						<h2>{mark}%</h2>
 					</div>
 				) : (
 					<CourseTitleCell courseId={parseInt(courseId)} />

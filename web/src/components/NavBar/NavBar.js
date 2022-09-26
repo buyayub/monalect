@@ -1,25 +1,21 @@
 import { FiUser, FiHome } from 'react-icons/fi'
 import { useState } from 'react'
-import { Link, routes } from '@redwoodjs/router'
+import { NavLink, routes } from '@redwoodjs/router'
 import { useAuth } from '@redwoodjs/auth'
 import { FiMenu, FiBook, FiHelpCircle } from 'react-icons/fi'
 
 import IconButton from 'src/components/IconButton'
 
-const NavBar = ({ courseId }) => {
+const NavBar = ({ courseId, className }) => {
 	return (
-		<nav class="mn-c-nav">
-			<ul>
+		<nav className={`mn-c-nav mn-flex-row mn-align-center mn-gap-large ${className}`}>
+			<div class="mn-flex-row mn-align-center mn-gap-small">
+				<img alt="monalect logo" class="mn-logo-small" src="/monalogo.png" />
+				<p class="mn-logo-text mn-font-serif">monalect</p>
+			</div>
+			<ul className="mn-flex-row mn-align-center">
 				<li>
-					<Link to={routes.courseHome({ courseId: courseId })}>Overview</Link>
-				</li>
-				<li>
-					<Link to={routes.study({ courseId: courseId })}>Study</Link>
-				</li>
-				<li>
-					<Link to={routes.courseQuestion({ courseId: courseId })}>
-						Questions
-					</Link>
+					<NavLink activeClassName="mn-active-text" to={routes.home()}>Courses</NavLink>
 				</li>
 			</ul>
 		</nav>

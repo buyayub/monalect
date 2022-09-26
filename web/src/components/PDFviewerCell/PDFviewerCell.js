@@ -39,8 +39,9 @@ export const Success = ({ textbooks }) => {
 	}
 
 	return (
-		<div className="mn-c-pdf-viewer">
+		<div className="mn-flex-column mn-height-full">
 			<Dropdown
+				className="mn-is-long"
 				items={items}
 				onChange={selectTextbook}
 				name="textbook"
@@ -49,8 +50,8 @@ export const Success = ({ textbooks }) => {
 			/>
 			<object
 				data={bookUrl}
+				className="mn-height-full"
 				type="application/pdf"
-				className="webviewer"
 			></object>
 		</div>
 	)

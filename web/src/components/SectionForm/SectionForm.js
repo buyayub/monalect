@@ -23,22 +23,23 @@ const SectionForm = ({
 		cancel()
 	}
 	return (
-		<form className="mn-flex-column mn-gap-medium" onSubmit={onSubmit}>
+		<form
+			className="mn-flex-column mn-gap-large mn-form-width-medium"
+			onSubmit={onSubmit}
+		>
+			<div className="mn-flex-column mn-gap-small">
 			<TextInput label="Title" />
 			<div className="mn-flex-row mn-justify-space-between">
-			<p> Page Range </p>
-			<div className="mn-flex-row mn-gap-medium mn-align-center">
-				<TextInput className="mn-is-numeric" type="numeric" />
-				<p className="range"> to </p>
-				<TextInput className="mn-is-numeric" type="numeric" />
+				<p> Page Range </p>
+				<div className="mn-flex-row mn-gap-medium mn-align-center">
+					<TextInput className="mn-is-numeric" type="numeric" />
+					<p className="range"> to </p>
+					<TextInput className="mn-is-numeric" type="numeric" />
+				</div>
 			</div>
 			</div>
 			<div className="mn-flex-row mn-gap-medium mn-align-self-center">
-				<Button
-					className="mn-is-secondary"
-					type="reset"
-					onClick={cancel}
-				>
+				<Button className="mn-is-secondary" type="reset" onClick={cancel}>
 					Cancel
 				</Button>
 				<Button className="" type="submit">

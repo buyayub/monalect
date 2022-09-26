@@ -1,8 +1,0 @@
-@use "../abstract/color";
-@use "../abstract/sizing";
-
-.mn-c-page {
-	display: flex;
-	flex-direction: row;
-	gap: sizing.$main * 2;
-}

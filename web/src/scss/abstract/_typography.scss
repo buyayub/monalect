@@ -1,17 +1,131 @@
-@use "./sizing";
-@use "./color";
+@use './color';
 
-html {
-	font-family: 'Roboto', sans-serif;
-	font-weight: 400;
-	font-size: sizing.$fs-p;
-	color: color.$main0;
+// Sizes
+
+$x-small: 12px;
+$small: 14px;
+$normal: 16px;
+$large: 24px;
+$x-large: 32px;
+$xx-large: 36px;
+
+// Element
+
+*, :root {
+	font-family: 'Computer Modern Bright';
+	font-size: $normal;
 }
 
-em {
+legend, aside {
+	font-size: $small;
+}
+
+p, figcaption {
+	font-size: $normal;
+}
+
+label, nav, button {
+	font-size: $normal;
+}
+
+h4 {
+	font-size: 20px;
+}
+
+h3 {
+	font-size: $large;
+}
+
+h2 {
+	font-size: $x-large;
+}
+
+h1 {
+	font-size: $xx-large;
+}
+
+p a {
+	color: color.$dark-blue;
+	text-decoration: underline;
+	&:hover {
+		cursor: pointer;
+	}
+}
+
+@font-face {
+	font-family: 'Computer Modern Serif';
+	src: url('/public/Serif/cmunrm.woff') format('woff');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Computer Modern Bright';
+	src: url('/public/Bright/cmunbmr.woff');
+	font-weight: normal;
+	font-style: normal;
+}
+
+// storybook fucking sucks
+
+/*
+
+@font-face {
+	font-family: 'Computer Modern Serif';
+	src: url('http://localhost:7910/Serif/cmunrm.woff') format('woff');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Computer Modern Serif';
+	src: url('http://localhost:7910/Serif/cmunbx.woff') format('woff');
+	font-weight: bold;
+	font-style: normal;
+}
+
+
+@font-face {
+	font-family: 'Computer Modern Serif';
+	src: url('http://localhost:7910/Serif/cmunti.woff') format('woff');
+	font-weight: normal;
 	font-style: italic;
 }
 
-strong {
 
+@font-face {
+	font-family: 'Computer Modern Serif';
+	src: url('http://localhost:7910/Serif/cmunbi.woff') format('woff');
+	font-weight: bold;
+	font-style: italic;
 }
+
+@font-face {
+	font-family: 'Computer Modern Bright';
+	src: url('http://localhost:7910/Bright/cmunbmr.woff');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Computer Modern Bright';
+	src: url('http://localhost:7910/Bright/cmunbbx.woff');
+	font-weight: bold;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Computer Modern Bright';
+	src: url('http://localhost:7910/Bright/cmunbmo.woff');
+	font-weight: normal;
+	font-style: italic;
+}
+
+@font-face {
+	font-family: 'Computer Modern Bright';
+	src: url('http://localhost:7910/Bright/cmunbxo.woff');
+	font-weight: bold;
+	font-style: italic;
+}
+
+*/

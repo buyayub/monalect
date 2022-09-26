@@ -1,4 +1,4 @@
-import NotebookPage from  'src/components/NotebookPage';
+import NotebookPage from 'src/components/NotebookPage'
 
 export const QUERY = gql`
 	query FindNotebookQuery($userId: Int!, $courseId: Int!) {
@@ -21,15 +21,19 @@ export const Failure = ({ error }) => (
 
 export const Success = ({ notebookPages }) => {
 	return (
-		<div className="mn-c-notebook-container">
-			{ notebookPages.map((page, i) => {
-				return (
-					<div className="notebook-lesson">
-						<h4>{page.index + 1}. {page.lessonTitle}</h4>
-						<NotebookPage title={page.lessonTitle} content={page.content} id={page.id} />
-					</div>
-				)
-			})}
-		</div>
+		<>
+			<div className="mn-flex-column mn-gap-x-large mn-scrollable mn-height-full mn-padding-right-medium">
+				{notebookPages.map((page, i) => {
+					return (
+						<NotebookPage
+							index={page.index + 1}
+							title={page.lessonTitle}
+							content={page.content}
+							id={page.id}
+						/>
+					)
+				})}
+			</div>
+		</>
 	)
 }

@@ -37,6 +37,6 @@ export const schema = gql`
 	type Mutation {
 		createQuestion(userId: Int!, input: CreateQuestionInput!): Question! @requireAuth
 		updateQuestion(id: Int!, input: UpdateQuestionInput!): Question! @requireAuth
-		deleteQuestion(userId: Int!, questionId: Int!): Boolean! @requireAuth
+		deleteQuestion(userId: Int!, questionId: Int!): Question @requireAuth
 	}
 `

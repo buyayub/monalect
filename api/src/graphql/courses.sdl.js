@@ -1,14 +1,14 @@
 export const schema = gql`
 	type Course {
-		id: Int!
-		user: User!
-		userId: Int!
-		title: String!
-		createdAt: DateTime!
-		lessons: [Lesson]!
-		textbooks: [Textbook]!
-		articles: [Article]!
-		goals: [Goal]!
+		id: Int
+		user: User
+		userId: Int
+		title: String
+		createdAt: DateTime
+		lessons: [Lesson]
+		textbooks: [Textbook]
+		articles: [Article]
+		goals: [Goal]
 	}
 
 	type Card {
@@ -20,7 +20,7 @@ export const schema = gql`
 	}
 
 	type Query {
-		courses(userId: Int!): [Course!]! @requireAuth
+		courses(userId: Int!): [Course]! @requireAuth
 		course(id: Int!): Course @requireAuth
 		cards(userId: Int!): [Card!]! @requireAuth
 		card(courseId: Int!): Card! @requireAuth

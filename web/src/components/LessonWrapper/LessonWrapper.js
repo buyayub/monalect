@@ -1,6 +1,7 @@
 import MaterialSection from 'src/components/MaterialSection'
 import Button from 'src/components/Button'
 import MaterialSectionAdd from 'src/components/MaterialSectionAdd'
+import { FiPlus, FiLink } from 'react-icons/fi'
 
 const LessonNode = ({
 	index,
@@ -15,7 +16,7 @@ const LessonNode = ({
 	unlinkSection,
 }) => {
 	return (
-		<div className="mn-c-lesson-node">
+		<div className="mn-flex-column mn-gap-small">
 			<MaterialSection
 				className={
 					`mn-is-large ` +
@@ -27,7 +28,7 @@ const LessonNode = ({
 				handleDelete={handleDelete}
 				sections={lessonMaterial}
 			/>
-			<div className="lesson-list">
+			<div className="mn-indent mn-flex-column mn-gap-small">
 				{lessonMaterial.map((material, i) => {
 					if (material.type == 'article') {
 						let materialDisplay = materials[material.materialId]
@@ -69,12 +70,15 @@ const LessonNode = ({
 						setLessonRoot(index)
 					}}
 					label="Link Material"
-				/>
+				>
+					<FiLink />
+				</MaterialSectionAdd>
 			</div>
 		</div>
 	)
 }
 const LessonWrapper = ({
+	className,
 	lessons = [],
 	materials,
 	setLessonForm,
@@ -86,9 +90,9 @@ const LessonWrapper = ({
 	unlinkSection = null,
 }) => {
 	return (
-		<div className="mn-c-lesson-main">
-			<div className="title">
-				<h2> Lessons </h2>
+		<div className={`mn-flex-column mn-gap-medium ${className}`}>
+			<div className="mn-flex-row mn-justify-space-between">
+				<h2 className="mn-text-blue"> Lessons </h2>
 				<Button
 					className={!linkMode ? 'mn-is-hidden' : ''}
 					onClick={() => setLinkMode(false)}
@@ -97,7 +101,7 @@ const LessonWrapper = ({
 					Exit{' '}
 				</Button>
 			</div>
-			<div className="mn-c-lesson-wrapper">
+			<div className="mn-c-card mn-flex-column mn-gap-medium">
 				{lessons.map((lesson, i) => {
 					return (
 						<LessonNode
@@ -122,7 +126,9 @@ const LessonWrapper = ({
 					}}
 					label="Add Lesson"
 					className="mn-is-large"
-				/>
+				>
+					<FiPlus />
+				</MaterialSectionAdd> 
 			</div>
 		</div>
 	)

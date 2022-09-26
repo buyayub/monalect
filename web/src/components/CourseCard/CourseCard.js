@@ -18,6 +18,7 @@ const CourseCard = ({
 				courseTitle: courseTitle,
 				questionCount: questionCount,
 				notebookWord: notebookWords,
+				mark: mark
 			})}
 		>
 			<div className="mn-c-card">

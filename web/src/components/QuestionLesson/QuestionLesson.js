@@ -6,13 +6,14 @@ import { useState } from 'react'
 const QuestionLesson = ({
 	lesson,
 	deleteAnswer,
-	deleteQuestion,
+	handleDelete,
 	createQuestion,
 	createAnswer,
 	setLessonSelect,
 	setQuestionSelect,
 	toggleQuestionForm,
 	toggleAnswerForm,
+	setAnswerType,
 	returnQuestion,
 }) => {
 	const showUnsorted =
@@ -67,7 +68,13 @@ const QuestionLesson = ({
 					return (
 						<Question
 							question={question}
+							deleteAnswer={deleteAnswer}
 							setQuestionSelect={setQuestionSelect}
+							setAnswerType={setAnswerType}
+							toggleAnswerForm={toggleAnswerForm}
+							createAnswer={createAnswer}
+							handleDelete = {handleDelete}
+							setLessonSelect={setLessonSelect}
 						/>
 					)
 				})}

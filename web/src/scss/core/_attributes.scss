@@ -64,6 +64,19 @@
 	stroke-width: 1px;
 }
 
+.mn-logo-small {
+	height: 24px;
+	width: auto;
+}
+
+.mn-logo-text {
+	font-size: 24px;
+	font-weight: bold;
+}
+
+.mn-font-serif {
+	font-family: "Computer Modern Serif"	
+}
 
 .mn-flex-row {
 	display:flex;
@@ -92,6 +105,10 @@
 
 .mn-align-self-center{
 	align-self: center;
+}
+
+.mn-align-stretch {
+	align-items: stretch;
 }
 
 .mn-gap-x-small {
@@ -136,6 +153,11 @@
 		opacity: 1;
 		transition: 0.1s;
 	}
+
+	.mn-on-hover-active {
+		color: color.$black;
+		transition: 0.1s;
+	}
 }
 
 .mn-form-width-large {
@@ -158,12 +180,20 @@
 	border-left: 1px color.$black solid;
 }
 
+.mn-border-left-light {
+	border-left: 1px color.$grey solid;
+}
+
 .mn-border-bottom{
 	border-bottom: 1px color.$black solid;
 }
 
 .mn-padding-bottom-medium {
-	padding-bottom: 24px;
+	padding-bottom: 16px;
+}
+
+.mn-padding-bottom-small{
+	padding-bottom: 8px;
 }
 
 .mn-text-padding {
@@ -201,6 +231,10 @@
 	align-self: start;
 }
 
+.mn-align-self-end {
+	align-self: end;
+}
+
 .mn-is-correct {
 	color: color.$green;
 }
@@ -221,12 +255,29 @@
 	color: color.$grey;
 }
 
+.mn-active-text {
+	color: color.$black;
+	text-decoration: underline;
+}
+
 .mn-height-large {
 	height: 24px;
 }
 
+.mn-height-75{
+	height: 75vh;
+}
+
+.mn-height-full {
+	height: 100%;
+}
+
+.mn-page-height-100 {
+	height: calc(100vh - 38px); // minus header
+}
+
 .mn-layout-half {
-	width: 40vw;	
+	width: 50%;	
 }
 
 .mn-main-layout {
@@ -236,4 +287,34 @@
 .mn-is-inactive {
 	color: color.$grey;
 	cursor: pointer;
+}
+
+.mn-padding-header {
+	padding-top: 12px;
+	padding-left: 16px;
+	padding-right: 32px;
+}
+
+.mn-padding-page {
+	padding: 16px;
+}
+
+.mn-padding-right-medium {
+	padding-right: 16px;
+}
+
+.mn-padding-right-small{
+	padding-right: 8px;
+}
+
+.mn-scrollable {
+	overflow-y: scroll;
+}
+
+.z-index-1 {
+	z-index: 1;
+}
+
+.z-index-0 {
+	z-index: 0;
 }

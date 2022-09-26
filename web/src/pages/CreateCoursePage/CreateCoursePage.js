@@ -43,7 +43,9 @@ const CreateCoursePage = () => {
 	const [identifier, setIdentifier] = useState(0)
 
 	const materialDelete = (id) => {
-		setUploaded(uploaded.filter((element) => element.localId != materials[id].localId))
+		setUploaded(
+			uploaded.filter((element) => element.localId != materials[id].localId)
+		)
 		setMaterial(materials.filter((element, index) => index != id))
 	}
 
@@ -207,50 +209,64 @@ const CreateCoursePage = () => {
 			mode: 'cors',
 			method: 'PUT',
 			headers: {
-				"Content-Type" : "application/pdf"
+				'Content-Type': 'application/pdf',
 			},
-			body: data
-		})	
+			body: data,
+		})
 	}
 
 	return (
 		<>
 			<MetaTags title="CreateCourse" description="CreateCourse page" />
-			<TextInput
-				label="Title"
-				onChange={(e) => {
-					setTitle(e.target.value)
-				}}
-			/>
-			<div class="mn-c-page">
-				<MaterialWrapper
-					materials={materials}
-					showForm={() => setMaterialForm(true)}
-					showSection={() => setSectionForm(true)}
-					materialDelete={materialDelete}
-					sectionDelete={sectionDelete}
-					setSectionRoot={setSectionRoot}
-					linkMode={linkMode}
-					lessonRoot={lessonRoot}
-					linkSection={linkSection}
+			<header className="mn-padding-header mn-flex-row mn-align-center mn-justify-space-between">
+				<NavBar />
+			</header>
+			<div className="mn-padding-page mn-flex-column mn-gap-large">
+				<TextInput
+					className="mn-form-width-medium"
+					label="Course Title:"
+					onChange={(e) => {
+						setTitle(e.target.value)
+					}}
 				/>
-				<LessonWrapper
-					lessons={lessons}
-					materials={materials}
-					setLessonForm={setLessonForm}
-					setLessonRoot={setLessonRoot}
-					deleteLesson={deleteLesson}
-					setLinkMode={setLinkMode}
-					linkMode={linkMode}
-					lessonRoot={lessonRoot}
-					unlinkSection={unlinkSection}
-				/>
+				<div className="mn-flex-row mn-gap-large mn-justify-space-around mn-grow">
+					<MaterialWrapper
+						className="mn-layout-half"
+						materials={materials}
+						showForm={() => setMaterialForm(true)}
+						showSection={() => setSectionForm(true)}
+						materialDelete={materialDelete}
+						sectionDelete={sectionDelete}
+						setSectionRoot={setSectionRoot}
+						linkMode={linkMode}
+						lessonRoot={lessonRoot}
+						linkSection={linkSection}
+					/>
+					<LessonWrapper
+						className="mn-layout-half"
+						lessons={lessons}
+						materials={materials}
+						setLessonForm={setLessonForm}
+						setLessonRoot={setLessonRoot}
+						deleteLesson={deleteLesson}
+						setLinkMode={setLinkMode}
+						linkMode={linkMode}
+						lessonRoot={lessonRoot}
+						unlinkSection={unlinkSection}
+					/>
+				</div>
 			</div>
-			<Button onClick={() => {}}>Cancel</Button>
-			<Button onClick={() => submitCourse(title, materials, lessons)}>
-				Create
-			</Button>
-			<Modal show={showMaterialForm} changeState={() => setMaterialForm(false)}>
+			<footer className="mn-c-sticky-footer">
+				<Button onClick={() => {}}>Cancel</Button>
+				<Button onClick={() => submitCourse(title, materials, lessons)}>
+					Create
+				</Button>
+			</footer>
+			<Modal
+				title="Add Material"
+				show={showMaterialForm}
+				changeState={() => setMaterialForm(false)}
+			>
 				<LearningMaterialForm
 					cancel={() => {
 						setMaterialForm(false)
@@ -261,7 +277,11 @@ const CreateCoursePage = () => {
 					addUploaded={addUploaded}
 				/>
 			</Modal>
-			<Modal show={showSectionForm} changeState={() => setSectionForm(false)}>
+			<Modal
+				title="Textbook Section"
+				show={showSectionForm}
+				changeState={() => setSectionForm(false)}
+			>
 				<SectionForm
 					cancel={() => setSectionForm(false)}
 					addSection={addSection}
@@ -270,7 +290,11 @@ const CreateCoursePage = () => {
 					setIdentifier={setIdentifier}
 				/>
 			</Modal>
-			<Modal show={showLessonForm} changeState={() => setLessonForm(false)}>
+			<Modal
+				title="Add Lesson"
+				show={showLessonForm}
+				changeState={() => setLessonForm(false)}
+			>
 				<LessonForm
 					cancel={() => setLessonForm(false)}
 					addLesson={addLesson}

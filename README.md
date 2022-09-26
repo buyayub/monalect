@@ -10,7 +10,7 @@ Monalect is a web-app built with [RedwoodJS](https://redwoodjs.com/). I highly r
 
 Monalect will eventually be wholly hosted on https://www.monalect.com 
 
-It should be done by the end of August 2022, that's my last deadline.
+~~It should be done by the end of August 2022, that's my last deadline.~~ :(
 
 ## To-Do
 

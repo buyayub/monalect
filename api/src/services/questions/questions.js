@@ -1,26 +1,25 @@
 import { db } from 'src/lib/db'
 import { isOwner } from 'src/lib/auth'
 
-export const questionsByLesson = async ({userId, courseId}) => {
+export const questionsByLesson = async ({ userId, courseId }) => {
 	isOwner(userId)
 
 	let payload = await db.lesson.findMany({
-		where: 
-		{
+		where: {
 			userId: userId,
-			courseId: courseId
+			courseId: courseId,
 		},
-		select: 
-		{
+		select: {
 			id: true,
 			index: true,
-			title: true
-		}})
+			title: true,
+		},
+	})
 
-	for (item of payload){ 
+	for (item of payload) {
 		item.questions = db.question.findMany({
 			where: {
-				lessonId: item.id 
+				lessonId: item.id,
 			},
 			select: {
 				id: true,
@@ -28,8 +27,8 @@ export const questionsByLesson = async ({userId, courseId}) => {
 				question: true,
 				multiple: true,
 				answers: true,
-				choices: true
-			}
+				choices: true,
+			},
 		})
 	}
 
@@ -38,10 +37,10 @@ export const questionsByLesson = async ({userId, courseId}) => {
 		id: null,
 		index: null,
 		title: null,
-		questions: (await db.question.findMany({
+		questions: await db.question.findMany({
 			where: {
 				courseId: courseId,
-				lessonId: null
+				lessonId: null,
 			},
 			select: {
 				id: true,
@@ -49,16 +48,15 @@ export const questionsByLesson = async ({userId, courseId}) => {
 				question: true,
 				multiple: true,
 				answers: true,
-				choices: true
-			}
-		}))
+				choices: true,
+			},
+		}),
 	})
 
 	return payload
-
 }
 
-export const createQuestion = async ( { userId, input } ) => {
+export const createQuestion = async ({ userId, input }) => {
 	isOwner(userId)
 
 	const question = await db.question.create({
@@ -68,7 +66,7 @@ export const createQuestion = async ( { userId, input } ) => {
 			lessonId: input.lessonId,
 			question: input.question,
 			choices: input.choices,
-			multiple: input.multiple
+			multiple: input.multiple,
 		},
 		select: {
 			id: true,
@@ -76,19 +74,19 @@ export const createQuestion = async ( { userId, input } ) => {
 			question: true,
 			multiple: true,
 			choices: true,
-			answers: true
-		}
+			answers: true,
+		},
 	})
 
 	return question
 }
 
-export const deleteQuestion = ({userId, questionId}) => {
+export const deleteQuestion = async ({ userId, questionId }) => {
 	isOwner(userId)
-	return db.question.delete({
+	const question = db.question.delete({
 		where: {
-			userId: userID,
 			id: questionId
 		},
 	})
+	return question
 }

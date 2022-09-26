@@ -11,7 +11,7 @@ const LessonDisplay = ({
 	active = false,
 }) => {
 	return (
-		<div onClick={onClick} className="mn-flex-row mn-gap-medium mn-clickable">
+		<div onClick={onClick} className="mn-hover mn-flex-row mn-gap-medium mn-clickable">
 			<div className="index">{index}</div>
 			<div
 				className={`mn-flex-row mn-gap-large mn-grow mn-justify-space-between mn-text-padding ${
@@ -20,7 +20,7 @@ const LessonDisplay = ({
 			>
 				<p> {title} </p>
 				<div className="mn-flex-row mn-gap-x-large">
-					<div className="mn-flex-row mn-is-inactive mn-gap-small">
+					<div className="mn-flex-row mn-on-hover-active mn-is-inactive mn-gap-small">
 						<span className="mn-flex-row mn-gap-x-small">
 							<RiBook2Line />
 							<p>{notebookWords == null ? 0 : notebookWords}</p>

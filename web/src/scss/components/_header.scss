@@ -1,0 +1,15 @@
+@use '../abstract/color';
+
+.mn-c-header {
+	height: 38px;
+}
+
+.mn-c-course-header {
+	position: relative;
+	left: -16px;
+	width: 100vw;
+	background-color: color.$blue;
+	border-bottom: 4px double;
+	color: color.$white;
+	padding: 24px;
+}

@@ -1,54 +1,55 @@
-@use "./base/reset";
-@use "./base/core";
+@use './core/reset';
+@use './abstract/typography';
+@use './abstract/color';
+@use './core/attributes';
 
-@use "./abstract/typography";
-@use "./abstract/sizing";
-@use "./abstract/color";
+@use './components/button';
+@use './components/card';
+@use './components/dropdown';
+@use './components/file-upload';
+@use './components/progress-bar';
+@use './components/text-input';
+@use './components/modal';
+@use './components/nav';
+@use './components/footer';
+@use './components/header';
 
-@use "./component/button";
-@use "./component/page";
-@use "./component/textinput";
-@use "./component/icon-button";
-@use "./component/dropdown";
-@use "./component/navbar";
-@use "./component/login-form";
-@use "./component/learning-material";
-@use "./component/learning-material-add";
-@use "./component/lesson-wrapper";
-@use "./component/material-section";
-@use "./component/material-section-add";
-@use "./component/material-form";
-@use "./component/material-wrapper";
-@use "./component/section-form";
-@use "./component/file-upload";
-@use "./component/modal";
-@use "./component/course-card";
-
-@use "./component/goal-display";
-@use "./component/lesson-display";
-@use "./component/lesson-material-display";
-@use "./component/header";
-
-@use "./component/answer";
-@use "./component/question";
-
-@use "./page/course-home";
-@use "./page/course-study";
 
 body {
-	background-color: color.$background;
-	box-sizing: border-box;
+	background-color: color.$white;
+	scrollbar-width: none;
 }
 
-
-h2 {
-	font-size: sizing.$fs-h2;
-	font-weight: 300;
+body::-webkit-scrollbar {
+	width: 4px;
 }
 
-h4 {
-	font-size: sizing.$fs-h4;
-	font-weight: 300;
-}
+.ql-container {
+	height: auto !important;
+	font-family: 'Computer Modern Serif' !important;
+	font-size: 16px !important;
 
+	p {
+		font-size: 16px !important;
+	}
+
+	strong {
+		font-weight: bold;
+	}
+
+	em {
+		font-style: italic;
+	}
+
+	sup {
+		vertical-align: super;
+		font-size: 12px;
+	}
+
+	sub {
+		vertical-align: sub;
+		font-size: 12px;
+	}
+
+}
 

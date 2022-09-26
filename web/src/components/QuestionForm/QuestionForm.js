@@ -24,8 +24,12 @@ const QuestionForm = ({
 		const question = e.target[1].value
 
 		let choices = null
-		if (questionType == 'multiple') choices = parseInt(e.target[2].value)
+		if (questionType == 'multiple') {
+			choices = parseInt(e.target[2].value)
+			e.target[2].value = ''
+		}
 
+		e.target[1].value = ''
 		submitQuestion(questionType, question, choices)
 		cancel()
 	}
@@ -64,7 +68,13 @@ const QuestionForm = ({
 	}
 
 	return (
-		<form className="mn-flex-column mn-form-width-medium mn-gap-medium" onSubmit={onSubmit}>
+		<form
+			className="mn-flex-column mn-form-width-medium mn-gap-medium"
+			onSubmit={onSubmit}
+			onReset={(e) => {
+				setQuestionType("word")
+			}}
+		>
 			<Dropdown
 				required
 				selected="word"
@@ -90,9 +100,11 @@ const QuestionForm = ({
 			)}
 			<div className="mn-flex-row mn-gap-medium mn-align-self-center">
 				<Button
-					className="mn-is-secondary" 
+					className="mn-is-secondary"
 					type="reset"
-					onClick={cancel}
+					onClick={(e) => {
+						cancel()
+					}}
 				>
 					Cancel
 				</Button>

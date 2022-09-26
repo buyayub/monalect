@@ -1,7 +1,7 @@
 import { useQuill } from 'react-quilljs'
-import 'quill/dist/quill.snow.css'
 import { useState, useEffect } from 'react'
 import { useMutation } from '@redwoodjs/web'
+import 'quill/dist/quill.snow.css'
 import { useAuth } from '@redwoodjs/auth'
 import { useParams, useLocation } from '@redwoodjs/router'
 
@@ -15,13 +15,14 @@ const SAVE_CONTENT = gql`
 	}
 `
 
-const NotebookPage = ({ title, content, id }) => {
+const NotebookPage = ({ index, title, content, id }) => {
 	const timeout = 2
 	const [timer, setTimer] = useState(0)
 	const [saved, setSaved] = useState(true)
 	const [saveContent] = useMutation(SAVE_CONTENT)
 	const { currentUser } = useAuth()
 	const [updateStuff, setUpdateStuff] = useState(false)
+	const [wordCount, setWordCount] = useState(0)
 
 	const { pathname } = useLocation()
 
@@ -43,14 +44,20 @@ const NotebookPage = ({ title, content, id }) => {
 			],
 		},
 		formats: ['bold', 'italic', 'indent', 'list', 'script', 'size', 'formula'],
+		theme: 'snow',
 	})
 
-	const submitPage = () => {
-		let page = 0
-		let words = quill
+	const getWords = () => {
+		return quill
 			.getText()
 			.split(/\n| |\t/)
 			.filter((e) => e != '').length
+	}
+
+	const submitPage = () => {
+		let page = 0
+		let words = getWords()
+		setWordCount(getWords())
 		let newContent = JSON.stringify(quill.getContents())
 		saveContent({
 			variables: {
@@ -86,16 +93,14 @@ const NotebookPage = ({ title, content, id }) => {
 	// reset timer to 5 on change
 	// quill initialization
 
-	console.log(title, " Update: ", content)
-
 	useEffect(() => {
 		if (quill) {
-			console.log(title, " Effect: ", content)
 			quill.setContents(JSON.parse(content))
 			quill.on('text-change', () => {
 				setTimer(timeout)
 				setSaved(false)
 			})
+			setWordCount(getWords())
 		}
 	}, [quill, updateStuff])
 
@@ -107,10 +112,22 @@ const NotebookPage = ({ title, content, id }) => {
 
 	return (
 		<>
-			<div className="quill-page">
-				<div ref={quillRef} />
+			<div className="mn-flex-column mn-gap-small">
+				<div className="mn-flex-row mn-justify-space-between">
+					<h3>
+						{index}. {title}{' '}
+					</h3>
+					<p className="mn-align-self-end mn-padding-right-medium mn-secondary-text">
+						{saved ? 'Saved' : 'Unsaved...'}
+					</p>
+				</div>
+				<div>
+					<div ref={quillRef} />
+				</div>
+				<p className="mn-text-blue mn-align-self-end mn-padding-right-small">
+					{wordCount} words
+				</p>
 			</div>
-			<p className="saved">{saved ? 'Saved' : 'Unsaved...'}</p>
 		</>
 	)
 }

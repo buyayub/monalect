@@ -24,6 +24,7 @@ I'll also be refactoring this page as well, as I think out ideas, as well as a f
 + [ ] switch to object parameters, so arguments can be order agnostic
 + [ ] I'm going to make goal generation use a seperate query, but in the future mix it in with the other initialization queries. In fact, mix all initialization queries into a single one and handle it that way.
 + [ ] ~~use a layout for the header/navbar~~
+	+ this is "impossible" since redwoodjs doesn't seem to provide support for accessing route parameters in layouts instead of pages, which seems silly, but it's insurmountable. Best I could do was a header component, which turned out well.
 + [ ] when there's no correct answer for a multiple choice question, select "none of the above"
 + [ ] handle case where there's more choices then there are answers; duplicate answers and ensure they end up correct
 + [ ] organize components, use indexes and curly brace imports. 

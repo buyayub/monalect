@@ -2,6 +2,7 @@ import LearningMaterial from 'src/components/LearningMaterial'
 import LearningMaterialAdd from 'src/components/LearningMaterialAdd'
 import MaterialSection from 'src/components/MaterialSection'
 import MaterialSectionAdd from 'src/components/MaterialSectionAdd'
+import { FiPlus } from 'react-icons/fi'
 
 const LearningMaterialSection = ({
 	type,
@@ -18,7 +19,7 @@ const LearningMaterialSection = ({
 	linkSection,
 }) => {
 	return (
-		<div className="mn-flex-column mn-gap-medium">
+		<div className={`mn-flex-column mn-gap-medium`}>
 			<LearningMaterial
 				type={type}
 				className={linkMode && type == 'textbook' ? 'mn-is-inactive' : ''}
@@ -65,7 +66,9 @@ const LearningMaterialSection = ({
 										  }
 										: null
 								}
-							/>
+							>
+								<FiPlus />
+							</MaterialSectionAdd>
 					) : (
 						''
 					)}
@@ -76,6 +79,7 @@ const LearningMaterialSection = ({
 }
 
 const MaterialWrapper = ({
+	className,
 	materials = [],
 	showForm,
 	showSection,
@@ -88,7 +92,7 @@ const MaterialWrapper = ({
 }) => {
 	console.log(materials)
 	return (
-		<div className="mn-flex-column mn-gap-medium">
+		<div className={`mn-flex-column mn-gap-medium ${className}`}>
 			<h2 className="mn-text-blue"> Learning Material </h2>
 			<div className="mn-flex-column mn-gap-large mn-c-card">
 				{materials.map((material, i) => {

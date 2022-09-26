@@ -1,10 +1,10 @@
-import { FiPlus } from 'react-icons/fi'
 import IconButton from 'src/components/IconButton'
 
 const LearningMaterialAdd = ({
 	onClick,
 	label = 'Add Section',
 	className = '',
+	children
 }) => {
 	return (
 		<div
@@ -14,7 +14,7 @@ const LearningMaterialAdd = ({
 			onClick={onClick}
 		>
 			<IconButton className="mn-is-small mn-is-secondary">
-				<FiPlus />
+				{children}
 			</IconButton>
 			<p>{label}</p>
 		</div>

@@ -39,21 +39,25 @@ export const CREATE_QUESTION = gql`
 
 export const DELETE_QUESTION = gql`
 	mutation DeleteQuestionMutation($userId: Int!, $questionId: Int!) {
-		deleteQuestion(userId: $userId, questionId: $questionId)
-	}
-`
-
-/*
-const CREATE_ANSWER = gql`
-	mutation CreateAnswerMutation($userId: Int!, $input: CreateAnswerInput!) {
-		createAnswer(userId: $userId, input: $input) {
+		deleteQuestion(userId: $userId, questionId: $questionId) {
 			id
 		}
 	}
 `
-const DELETE_ANSWER = gql`
-	mutation DeleteAnswerMutation($userId: Int!, $id: Int!) {
-		deleteAnswer(userId: $userId, id: $id)
+
+
+export const CREATE_ANSWER = gql`
+	mutation CreateAnswerMutation($userId: Int!, $input: CreateAnswerInput!) {
+		createAnswer(userId: $userId, input: $input) {
+			id
+			answer
+			correct
+			questionId
+		}
 	}
 `
-*/
+export const DELETE_ANSWER = gql`
+	mutation DeleteAnswerMutation($userId: Int!, $id: Int!) {
+		deleteAnswer(userId: $userId, id: $id) 
+	}
+`
