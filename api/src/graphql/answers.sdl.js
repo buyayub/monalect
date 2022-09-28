@@ -14,7 +14,7 @@ export const schema = gql`
 	input CreateAnswerInput {
 		answer: String!
 		correct: Boolean!
-		questionId: Int!
+		questionId: Int
 	}
 
 	input UpdateAnswerInput {

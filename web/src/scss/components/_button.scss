@@ -127,3 +127,14 @@
 	}
 }
 
+.mn-is-danger.mn-is-soft {
+	background-color: color.$pale-red;
+	border-color: transparent;
+	color: color.$light-red;
+
+	&:hover  {
+		color: color.$dark-red;
+		background-color: color.$light-red;
+	}
+}
+

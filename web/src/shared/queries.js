@@ -61,3 +61,12 @@ export const DELETE_ANSWER = gql`
 		deleteAnswer(userId: $userId, id: $id) 
 	}
 `
+export const GET_LESSONS = gql`
+	query GetLessonsQuery($userId: Int!, $courseId: Int!) {
+		lessons(courseId: $courseId, userId: $userId) {
+			id
+			title
+			index
+		}
+	}
+`

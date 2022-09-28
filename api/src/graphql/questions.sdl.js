@@ -27,6 +27,7 @@ export const schema = gql`
 		question: String!
 		choices: Int
 		multiple: Boolean!
+		answers: [CreateAnswerInput]!
 	}
 
 	input UpdateQuestionInput {

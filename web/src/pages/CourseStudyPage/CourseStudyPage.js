@@ -1,6 +1,8 @@
 import { Link, routes } from '@redwoodjs/router'
 import { MetaTags, useQuery, Head } from '@redwoodjs/web'
 import { useAuth } from '@redwoodjs/auth'
+import  QuestionFullForm from 'src/components/QuestionFullForm';
+import Modal from 'src/components/Modal'
 
 import CourseNavBar from 'src/components/CourseNavBar'
 import { useState } from 'react'
@@ -10,6 +12,7 @@ import PDFviewerCell from 'src/components/PDFviewerCell'
 const CourseStudyPage = ({ courseId }) => {
 	const { currentUser } = useAuth()
 	const [bookUrl, setBookUrl] = useState('')
+	const [showForm, setShowForm] = useState(true)
 
 	// load katex in <Head> </Head> 
 	return (
@@ -46,6 +49,9 @@ const CourseStudyPage = ({ courseId }) => {
 					</div>
 				</main>
 			</div>
+			<Modal show={showForm} changeState={() => {setShowForm(!showForm)}}>
+				<QuestionFullForm cancel={() => {setShowForm(!showForm)}}courseId={parseInt(courseId)} userId={currentUser.id}/>
+			</Modal>
 		</>
 	)
 }

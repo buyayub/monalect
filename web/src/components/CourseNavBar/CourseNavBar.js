@@ -66,6 +66,14 @@ const CourseNavBar = ({ courseId = null }) => {
 							Questions
 						</NavLink>
 					</li>
+					<li>
+						<NavLink
+							activeClassName="mn-active-text"
+							to={routes.test({ courseId: courseId })}
+						>
+							Tests
+						</NavLink>
+					</li>
 				</ul>
 			</nav>
 		</header>

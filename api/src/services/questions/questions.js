@@ -59,7 +59,7 @@ export const questionsByLesson = async ({ userId, courseId }) => {
 export const createQuestion = async ({ userId, input }) => {
 	isOwner(userId)
 
-	const question = await db.question.create({
+	let question = await db.question.create({
 		data: {
 			userId: userId,
 			courseId: input.courseId,
@@ -74,9 +74,33 @@ export const createQuestion = async ({ userId, input }) => {
 			question: true,
 			multiple: true,
 			choices: true,
-			answers: true,
 		},
 	})
+
+	let answers = []
+
+	if (input.answers.length > 0) {
+		for (answer of input.answers) {
+			answers.push(
+				await db.answer.create({
+					data: {
+						userId: userId,
+						questionId: question.id,
+						correct: answer.correct,
+						answer: answer.answer,
+					},
+					select: {
+						id: true,
+						questionId: true,
+						correct: true,
+						answer: true,
+					},
+				})
+			)
+		}
+	}
+
+	question.answers = answers
 
 	return question
 }
@@ -85,7 +109,7 @@ export const deleteQuestion = async ({ userId, questionId }) => {
 	isOwner(userId)
 	const question = db.question.delete({
 		where: {
-			id: questionId
+			id: questionId,
 		},
 	})
 	return question

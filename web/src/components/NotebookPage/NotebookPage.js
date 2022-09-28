@@ -81,7 +81,7 @@ const NotebookPage = ({ index, title, content, id }) => {
 				setTimer(timer - 1)
 			}, 1000)
 		}
-		if (timer == 0 && saved != true) {
+		if (timer == 0 && !saved) {
 			setSaved(true)
 			submitPage()
 		}

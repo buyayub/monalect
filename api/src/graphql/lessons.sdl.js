@@ -16,8 +16,6 @@ export const schema = gql`
 	}
 
 	# I have absolutely no clue why this one works but Lesson doesn't. Not a single fucking clue. 
-	# It's a phantom bug, no matter how deep I searched I couldn't find a reason.
-	# Sign of the end times.
 	type LessonDisplay {
 		id: Int!
 		user: User!

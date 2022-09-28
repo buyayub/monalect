@@ -108,6 +108,6 @@ export const requireAuth = ({ roles }) => {
 
 export const isOwner = (id) => {
 	if (context.currentUser.id !== id) {
-		throw new ForbiddenError("You don't own that.")
+		throw new ForbiddenError("You don't have access to that.")
 	}
 }

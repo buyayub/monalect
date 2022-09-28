@@ -4,6 +4,10 @@
 	display: none !important;
 }
 
+.mn-is-visible-hidden {
+	visibility: collapse !important;
+}
+
 .mn-is-blur {
 	filter: blur(2px);
 	transition: 0.3s;
@@ -44,6 +48,10 @@
 .mn-flex-column {
 	display: flex;
 	flex-direction: column;
+}
+
+.mn-flex-wrap {
+	flex-wrap: wrap;
 }
 
 .mn-icon-large {

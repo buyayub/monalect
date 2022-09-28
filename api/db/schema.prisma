@@ -25,6 +25,7 @@ model User {
 	answers		Answer[]
 	goals		Goal[]
 	notebookPages NotebookPage[]
+	tests Test[]
 }
 
 model Course {
@@ -41,6 +42,7 @@ model Course {
 	articles	Article[]
 	goals		Goal[]
 	questions	Question[]	
+	tests Test[]
 }
 
 model Lesson {
@@ -55,6 +57,7 @@ model Lesson {
 	sections 	SectionOnLesson[]
 	articles		ArticleOnLesson[]
 	questions	Question[]	
+	tests		TestOnLesson[]
 }
 
 model Textbook {
@@ -168,3 +171,22 @@ model NotebookPage {
 	courseId 	Int
 }
 
+
+model Test {
+	id		Int @id @default(autoincrement())
+	user		User	@relation(fields: [userId], references: [id])
+	userId		Int
+	quiz		Boolean
+	lessons 	TestOnLesson[]	
+	course 		Course @relation(fields: [courseId], references: [id])
+	courseId 	Int
+}
+
+model TestOnLesson {
+	id			Int 	@id @default(autoincrement())
+	mark		Int
+	lesson 		Lesson @relation(fields: [lessonId], references: [id])
+	lessonId 	Int
+	test 		Test @relation(fields: [testId], references: [id])
+	testId 		Int
+}

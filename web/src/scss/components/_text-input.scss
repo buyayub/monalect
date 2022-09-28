@@ -1,4 +1,4 @@
-.mn-c-text-input {
+div.mn-c-text-input {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
@@ -20,4 +20,11 @@
 		height: 32px;
 		width: 240px;
 	}
+}
+
+span.mn-c-text-input
+{
+	height: 16px;
+	min-width: 32px;
+	border-bottom: 1px solid grey;
 }
