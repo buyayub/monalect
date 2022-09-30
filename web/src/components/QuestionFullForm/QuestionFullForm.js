@@ -76,16 +76,28 @@ const QuestionFullForm = ({
 	const onSubmit = (e) => {
 		e.preventDefault()
 		const lessonId = parseInt(e.target[0].value)
-		const questionType = e.target[1].value == 'multiple'
+		const multiple = e.target[1].value == 'multiple'
 		const question = e.target[2].value
+		let choices = null
+
+		if (multiple) {
+			choices = parseInt(e.target[3].value)
+		}
 
 		let questionAnswers = []
 
 		for (const answer of answers) {
-			questionAnswers.push({
-				answer: answer.answer,
-				correct: answer.correct,
-			})
+			if (multiple) {
+				questionAnswers.push({
+					answer: answer.answer,
+					correct: answer.correct,
+				})
+			} else if (!multiple && answer.correct) {
+				questionAnswers.push({
+					answer: answer.answer,
+					correct: answer.correct,
+				})
+			}
 		}
 
 		createQuestion({
@@ -95,21 +107,24 @@ const QuestionFullForm = ({
 					courseId: courseId,
 					lessonId: lessonId,
 					question: question,
-					multiple: questionType,
+					multiple: multiple,
+					choices: choices,
 					answers: questionAnswers,
 				},
 			},
 		})
 
-		// reset form 
-		e.target[2].value = ""
+		// reset form
+		e.target[2].value = ''
 		setAnswers([])
 		setAnswerKey(0)
+		if (multiple) {
+			e.target[3].value = ''
+		}
 
 		// start temporary "created" message
 		setTimer(timeout)
 	}
-
 
 	return (
 		<form
@@ -141,6 +156,11 @@ const QuestionFullForm = ({
 				}}
 			/>
 			<TextInput label="Question" required={true} />
+			{questionType == 'multiple' ? (
+				<TextInput label="Choices" className="mn-is-numeric" required={true} />
+			) : (
+				''
+			)}
 			<div className="mn-flex-column mn-gap-medium mn-padding-bottom-medium">
 				<p>Answers</p>
 				<div className="mn-flex-column mn-gap-small">
@@ -165,13 +185,13 @@ const QuestionFullForm = ({
 			</div>
 			<div className="mn-flex-row mn-align-self-center mn-gap-medium">
 				<Button className="mn-is-secondary" onClick={cancel}>
-					Cancel
+					Close
 				</Button>
-				<Button type="submit" className="mn-is-primary">Create</Button>
+				<Button type="submit" className="mn-is-primary">
+					Create
+				</Button>
 			</div>
-			<div className="mn-align-self-center">
-				{(timer > 0) ? "Created" : ""}
-			</div>
+			<div className="mn-align-self-center">{timer > 0 ? 'Created' : ''}</div>
 		</form>
 	)
 }
@@ -188,33 +208,37 @@ const CustomAnswerForm = ({
 	const [inputToggle, setInputToggle] = useState(false)
 	const inputForm = useRef(null)
 
+	// focus selection on text input if it's toggled to edit
 	useEffect(() => {
 		if (inputForm && inputToggle) {
 			inputForm.current.focus()
 		}
 	}, [inputToggle])
 
+	// handle keyboard input from text input to add submit and escape functionality
 	const inputKeyPress = (e) => {
 		if (e.key == 'Enter') {
 			e.preventDefault()
-
-			let answersCopy = JSON.parse(JSON.stringify(answers))
-
-			answersCopy.push({
-				answer: e.target.textContent,
-				correct: correct,
-				key: answerKey,
-			})
-
-			setAnswers([...answersCopy])
+			addAnswer(e.target.textContent)
 			e.target.textContent = ''
-			setAnswerKey(answerKey + 1)
 		}
 
 		if (e.key == 'Escape') {
 			e.preventDefault()
 			setInputToggle(!inputToggle)
 		}
+	}
+
+	// add answer to answers array
+	const addAnswer = (answer) => {
+		let answersCopy = JSON.parse(JSON.stringify(answers))
+		answersCopy.push({
+			answer: answer,
+			correct: correct,
+			key: answerKey,
+		})
+		setAnswers([...answersCopy])
+		setAnswerKey(answerKey + 1)
 	}
 
 	const deleteAnswer = (key) => {
@@ -275,11 +299,12 @@ const CustomAnswerForm = ({
 					<p>Add</p>
 				</div>
 				<span
-					class={`mn-c-text-input ${!inputToggle ? 'mn-is-hidden' : ''}`}
+					className={`mn-c-text-input ${!inputToggle ? 'mn-is-hidden' : ''}`}
 					contentEditable={true}
 					ref={inputForm}
 					onKeyDown={inputKeyPress}
 					onBlur={(e) => {
+						addAnswer(e.target.textContent)
 						setInputToggle(!inputToggle)
 						e.target.innerText = ''
 					}}

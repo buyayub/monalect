@@ -1,3 +1,5 @@
+@use '../abstract/typography';
+
 div.mn-c-text-input {
 	display: flex;
 	flex-direction: row;
@@ -22,9 +24,18 @@ div.mn-c-text-input {
 	}
 }
 
-span.mn-c-text-input
-{
-	height: 16px;
+span.mn-c-text-input {
+	min-height: 16px;
 	min-width: 32px;
 	border-bottom: 1px solid grey;
+	&.mn-h2 {
+		font-size: typography.$x-large !important;
+		height: typography.$x-large;
+		min-width: 64px;
+	}
+
+	&[contenteditable] {
+		outline: 0px solid transparent;
+	}
 }
+

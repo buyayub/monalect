@@ -33,13 +33,13 @@ export const schema = gql`
 	}
 
 	input UpdateCourseInput {
-		userId: Int
 		title: String
+		description: String
 	}
 
 	type Mutation {
 		createCourse(input: CreateCourseInput!): Course! @requireAuth
-		updateCourse(id: Int!, input: UpdateCourseInput!): Course! @requireAuth
-		deleteCourse(id: Int!): Course! @requireAuth
+		updateCourse(userId: Int!, id: Int!, input: UpdateCourseInput!): Course! @requireAuth
+		deleteCourse(userId: Int!, id: Int!): Boolean @requireAuth
 	}
 `

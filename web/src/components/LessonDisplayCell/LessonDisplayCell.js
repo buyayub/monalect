@@ -29,9 +29,8 @@ export const Failure = ({ error }) => (
 )
 
 export const Success = ({ lessons }) => {
-	console.log(lessons)
 	return (
-		<div className="mn-flex-column mn-gap-small">
+		<div className="mn-flex-column mn-gap-small mn-layout-half">
 			{lessons.map((lesson, i) => {
 				return (
 					<LessonBlock lesson={lesson} />

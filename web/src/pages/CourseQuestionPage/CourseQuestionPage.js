@@ -8,7 +8,9 @@ const CourseQuestionPage = ({courseId}) => {
 		<>
 			<MetaTags title="CourseQuestion" description="CourseQuestion page" />
 			<CourseNavBar courseId={courseId} />
-			<QuestionWrapper courseId={parseInt(courseId)} />
+			<div className="mn-height-full mn-main-layout">
+				<QuestionWrapper courseId={parseInt(courseId)} />
+			</div>
 		</>
 	)
 }

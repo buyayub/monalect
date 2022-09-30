@@ -114,7 +114,7 @@ const QuestionWrapper = ({ courseId }) => {
 	}
 
 	return (
-		<div>
+		<div className="mn-flex-column mn-gap-small">
 			{lessons
 				? lessons.map((lesson) => {
 						return (
@@ -131,9 +131,6 @@ const QuestionWrapper = ({ courseId }) => {
 						)
 				  })
 				: ''}
-			<p> Lesson Select: {lessonSelect} </p>
-			<p> Question Select: {questionSelect} </p>
-			<p> Answer Type : {answerType ? 'correct' : 'incorrect'} </p>
 			<Modal show={questionForm} changeState={() => toggleQuestionForm()}>
 				<QuestionForm
 					cancel={() => toggleQuestionForm()}

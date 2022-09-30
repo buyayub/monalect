@@ -30,9 +30,10 @@ model User {
 
 model Course {
 	id		Int	@id @default(autoincrement())
-	user		User	@relation(fields: [userId], references: [id])
+	user		User	@relation(fields: [userId], references: [id], onDelete: Cascade)
 	userId		Int
-	title		String
+	title		String @default("Untitled")
+	description	String @default("No description")
 	createdAt 	DateTime 	@default(now())
 	mark		Int @default(0)
 	active 		Boolean @default(true)
@@ -47,9 +48,9 @@ model Course {
 
 model Lesson {
 	id			Int	@id @default(autoincrement())
-	user		User	@relation(fields: [userId], references: [id])
+	user		User	@relation(fields: [userId], references: [id], onDelete: Cascade)
 	userId		Int
-	course 		Course @relation(fields: [courseId], references: [id])
+	course 		Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 	courseId 	Int
 	title		String	@default("Untitled")
 	index		Int?
@@ -62,7 +63,7 @@ model Lesson {
 
 model Textbook {
 	id		Int 	@id @default(autoincrement())
-	user		User	@relation(fields: [userId], references: [id])
+	user		User	@relation(fields: [userId], references: [id], onDelete: Cascade)
 	userId		Int
 	title		String	@default("Untitled")
 	author		String? 
@@ -71,26 +72,26 @@ model Textbook {
 	isbn		String?	
 	uploaded	Boolean	@default(false)
 	url			String?
-	course 		Course 	@relation(fields: [courseId], references: [id])
+	course 		Course 	@relation(fields: [courseId], references: [id], onDelete: Cascade)
 	courseId 	Int
 	sections	TextbookSection[]
 }
 
 model TextbookSection {
 	id		Int	@id @default(autoincrement())
-	user		User	@relation(fields: [userId], references: [id])
+	user		User	@relation(fields: [userId], references: [id], onDelete: Cascade)
 	userId		Int
 	title		String	@default("Untitled")
 	start		Int
 	end			Int
 	lessons		SectionOnLesson[]
-	textbook 	Textbook @relation(fields: [textbookId], references: [id])
+	textbook 	Textbook @relation(fields: [textbookId], references: [id], onDelete: Cascade)
 	textbookId 	Int
 }
 
 model Article {
 	id		Int 	@id @default(autoincrement())
-	user		User	@relation(fields: [userId], references: [id])
+	user		User	@relation(fields: [userId], references: [id], onDelete: Cascade)
 	userId		Int
 	title		String	@default("Untitled")
 	author		String?
@@ -99,7 +100,7 @@ model Article {
 	doi 		String?	
 	uploaded	Boolean
 	url			String?
-	course 		Course 	@relation(fields: [courseId], references: [id])
+	course 		Course 	@relation(fields: [courseId], references: [id], onDelete: Cascade)
 	courseId 	Int
 	lessons		ArticleOnLesson[]
 }
@@ -107,29 +108,29 @@ model Article {
 
 model SectionOnLesson {
 	id			Int 	@id @default(autoincrement())
-	lesson 		Lesson @relation(fields: [lessonId], references: [id])
+	lesson 		Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
 	lessonId 	Int
-	section  	TextbookSection @relation(fields: [sectionId], references: [id])
+	section  	TextbookSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
 	sectionId 	Int
 }
 
 model ArticleOnLesson {
 	id			Int 	@id @default(autoincrement())
-	lesson 		Lesson @relation(fields: [lessonId], references: [id])
+	lesson 		Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
 	lessonId 	Int
-	article 	Article @relation(fields: [articleId], references: [id])
+	article 	Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
 	articleId 	Int
 }
 
 model Question {
 	id 		Int 	@id @default(autoincrement())	
-	user		User	@relation(fields: [userId], references: [id])
+	user		User	@relation(fields: [userId], references: [id], onDelete: Cascade)
 	userId		Int
 	question	String
 	multiple	Boolean
 	choices 	Int?
 	answers 	Answer[]
-	lesson 		Lesson? @relation(fields: [lessonId], references: [id])
+	lesson 		Lesson? @relation(fields: [lessonId], references: [id], onDelete: Cascade)
 	lessonId 	Int?
 	course 		Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 	courseId 	Int
@@ -137,7 +138,7 @@ model Question {
 
 model Answer {
 	id 		Int 	@id @default(autoincrement())	
-	user		User	@relation(fields: [userId], references: [id])
+	user		User	@relation(fields: [userId], references: [id], onDelete: Cascade)
 	userId		Int
 	answer		String
 	correct		Boolean
@@ -147,9 +148,9 @@ model Answer {
 
 model Goal {
 	id 		Int 	@id @default(autoincrement())	
-	user		User	@relation(fields: [userId], references: [id])
+	user		User	@relation(fields: [userId], references: [id], onDelete: Cascade)
 	userId		Int
-	course 		Course 	@relation(fields: [courseId], references: [id])
+	course 		Course 	@relation(fields: [courseId], references: [id], onDelete: Cascade)
 	courseId 	Int
 	completed 	Boolean
 	type		String
@@ -160,33 +161,37 @@ model Goal {
 
 model NotebookPage {
 	id		Int @id @default(autoincrement())
-	user		User	@relation(fields: [userId], references: [id])
+	user		User	@relation(fields: [userId], references: [id], onDelete: Cascade)
 	userId		Int
 	page 		Int 
 	words		Int @default(0)
 	content		String?
-	lesson 		Lesson @relation(fields: [lessonId], references: [id])
+	lesson 		Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
 	lessonId 	Int
-	course 		Course @relation(fields: [courseId], references: [id])
+	course 		Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 	courseId 	Int
 }
 
 
 model Test {
 	id		Int @id @default(autoincrement())
-	user		User	@relation(fields: [userId], references: [id])
+	user		User	@relation(fields: [userId], references: [id], onDelete: Cascade)
+	correct		Int
+	count		Int
 	userId		Int
 	quiz		Boolean
 	lessons 	TestOnLesson[]	
-	course 		Course @relation(fields: [courseId], references: [id])
+	course 		Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 	courseId 	Int
 }
 
 model TestOnLesson {
 	id			Int 	@id @default(autoincrement())
-	mark		Int
-	lesson 		Lesson @relation(fields: [lessonId], references: [id])
+	mark		Float
+	correct		Int
+	count		Int
+	lesson 		Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
 	lessonId 	Int
-	test 		Test @relation(fields: [testId], references: [id])
+	test 		Test @relation(fields: [testId], references: [id], onDelete: Cascade)
 	testId 		Int
 }

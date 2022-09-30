@@ -53,3 +53,21 @@ body::-webkit-scrollbar {
 
 }
 
+.mn-c-modal.mn-is-study-question {
+		position: fixed;
+		top: 25vh;
+		left: calc(75vw - 240px);
+		width: auto;
+		height: auto;
+		margin: 0px !important;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		z-index: 2;
+
+		.mn-c-modal-blocker {
+			display: none;
+		}
+		
+	}

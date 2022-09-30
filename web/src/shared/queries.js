@@ -45,7 +45,6 @@ export const DELETE_QUESTION = gql`
 	}
 `
 
-
 export const CREATE_ANSWER = gql`
 	mutation CreateAnswerMutation($userId: Int!, $input: CreateAnswerInput!) {
 		createAnswer(userId: $userId, input: $input) {
@@ -58,7 +57,7 @@ export const CREATE_ANSWER = gql`
 `
 export const DELETE_ANSWER = gql`
 	mutation DeleteAnswerMutation($userId: Int!, $id: Int!) {
-		deleteAnswer(userId: $userId, id: $id) 
+		deleteAnswer(userId: $userId, id: $id)
 	}
 `
 export const GET_LESSONS = gql`
@@ -68,5 +67,23 @@ export const GET_LESSONS = gql`
 			title
 			index
 		}
+	}
+`
+
+export const UPDATE_COURSE = gql`
+	mutation UpdateCourseMutation(
+		$userId: Int!
+		$id: Int!
+		$input: UpdateCourseInput!
+	) {
+		updateCourse(userId: $userId, id: $id, input: $input) {
+			title
+		}
+	}
+`
+
+export const DELETE_COURSE = gql`
+	mutation DeleteCourseMutation($userId: Int!, $id: Int!) {
+		deleteCourse(userId: $userId, id: $id)
 	}
 `

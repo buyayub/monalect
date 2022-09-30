@@ -90,7 +90,6 @@ const MaterialWrapper = ({
 	lessonRoot,
 	linkSection,
 }) => {
-	console.log(materials)
 	return (
 		<div className={`mn-flex-column mn-gap-medium ${className}`}>
 			<h2 className="mn-text-blue"> Learning Material </h2>

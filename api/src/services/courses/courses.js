@@ -6,37 +6,40 @@ export const cards = async ({ userId }) => {
 
 	let courseCards = await db.course.findMany({
 		where: {
-			userId: userId
+			userId: userId,
 		},
 		select: {
 			id: true,
 			title: true,
-			mark: true
-	}})
+			mark: true,
+		},
+	})
 
 	for (const courseCard of courseCards) {
-		const notebookWords = (await db.notebookPage.aggregate({
-			_sum : {
-				words: true
-			},
-			where: {
-				courseId: courseCard.id
-			}
-		}))._sum.words
+		const notebookWords = (
+			await db.notebookPage.aggregate({
+				_sum: {
+					words: true,
+				},
+				where: {
+					courseId: courseCard.id,
+				},
+			})
+		)._sum.words
 
 		const questionCount = await db.question.count({
 			where: {
-				courseId: courseCard.id
-			}
+				courseId: courseCard.id,
+			},
 		})
 
-		courseCard.notebookWords = notebookWords;
-		courseCard.questionCount = questionCount;
+		courseCard.notebookWords = notebookWords
+		courseCard.questionCount = questionCount
 	}
-	return courseCards;
+	return courseCards
 }
 
-export const card = async ({courseId}) => {
+export const card = async ({ courseId }) => {
 	let courseCard = await db.course.findUnique({
 		where: {
 			id: courseId,
@@ -45,25 +48,28 @@ export const card = async ({courseId}) => {
 			id: true,
 			userId: true,
 			title: true,
-			mark: true
-	}})
+			mark: true,
+		},
+	})
 
 	isOwner(courseCard.userId)
 
-	courseCard.notebookWords = (await db.notebookPage.aggregate({
-			_sum : {
-				words: true
+	courseCard.notebookWords = (
+		await db.notebookPage.aggregate({
+			_sum: {
+				words: true,
 			},
 			where: {
-				courseId: card.id
-		}
-	})).words
-
-		courseCard.questionCount = await db.question.count({
-			where: {
-				courseId: card.id
-			}
+				courseId: card.id,
+			},
 		})
+	).words
+
+	courseCard.questionCount = await db.question.count({
+		where: {
+			courseId: card.id,
+		},
+	})
 
 	return courseCard
 }
@@ -73,12 +79,50 @@ export const courses = async ({ userId }) => {
 
 	let courses = await db.course.findMany({
 		where: {
-			userId: userId
+			userId: userId,
 		},
 		select: {
 			id: true,
 			title: true,
-	}})
+		},
+	})
 
-	return courses;
+	return courses
+}
+
+export const updateCourse = async ({ userId, id, input }) => {
+	isOwner(userId)
+
+	const update = await db.course.update({
+		where: {
+			id: id,
+		},
+		data: {
+			title: input.title != null ? input.title : undefined,
+			description: input.description != null ? input.description : undefined,
+		},
+	})
+
+	return update
+}
+
+export const deleteCourse = async ({ userId, id }) => {
+	const courseUser = await db.course.findMany({
+		where: {
+			id: id,
+		},
+		select: {
+			userId: true,
+		},
+	})
+
+	isOwner(courseUser[0].userId);
+
+	const course = await db.course.delete({
+		where: {
+			id: id,
+		},
+	})
+
+	return true
 }

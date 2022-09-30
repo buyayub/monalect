@@ -30,6 +30,8 @@ I'll also be refactoring this page as well, as I think out ideas, as well as a f
 + [ ] organize components, use indexes and curly brace imports. 
 + [ ] switch Question `multiple: Boolean` to `type: String` because somehow i forgot i'll add more question types in the future
 + [X] move question CRUD queries to their forms instead of the wrappers/pages 
+	+ [ ] make queries in forms optional, with the ability to override the query 
++ [ ] merge answer form in the study page, with the answer form in the question page
 
 ### Optimizations 
 

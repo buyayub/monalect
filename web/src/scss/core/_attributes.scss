@@ -284,12 +284,28 @@
 	height: calc(100vh - 38px); // minus header
 }
 
+.mn-width-75vw {
+	width: 75vw;
+}
+
+.mn-width-50vw {
+	width: 50vw;
+}
+
+.mn-width-50 {
+	width: 50%;
+}
+
 .mn-layout-half {
 	width: 50%;	
 }
 
 .mn-main-layout {
 	padding: 32px;
+}
+
+.mn-width-large {
+	width: 24px;
 }
 
 .mn-is-inactive {
@@ -326,3 +342,4 @@
 .z-index-0 {
 	z-index: 0;
 }
+

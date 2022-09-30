@@ -74,9 +74,9 @@ const Question = ({
 	)
 
 	const questionIcon = question.multiple ? (
-		<div className="mn-flex-row mn-gap-small">
+		<div className="mn-flex-row mn-gap-small mn-align-start">
 			<p>M</p>
-			<p className="mn-border-left">&nbsp; {question.choices}</p>
+			<p className="mn-border-left">&nbsp;{question.choices}</p>
 		</div>
 	) : (
 		<div className="word">

@@ -9,9 +9,9 @@ import IconButton from 'src/components/IconButton'
 const NavBar = ({ courseId, className }) => {
 	return (
 		<nav className={`mn-c-nav mn-flex-row mn-align-center mn-gap-large ${className}`}>
-			<div class="mn-flex-row mn-align-center mn-gap-small">
-				<img alt="monalect logo" class="mn-logo-small" src="/monalogo.png" />
-				<p class="mn-logo-text mn-font-serif">monalect</p>
+			<div className="mn-flex-row mn-align-center mn-gap-small">
+				<img alt="monalect logo" className="mn-logo-small" src="/monalogo.png" />
+				<p className="mn-logo-text mn-font-serif">monalect</p>
 			</div>
 			<ul className="mn-flex-row mn-align-center">
 				<li>

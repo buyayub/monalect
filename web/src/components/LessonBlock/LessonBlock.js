@@ -6,7 +6,7 @@ const LessonBlock = ({ lesson }) => {
 	const [expand, setExpand] = useState(false)
 
 	return (
-		<div className="mn-flex-column mn-medium-width">
+		<div className="mn-flex-column">
 			<LessonDisplay
 				index={lesson.index + 1}
 				title={lesson.title}

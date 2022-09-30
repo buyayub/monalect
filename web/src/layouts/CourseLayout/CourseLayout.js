@@ -6,7 +6,7 @@ const CourseLayout = ({ children }) => {
 	return (
 		<>
 			<header>
-				<nav class="mn-c-nav">
+				<nav className="mn-c-nav">
 					<ul>
 						<li>
 							<Link to={routes.home()}>Home</Link>

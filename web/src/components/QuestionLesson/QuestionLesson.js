@@ -22,14 +22,14 @@ const QuestionLesson = ({
 	const [active, setActive] = useState(false)
 
 	return (
-		<div className="mn-flex-column mn-gap-small">
+		<div className="mn-flex-column mn-gap-small mn-width-50">
 			<div
 				onClick={() => {
 					setActive(!active)
 				}}
 				className="mn-flex-row mn-gap-small mn-clickable mn-hover"
 			>
-				<p>{lesson.index + 1}.</p>
+				<p className="mn-width-large">{lesson.index != null ? `${lesson.index + 1}.` : ""}</p>
 				<div
 					className={
 						'mn-grow mn-flex-row mn-justify-space-between mn-border-left mn-text-padding mn-align-center ' +

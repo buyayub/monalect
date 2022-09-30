@@ -19,17 +19,8 @@ const MonalectPage = () => {
 					<h2>Community Updates</h2>
 					<p>Yo</p>
 				</div>
-				<div className="mn-flex-column mn-gap-medium mn-layout-half">
-					<div className="mn-flex-row mn-justify-space-between">
-						<h2>Courses</h2>
-						<Link to={routes.createCourse()}>
-							{' '}
-							<Button> Create </Button>
-						</Link>
-					</div>
-					<div className="mn-scrollable">
-						<CourseCardsCell userId={currentUser.id} />
-					</div>
+				<div className="mn-layout-half mn-height-full">
+					<CourseCardsCell userId={currentUser.id} />
 				</div>
 			</div>
 		</>
