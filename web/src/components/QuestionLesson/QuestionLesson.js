@@ -60,8 +60,8 @@ const QuestionLesson = ({
 			</div>
 			<div
 				className={
-					'mn-flex-column mn-gap-small mn-indent ' +
-					(active ? '' : 'mn-is-hidden')
+					'mn-flex-column mn-gap-small mn-indent-large ' +
+					(active ? 'mn-padding-bottom-medium' : 'mn-is-hidden')
 				}
 			>
 				{lesson.questions.map((question) => {

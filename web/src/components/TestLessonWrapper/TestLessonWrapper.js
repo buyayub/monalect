@@ -10,6 +10,7 @@ const GET_TEST_LESSONS = gql`
 			id
 			title
 			index
+			mark
 			questionCount
 		}
 	}
@@ -102,7 +103,7 @@ const TestLesson = ({ lesson }) => {
 				<p> {lesson.title} </p>
 				<div className="mn-flex-row mn-gap-x-large">
 					<p className="mn-is-inactive">{lesson.questionCount} questions</p>
-					<div>0%</div>
+					<div>{lesson.mark}%</div>
 				</div>
 			</div>
 		</div>

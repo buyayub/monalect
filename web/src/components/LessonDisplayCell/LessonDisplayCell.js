@@ -8,6 +8,7 @@ export const QUERY = gql`
 			notebookWords
 			questionCount
 			index
+			mark
 			sections {
 				title
 				start

@@ -12,7 +12,16 @@ export const QUERY = gql`
 	}
 `
 
-export const Loading = () => <div>Loading...</div>
+export const Loading = () => {
+	return (
+		<div className="mn-c-course-header mn-align-center mn-flex-row mn-justify-space-between">
+			<div className="mn-flex-row mn-gap-small mn-align-end">
+				<h2>Loading...</h2>
+			</div>
+			<h2>...</h2>
+		</div>
+	)
+}
 
 export const Empty = () => <div>Empty</div>
 

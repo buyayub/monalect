@@ -1,6 +1,6 @@
 import { useQuery, useMutation } from '@apollo/client'
 import { useState, useEffect, useRef } from 'react'
-import { LOAD_QUESTIONS } from 'src/shared/queries'
+import { LOAD_QUESTIONS, CREATE_TEST } from 'src/shared/queries'
 import Button from 'src/components/Button'
 import TextInput from 'src/components/TextInput'
 
@@ -27,6 +27,8 @@ const Test = ({
 		variables: { userId: userId, courseId: parseInt(courseId) },
 	})
 
+	const [createTest] = useMutation(CREATE_TEST)
+
 	const [timer, setTimer] = useState(null)
 	const [questions, setQuestions] = useState(null)
 
@@ -46,7 +48,7 @@ const Test = ({
 		}
 	}, [questionLessons])
 
-	// on submission
+	// split this up some day
 	const onSubmit = (e) => {
 		e.preventDefault()
 
@@ -116,8 +118,20 @@ const Test = ({
 			totalCorrect += correct
 		}
 
-		console.log(totalCount)
-		console.log(totalCorrect)
+		// submit the test
+
+		createTest({
+			variables: {
+				userId: userId,
+				input: {
+					count: totalCount,
+					correct: totalCorrect,
+					quiz: false,
+					courseId: parseInt(courseId),
+					tests: lessonMarks,
+				},
+			},
+		})	
 	}
 
 	// the disabled and hidden button at the start is to prevent 'enter' from submitting the form

@@ -44,6 +44,7 @@ model Course {
 	goals		Goal[]
 	questions	Question[]	
 	tests Test[]
+	testOnLessons TestOnLesson[]
 }
 
 model Lesson {
@@ -176,6 +177,7 @@ model NotebookPage {
 model Test {
 	id		Int @id @default(autoincrement())
 	user		User	@relation(fields: [userId], references: [id], onDelete: Cascade)
+	date		DateTime	@default(now())
 	correct		Int
 	count		Int
 	userId		Int
@@ -187,9 +189,12 @@ model Test {
 
 model TestOnLesson {
 	id			Int 	@id @default(autoincrement())
-	mark		Float
+	mark		Float? @default(0)
+	date		DateTime @default(now())
 	correct		Int
 	count		Int
+	course 		Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+	courseId 	Int
 	lesson 		Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
 	lessonId 	Int
 	test 		Test @relation(fields: [testId], references: [id], onDelete: Cascade)

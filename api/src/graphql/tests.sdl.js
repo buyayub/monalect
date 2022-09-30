@@ -5,32 +5,37 @@ export const schema = gql`
 		courseId: Int!
 		correct: Int!
 		count: Int!
+		mark: Int
 		quiz: Boolean!
 		lessons: [TestOnLesson]!
 	}
 
 	type TestOnLesson {
-		correct: Int
-		count: Int
+		mark: Int
+		correct: Int!
+		count: Int!
 		lessonId: Int
+		lessonTitle: String
 		testId: Int
 	}
 
 	type Query {
-		tests: [Test!]! @requireAuth
+		tests(userId: Int! courseId: Int!): [Test!]! @requireAuth
 		test(id: Int!): Test @requireAuth
 	}
 
 	input CreateTestInput {
-		userId: Int!
 		quiz: Boolean!
 		courseId: Int!
+		correct: Int!
+		count: Int!
 		tests: [TestOnLessonInput]!
 	}
 
 	input TestOnLessonInput {
-		mark: Int
-		lessonId: Int
+		correct: Int!
+		count: Int!
+		lessonId: Int!
 	}
 
 	input UpdateTestInput {
@@ -40,7 +45,7 @@ export const schema = gql`
 	}
 
 	type Mutation {
-		createTest(userId: Int!, input: CreateTestInput!): Test! @requireAuth
+		createTest(userId: Int!, input: CreateTestInput!): Test @requireAuth
 		updateTest(id: Int!, input: UpdateTestInput!): Test! @requireAuth
 		deleteTest(id: Int!): Test! @requireAuth
 	}
