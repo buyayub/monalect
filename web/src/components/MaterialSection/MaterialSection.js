@@ -2,8 +2,8 @@ import { FiFileText, FiX } from 'react-icons/fi'
 import IconButton from 'src/components/IconButton'
 
 const MaterialSection = ({
-	start = 0,
-	end = 0,
+	start = undefined,
+	end = undefined,
 	title = 'Untitled',
 	className = '',
 	handleDelete,
@@ -22,7 +22,7 @@ const MaterialSection = ({
 				<p> {title} </p>
 			</div>
 			<div className="mn-flex-row mn-gap-large mn-align-center">
-				{start != 0 && end != 0 && (
+				{start && end && (
 					<p className="mn-is-secondary">
 						{start} - {end}
 					</p>
