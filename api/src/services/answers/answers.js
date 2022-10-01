@@ -4,6 +4,9 @@ import { isOwner } from 'src/lib/auth'
 export const createAnswer = async ({ userId, input }) => {
 	isOwner(userId)
 
+	if (answer == "")
+		return null
+
 	const answer = await db.answer.create({
 		data: {
 			userId: userId,

@@ -10,8 +10,10 @@ const TestPage = ({courseId}) => {
 		<>
 			<MetaTags title="Test" description="Test page" />
 			<CourseNavBar courseId={courseId} />
-			<div className="mn-page-height-100">
-				<TestLessonWrapper courseId={courseId} userId={currentUser.id} />
+			<div className="mn-page-height-100 mn-padding-page">
+				<div className="mn-width-50">
+					<TestLessonWrapper courseId={courseId} userId={currentUser.id} />
+				</div>
 			</div>
 		</>
 	)

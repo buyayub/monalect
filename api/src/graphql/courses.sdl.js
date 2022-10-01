@@ -4,6 +4,7 @@ export const schema = gql`
 		user: User
 		userId: Int
 		title: String
+		description: String
 		createdAt: DateTime
 		lessons: [Lesson]
 		textbooks: [Textbook]
@@ -14,6 +15,8 @@ export const schema = gql`
 	type Card {
 		id: Int!
 		title: String!
+		description: String
+		lessonCount: Int
 		notebookWords: Int
 		questionCount: Int!
 		mark: Int!

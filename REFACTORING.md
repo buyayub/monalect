@@ -25,13 +25,14 @@ I'll also be refactoring this page as well, as I think out ideas, as well as a f
 + [ ] I'm going to make goal generation use a seperate query, but in the future mix it in with the other initialization queries. In fact, mix all initialization queries into a single one and handle it that way.
 + [ ] ~~use a layout for the header/navbar~~
 	+ this is "impossible" since redwoodjs doesn't seem to provide support for accessing route parameters in layouts instead of pages, which seems silly, but it's insurmountable. Best I could do was a header component, which turned out well.
-+ [ ] when there's no correct answer for a multiple choice question, select "none of the above"
++ [ ] when there's no correct answer available for a multiple choice question, create "none of the above"
 + [ ] handle case where there's more choices then there are answers; duplicate answers and ensure they end up correct
 + [ ] organize components, use indexes and curly brace imports. 
 + [ ] switch Question `multiple: Boolean` to `type: String` because somehow i forgot i'll add more question types in the future
 + [X] move question CRUD queries to their forms instead of the wrappers/pages 
 	+ [ ] make queries in forms optional, with the ability to override the query 
-+ [ ] merge answer form in the study page, with the answer form in the question page
++ [ ] have the answer form style in the study page replace the answer form style in the question page
++ [ ] replace the material prop drills with a single object, i don't know what i was thinking
 
 ### Optimizations 
 

@@ -37,7 +37,7 @@ const Question = ({
 	}
 
 	const incorrectQuestions = question.multiple ? (
-		<div className="mn-is-incorrect mn-flex-row mn-gap-medium mn-indent mn-align-center">
+		<div className="mn-is-incorrect mn-flex-row mn-gap-medium mn-indent mn-align-center mn-flex-wrap">
 			<FiXCircle className="mn-icon-small mn-icon-thick" />
 			{question.answers
 				.filter((e) => {
@@ -108,7 +108,7 @@ const Question = ({
 					'mn-flex-column mn-gap-small ' + (!active ? 'mn-is-hidden' : '')
 				}
 			>
-				<div className="mn-flex-row mn-indent mn-gap-medium">
+				<div className="mn-flex-row mn-indent mn-gap-medium mn-flex-wrap">
 					<FiCheckCircle className="mn-icon-small mn-icon-thick mn-is-correct" />
 					{question.answers
 						.filter((e) => {

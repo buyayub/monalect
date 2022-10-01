@@ -14,10 +14,10 @@ import { Head } from '@redwoodjs/web'
 const Routes = () => {
 	return (
 		<Router>
-			<Route path="/admin/login" page={LoginPage} name="login" />
-			<Route path="/admin/signup" page={SignupPage} name="signup" />
-			<Route path="/admin/forgot-password" page={ForgotPasswordPage} name="forgotPassword" />
-			<Route path="/admin/reset-password" page={ResetPasswordPage} name="resetPassword" />
+			<Route path="/login" page={LoginPage} name="login" />
+			<Route path="/signup" page={SignupPage} name="signup" />
+			<Route path="/forgot-password" page={ForgotPasswordPage} name="forgotPassword" />
+			<Route path="/reset-password" page={ResetPasswordPage} name="resetPassword" />
 			<Set wrap={MainLayout}>
 				<Route path="/about" page={AboutPage} name="about" />
 				<Route path="/register" page={RegisterPage} name="register" />

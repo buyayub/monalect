@@ -32,12 +32,16 @@ const AnswerForm = ({
 			const answerResponse = response.data.createAnswer
 			submitAnswer(answerResponse)
 		})
-		e.target[0].value = ""
+		e.target[0].value = ''
 		cancel()
 	}
 
 	return (
-		<form className="mn-form-width-medium mn-flex-column mn-gap-large" onSubmit={onSubmit}>
+		<form
+			className="mn-form-width-medium mn-flex-column mn-gap-large"
+			autoComplete={false}
+			onSubmit={onSubmit}
+		>
 			<TextInput label="Answer" name="answer" />
 			<div className="mn-flex-row mn-gap-medium mn-align-self-center">
 				<Button className="mn-is-secondary" type="reset" onClick={cancel}>

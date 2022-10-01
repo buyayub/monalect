@@ -71,6 +71,7 @@ const QuestionForm = ({
 		<form
 			className="mn-flex-column mn-form-width-medium mn-gap-medium"
 			onSubmit={onSubmit}
+			autoComplete={false}
 			onReset={(e) => {
 				setQuestionType("word")
 			}}

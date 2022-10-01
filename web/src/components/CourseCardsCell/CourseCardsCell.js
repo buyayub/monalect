@@ -8,16 +8,20 @@ export const QUERY = gql`
 		cards(userId: $userId) {
 			id
 			title
+			description
 			notebookWords
 			questionCount
+			lessonCount
 			mark
 		}
 	}
 `
+export const beforeQuery = (props) => {
+	// fetch policy set to network only to update upon test creation
+  return { variables: props, fetchPolicy: 'network-only' }
+}
 
 export const Loading = () => <div>Loading...</div>
-
-export const Empty = () => <div>Empty</div>
 
 export const Failure = ({ error }) => (
 	<div style={{ color: 'red' }}>Error: {error.message}</div>
@@ -35,7 +39,6 @@ export const Success = ({ cards }) => {
 			}),
 		])
 	}
-
 	return (
 		<div className="mn-flex-column mn-gap-medium mn-height-full">
 			<div className="mn-flex-row mn-justify-space-between">
@@ -58,7 +61,6 @@ export const Success = ({ cards }) => {
 			<div className="mn-scrollable mn-height-full">
 				<div className="mn-flex-column mn-gap-medium mn-padding-right-small">
 					{cardDisplay.map((item) => {
-						console.log(item)
 						return (
 							<CourseCard
 								courseId={item.id}
@@ -73,6 +75,8 @@ export const Success = ({ cards }) => {
 								edit={edit}
 								handleDelete={deleteCard}
 								key={item.id}
+								courseDescription={item.description}
+								lessons={item.lessonCount}
 							/>
 						)
 					})}

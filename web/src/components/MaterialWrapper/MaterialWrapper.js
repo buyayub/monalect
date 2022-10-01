@@ -3,6 +3,7 @@ import LearningMaterialAdd from 'src/components/LearningMaterialAdd'
 import MaterialSection from 'src/components/MaterialSection'
 import MaterialSectionAdd from 'src/components/MaterialSectionAdd'
 import { FiPlus } from 'react-icons/fi'
+import { useState } from 'react'
 
 const LearningMaterialSection = ({
 	type,
@@ -12,6 +13,7 @@ const LearningMaterialSection = ({
 	sectionDelete,
 	materialDelete,
 	index,
+	uploaded,
 	setSectionRoot,
 	showSection,
 	linkMode,
@@ -25,6 +27,7 @@ const LearningMaterialSection = ({
 				className={linkMode && type == 'textbook' ? 'mn-is-inactive' : ''}
 				title={title}
 				pages={pages}
+				fileAdded={uploaded}
 				onClick={(e) => {
 					if (linkMode && type == 'article') {
 						linkSection(lessonRoot, 'article', index)
@@ -104,6 +107,7 @@ const MaterialWrapper = ({
 							type={material.type}
 							title={material.title}
 							pages={material.pages}
+							uploaded={material.uploaded}
 							sections={sections}
 							sectionDelete={sectionDelete}
 							materialDelete={materialDelete}

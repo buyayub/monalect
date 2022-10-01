@@ -18,6 +18,7 @@ const Test = ({
 	userId = null,
 	courseId = null,
 	cancel = null,
+	updateLessons = null,
 }) => {
 	const {
 		data: questionLessons,
@@ -28,9 +29,8 @@ const Test = ({
 	})
 
 	const [createTest] = useMutation(CREATE_TEST)
-
-	const [timer, setTimer] = useState(null)
-	const [questions, setQuestions] = useState(null)
+	const [questions, setQuestions] = useState(undefined)
+	const submitForm = useRef(null)
 
 	// filter for selected lessons, and expand questions into a single array, then randomize the questions
 	useEffect(() => {
@@ -48,6 +48,8 @@ const Test = ({
 		}
 	}, [questionLessons])
 
+	// TIMER
+
 	// split this up some day
 	const onSubmit = (e) => {
 		e.preventDefault()
@@ -59,7 +61,6 @@ const Test = ({
 		for (let element of e.target) {
 			if (element.type != 'text' && element.type != 'radio') continue
 
-			console.log(element)
 			let value = element.value
 			let correct = false
 			let inside = false
@@ -82,7 +83,6 @@ const Test = ({
 			// If it's not checked, and it's incorrect, then count it as null for later
 
 			if (!inside && element.type == 'radio' && !element.checked) {
-				console.log('yoyo')
 				correct = null
 			}
 
@@ -119,7 +119,7 @@ const Test = ({
 		}
 
 		// submit the test
-
+		// update the lesson marks and exit
 		createTest({
 			variables: {
 				userId: userId,
@@ -131,13 +131,15 @@ const Test = ({
 					tests: lessonMarks,
 				},
 			},
-		})	
-	}
+		})
 
+		updateLessons(lessonMarks)
+		cancel()
+	}
 	// the disabled and hidden button at the start is to prevent 'enter' from submitting the form
 	return (
 		<form
-			className="mn-flex-column mn-gap-x-large mn-width-75vw"
+			className="mn-flex-column mn-gap-medium mn-width-75vw mn-height-75"
 			onSubmit={onSubmit}
 			autoComplete="off"
 		>
@@ -147,17 +149,25 @@ const Test = ({
 				style={{ display: 'none' }}
 				aria-hidden="true"
 			></button>
-			<div className="mn-flex-row mn-justify-space-between">
+			<div className="mn-flex-row mn-justify-space-between mn-align-center">
 				<h2>{'Test'}</h2>
-				<div className="mn-flex-row mn-gap-medium">
+				<div className="mn-flex-row mn-gap-medium mn-align-center">
+					<Timer
+						questions={questions}
+						trigger={() => {
+							submitForm.current.click()
+						}}
+					/>
 					<Button className="mn-is-danger" onClick={cancel}>
 						{' '}
 						Cancel{' '}
 					</Button>
-					<Button type="submit"> Submit </Button>
+					<button ref={submitForm} type="submit" className="mn-c-button">
+						Submit
+					</button>
 				</div>
 			</div>
-			<div className="mn-flex-column mn-gap-x-large">
+			<div className="mn-flex-column mn-gap-x-large mn-scrollable">
 				{questions
 					? questions.map((question, i) => (
 							<Question question={question} index={i} key={i} />
@@ -170,48 +180,6 @@ const Test = ({
 
 const Question = ({ question, index }) => {
 	// Function: generate multiple choice answer form
-	const multipleAnswers = (answers, choices) => {
-		let correctAnswers = answers.filter((answer) => answer.correct)
-		let incorrectAnswers = answers.filter((answer) => !answer.correct)
-
-		let newAnswers = [
-			correctAnswers[Math.floor(Math.random() * correctAnswers.length)],
-		] // selects a random correct answer
-
-		// array of random numbers within number of choices
-		let nums = Array.from(Array(incorrectAnswers.length - 1).keys())
-
-		// shuffle the array using function defined globally at top
-		randomizeArray(nums)
-
-		// push the stuff onto the answers list
-		for (let i = 0; i < choices - 1 && i < incorrectAnswers.length; i++) {
-			newAnswers.push(incorrectAnswers[nums[i]])
-		}
-
-		// shuffle the answers again
-		randomizeArray(newAnswers)
-
-		return newAnswers.map((answer, i) => {
-			return (
-				<div
-					className="mn-flex-row mn-indent mn-gap-medium"
-					key={`answer${index}_${i}`}
-				>
-					<input
-						type="radio"
-						className="mn-indent mn-clickable"
-						name={index}
-						id={`answer${index}_${i}`}
-						value={answer.answer.toLowerCase().replace(/ /g, '')}
-					/>
-					<label htmlFor={`answer${index}_${i}`} className="mn-clickable">
-						{answer.answer}
-					</label>
-				</div>
-			)
-		})
-	}
 
 	return (
 		<div className="mn-flex-column mn-gap-medium">
@@ -219,7 +187,11 @@ const Question = ({ question, index }) => {
 				{index + 1}. {question.question}
 			</h4>
 			{question.multiple ? (
-				multipleAnswers(question.answers, question.choices)
+				<MultipleChoice
+					answers={question.answers}
+					choices={question.choices}
+					index={index}
+				/>
 			) : (
 				<TextInput
 					className="mn-form-width-medium mn-indent"
@@ -228,6 +200,83 @@ const Question = ({ question, index }) => {
 				/>
 			)}
 		</div>
+	)
+}
+
+const MultipleChoice = ({ answers, choices, index }) => {
+	let correctAnswers = answers.filter((answer) => answer.correct)
+	let incorrectAnswers = answers.filter((answer) => !answer.correct)
+
+	let newAnswers = [
+		correctAnswers[Math.floor(Math.random() * correctAnswers.length)],
+	] // selects a random correct answer
+
+	// array of random numbers within number of choices
+	let nums = Array.from(Array(incorrectAnswers.length).keys())
+
+	// shuffle the array using function defined globally at top
+	randomizeArray(nums)
+
+	// push the stuff onto the answers list
+	for (let i = 0; i < choices - 1 && i < incorrectAnswers.length; i++) {
+		newAnswers.push(incorrectAnswers[nums[i]])
+	}
+
+	// shuffle the answers again
+	randomizeArray(newAnswers)
+
+	return newAnswers.map((answer, i) => {
+		return (
+			<div
+				className="mn-flex-row mn-indent mn-gap-medium"
+				key={`answer${index}_${i}`}
+			>
+				<input
+					type="radio"
+					className="mn-indent mn-clickable"
+					name={index}
+					id={`answer${index}_${i}`}
+					value={answer.answer.toLowerCase().replace(/ /g, '')}
+				/>
+				<label htmlFor={`answer${index}_${i}`} className="mn-clickable">
+					{answer.answer}
+				</label>
+			</div>
+		)
+	})
+}
+
+const Timer = ({ trigger = null, questions }) => {
+	const [timer, setTimer] = useState()
+	useEffect(() => {
+		let interval = null
+		if (timer > 0) {
+			interval = setTimeout(() => {
+				setTimer(timer - 1)
+			}, 1000)
+		}
+
+		if (timer == 0) {
+			trigger()
+		}
+
+		return () => {
+			window.clearTimeout(interval)
+		}
+	}, [timer])
+
+	useEffect(() => {
+		if (!timer) {
+			setTimer(questions ? questions.length * 90 : undefined)
+		}
+	})
+
+	return (
+		<h3>
+			{timer
+				? new Date(timer * 1000).toISOString().substr(11, 8)
+				: 'loading...'}
+		</h3>
 	)
 }
 

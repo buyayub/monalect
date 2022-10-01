@@ -32,14 +32,14 @@ const QuestionAnswer = ({
 
 	return (
 		<div
-			className={`mn-flex-row mn-gap-small mn-hover-collapse mn-clickable ${className} ${correctDisplay}`}
+			className={`mn-flex-row mn-gap-small mn-clickable ${className} ${correctDisplay}`}
 		>
-			<div className="main">
+			<div>
 				<p>{title}</p>
 			</div>
 			<IconButton
 				onClick={submitDelete}
-				className="mn-on-hover-collapse mn-is-danger mn-is-small"
+				className="mn-is-danger mn-is-small mn-is-soft"
 			>
 				<FiX />
 			</IconButton>

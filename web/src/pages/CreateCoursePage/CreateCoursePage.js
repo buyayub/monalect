@@ -12,6 +12,7 @@ import { Link, routes, navigate } from '@redwoodjs/router'
 import { MetaTags, useMutation } from '@redwoodjs/web'
 import { useAuth } from '@redwoodjs/auth'
 import { useState } from 'react'
+import { QUERY } from 'src/components/CourseCardsCell'
 
 const CREATE_BATCH = gql`
 	mutation CreateBatchCourseMutation($input: CreateBatchCourseInput!) {
@@ -31,6 +32,7 @@ const CreateCoursePage = () => {
 	const [uploaded, setUploaded] = useState([])
 	const [lessons, setLessons] = useState([])
 	const [courseId, setCourseId] = useState(null)
+	const [uploading, setUploading] = useState(false)
 
 	const [showMaterialForm, setMaterialForm] = useState(false)
 	const [showSectionForm, setSectionForm] = useState(false)
@@ -198,11 +200,13 @@ const CreateCoursePage = () => {
 				const stuff = uploaded.find((e) => e.localId == item.localId)
 				uploadTextbook(stuff.file, item.presigned)
 			}
+
+			// go to home
+			navigate(routes.home())
 		})
 	}
 
 	const uploadTextbook = (file, url) => {
-		console.log(url)
 		var data = new FormData()
 		data.append('file', file)
 		fetch(url, {
@@ -221,7 +225,11 @@ const CreateCoursePage = () => {
 			<header className="mn-padding-header mn-flex-row mn-align-center mn-justify-space-between">
 				<NavBar />
 			</header>
-			<div className="mn-padding-page mn-flex-column mn-gap-large">
+			<div
+				className={`mn-padding-page mn-flex-column mn-gap-large ${
+					uploading ? 'mn-wait' : ''
+				}`}
+			>
 				<TextInput
 					className="mn-form-width-medium"
 					label="Course Title:"
@@ -256,11 +264,29 @@ const CreateCoursePage = () => {
 					/>
 				</div>
 			</div>
-			<footer className="mn-c-sticky-footer">
-				<Button onClick={() => {}}>Cancel</Button>
-				<Button onClick={() => submitCourse(title, materials, lessons)}>
-					Create
-				</Button>
+			<footer className="mn-c-sticky-footer mn-flex-row mn-justify-end mn-padding-small mn-gap-medium">
+				{uploading ? (
+					"Creating... (don't exit)"
+				) : (
+					<>
+						<Button
+							className="mn-is-danger"
+							onClick={() => {
+								navigate(routes.home())
+							}}
+						>
+							Cancel
+						</Button>
+						<Button
+							onClick={() => {
+								setUploading(true)
+								submitCourse(title, materials, lessons)
+							}}
+						>
+							Create
+						</Button>
+					</>
+				)}
 			</footer>
 			<Modal
 				title="Add Material"

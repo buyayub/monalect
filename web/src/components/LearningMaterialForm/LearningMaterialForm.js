@@ -44,6 +44,7 @@ const LearningMaterialForm = ({
 		<form
 			className="mn-c-material-form mn-flex-column mn-gap-large mn-form-width-medium"
 			onSubmit={onSubmit}
+			autoComplete={false}
 		>
 			<Dropdown
 				items={[

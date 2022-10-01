@@ -284,6 +284,19 @@
 	height: 100%;
 }
 
+.mn-height-90vh{
+	height: 90vh;
+}
+
+.mn-absolute-bottom-right {
+	position: absolute;
+	bottom: 16px;
+	right: 16px;
+}
+
+.mn-position-relative {
+	position: relative;
+}
 .mn-page-height-100 {
 	height: calc(100vh - 38px); // minus header
 }
@@ -351,3 +364,23 @@
 	width: 42px;
 }
 
+.mn-min-width-small {
+	min-width: 16px;
+}
+
+.mn-height-small {
+
+	height: 16px;
+}
+
+.mn-text-align-end {
+	text-align: end;
+}
+
+.mn-padding-small {
+	padding: 16px;
+}
+
+.mn-wait {
+	cursor: wait;
+}

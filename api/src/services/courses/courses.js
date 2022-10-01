@@ -1,5 +1,7 @@
 import { db } from 'src/lib/db'
 import { isOwner } from 'src/lib/auth'
+import { s3Client } from 'src/lib/aws'
+import { DeleteObjectCommand } from '@aws-sdk/client-s3'
 
 export const cards = async ({ userId }) => {
 	isOwner(userId)
@@ -12,10 +14,11 @@ export const cards = async ({ userId }) => {
 			id: true,
 			title: true,
 			mark: true,
+			description: true,
 		},
 	})
 
-	for (const courseCard of courseCards) {
+	for (let courseCard of courseCards) {
 		const notebookWords = (
 			await db.notebookPage.aggregate({
 				_sum: {
@@ -74,12 +77,13 @@ export const cards = async ({ userId }) => {
 		})
 
 		// get sum of all lessons
-		const sum = lessonAverages.reduce((a, b) => a + b)
-
 		// if there are actually any lesson averages, find the average of them all
 		if (lessonAverages.length != 0) {
+			const sum = lessonAverages.reduce((a, b) => a + b)
 			courseCard.mark = Math.floor(sum / lessonAverages.length)
 		}
+
+		courseCard.lessonCount = lessons.length
 	}
 	return courseCards
 }
@@ -93,6 +97,7 @@ export const card = async ({ courseId }) => {
 			id: true,
 			userId: true,
 			title: true,
+			description: true,
 			mark: true,
 		},
 	})
@@ -143,6 +148,7 @@ export const card = async ({ courseId }) => {
 		)
 	}
 
+
 	// get averages of each lesson
 	let lessonAverages = []
 	tests.forEach((test) => {
@@ -154,12 +160,13 @@ export const card = async ({ courseId }) => {
 	})
 
 	// get sum of all lessons
-	const sum = lessonAverages.reduce((a, b) => a + b)
-
 	// if there are actually any lesson averages, find the average of them all
 	if (lessonAverages.length != 0) {
+		const sum = lessonAverages.reduce((a, b) => a + b)
 		courseCard.mark = Math.floor(sum / lessonAverages.length)
 	}
+
+	courseCard.lessonCount = lessons.length
 
 	return courseCard
 }
@@ -206,6 +213,28 @@ export const deleteCourse = async ({ userId, id }) => {
 		},
 	})
 
+	const textbooks = await db.textbook.findMany({
+		where: {
+			courseId: id,
+		},
+		select: {
+			url: true,
+		},
+	})
+
+	// delete textbook files
+	for (textbook of textbooks) {
+		if (textbook.url) {
+			const data = await s3Client.send(
+				new DeleteObjectCommand({
+					Bucket: 'monalectpdf',
+					Key: textbook.url + '.pdf',
+					ContentType: 'application/pdf',
+				})
+			)
+		}
+	}
+
 	isOwner(courseUser[0].userId)
 
 	const course = await db.course.delete({
@@ -213,6 +242,5 @@ export const deleteCourse = async ({ userId, id }) => {
 			id: id,
 		},
 	})
-
 	return true
 }

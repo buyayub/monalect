@@ -30,7 +30,7 @@ const LessonDisplay = ({
 							<p>{questionCount}</p>
 						</span>
 					</div>
-					<div className="mn-width-large">{mark ? mark : 0}%</div>
+					<div className="mn-width-large mn-text-align-end">{mark ? mark : 0}%</div>
 				</div>
 			</div>
 		</div>

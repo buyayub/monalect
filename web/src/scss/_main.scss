@@ -51,6 +51,12 @@ body::-webkit-scrollbar {
 		font-size: 12px;
 	}
 
+	.ql-tooltip {
+		right: 8px !important;
+		top: 0px !important;
+		left: auto !important;
+	}
+
 }
 
 .mn-c-modal.mn-is-study-question {

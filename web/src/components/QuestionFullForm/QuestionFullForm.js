@@ -130,6 +130,7 @@ const QuestionFullForm = ({
 		<form
 			className="mn-form-width-medium mn-form-middle mn-flex-column mn-gap-small"
 			onSubmit={onSubmit}
+			autoComplete={false}
 		>
 			<Dropdown
 				label="Lesson"
@@ -304,7 +305,9 @@ const CustomAnswerForm = ({
 					ref={inputForm}
 					onKeyDown={inputKeyPress}
 					onBlur={(e) => {
-						addAnswer(e.target.textContent)
+						console.log(e)
+						if (e.target.textContent.replace(/\s/g, '').length)
+							addAnswer(e.target.textContent)
 						setInputToggle(!inputToggle)
 						e.target.innerText = ''
 					}}
