@@ -6,8 +6,8 @@ const REGION = 'us-east-1' //e.g. "us-east-1"
 const s3Client = new S3Client({
 	region: REGION,
 	credentials: {
-		AccessKeyId: env('BUCKET_ACCESS_KEY_ID'),
-		SecretAccessKey: env('BUCKET_SECRET_ACCESS_KEY'),
+		AccessKeyId: process.env.BUCKET_ACCESS_KEY_ID,
+		SecretAccessKey: process.env.BUCKET_SECRET_ACCESS_KEY
 	},
 })
 export { s3Client }
