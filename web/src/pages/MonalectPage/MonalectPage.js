@@ -16,8 +16,8 @@ const MonalectPage = () => {
 			</header>
 			<div className="mn-flex-row mn-justify-space-around mn-page-height-100 mn-padding-page">
 				<div className="mn-layout-half">
-					<h2>Community Updates</h2>
-					<p>Yo</p>
+					<h2>Updates</h2>
+					<p>TBD</p>
 				</div>
 				<div className="mn-layout-half mn-height-full">
 					<CourseCardsCell userId={currentUser.id} />

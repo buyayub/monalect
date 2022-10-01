@@ -28,6 +28,14 @@ export const createAnswer = async ({ userId, input }) => {
 export const deleteAnswer = async ({userId, id }) => {
 	isOwner(userId)
 
+	const answerAuth = await db.answer.findUnique({
+		where: {
+			id: id
+		}})
+
+	isOwner(answerAuth.userId)
+
+
 	const answer = await db.answer.delete({
 		where: {
 			id: id

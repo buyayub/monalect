@@ -4,6 +4,13 @@ import { isOwner } from 'src/lib/auth'
 export const lessons = async ({ courseId, userId }) => {
 	isOwner(userId)
 
+	const courseAuth = await db.course.findUnique({
+		where: {
+			id: courseId
+		}})
+	
+	isOwner(courseAuth.userId)
+
 	let payload = await db.lesson.findMany({
 		where: {
 			courseId: courseId,

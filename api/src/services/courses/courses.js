@@ -190,6 +190,12 @@ export const courses = async ({ userId }) => {
 export const updateCourse = async ({ userId, id, input }) => {
 	isOwner(userId)
 
+	const course = await db.course.findUnique({
+		where: {
+			id: id,
+		}})
+	isOwner(course.userId)
+
 	const update = await db.course.update({
 		where: {
 			id: id,
@@ -204,7 +210,9 @@ export const updateCourse = async ({ userId, id, input }) => {
 }
 
 export const deleteCourse = async ({ userId, id }) => {
-	const courseUser = await db.course.findMany({
+	isOwner(userId) //check if user is the same
+
+	const courseAuth = await db.course.findUnique({
 		where: {
 			id: id,
 		},
@@ -212,6 +220,8 @@ export const deleteCourse = async ({ userId, id }) => {
 			userId: true,
 		},
 	})
+
+	isOwner(courseAuth.userId) // check if the selected item is the user's
 
 	const textbooks = await db.textbook.findMany({
 		where: {
@@ -235,7 +245,6 @@ export const deleteCourse = async ({ userId, id }) => {
 		}
 	}
 
-	isOwner(courseUser[0].userId)
 
 	const course = await db.course.delete({
 		where: {

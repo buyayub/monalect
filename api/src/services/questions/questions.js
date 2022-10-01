@@ -4,6 +4,13 @@ import { isOwner } from 'src/lib/auth'
 export const questionsByLesson = async ({ userId, courseId }) => {
 	isOwner(userId)
 
+	const courseAuth = await db.course.findUnique({
+		where: {
+			id: courseId
+		}})
+	
+	isOwner(courseAuth.userId)
+
 	let payload = await db.lesson.findMany({
 		where: {
 			userId: userId,
@@ -107,7 +114,15 @@ export const createQuestion = async ({ userId, input }) => {
 
 export const deleteQuestion = async ({ userId, questionId }) => {
 	isOwner(userId)
-	const question = db.question.delete({
+
+	const questionAuth = db.question.findUnique({
+		where: {
+			id: questionId
+		}})
+
+	isOwner(questionAuth.userId)
+
+	const question = await db.question.delete({
 		where: {
 			id: questionId,
 		},
