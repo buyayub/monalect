@@ -30,6 +30,7 @@ export const Success = ({ notebookPages }) => {
 							title={page.lessonTitle}
 							content={page.content}
 							id={page.id}
+							key={page.id}
 						/>
 					)
 				})}
