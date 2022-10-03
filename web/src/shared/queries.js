@@ -99,3 +99,17 @@ export const CREATE_TEST = gql`
 		}
 	}
 `
+
+export const GET_COURSE_CARDS = gql`
+	query CourseCardsQuery($userId: Int!) {
+		cards(userId: $userId) {
+			id
+			title
+			description
+			notebookWords
+			questionCount
+			lessonCount
+			mark
+		}
+	}
+`

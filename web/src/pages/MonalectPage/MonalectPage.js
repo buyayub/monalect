@@ -4,6 +4,7 @@ import CourseCardsCell from 'src/components/CourseCardsCell'
 import { Link, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import { useAuth } from '@redwoodjs/auth'
+import { useContext} from 'react'
 
 const MonalectPage = () => {
 	const { currentUser } = useAuth()

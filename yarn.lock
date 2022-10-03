@@ -15929,6 +15929,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"idb-keyval@npm:^6.2.0":
+  version: 6.2.0
+  resolution: "idb-keyval@npm:6.2.0"
+  dependencies:
+    safari-14-idb-fix: ^3.0.0
+  checksum: cd40d1be22e375d3049b4852747b3693afea15a35b1eedbeee46256ee583d607a04ec46d6b3261ee4b3d111cdb14c5e03558c19baa98322fd8fabba55490ad4e
+  languageName: node
+  linkType: hard
+
 "ieee754@npm:1.1.13":
   version: 1.1.13
   resolution: "ieee754@npm:1.1.13"
@@ -23099,6 +23108,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"safari-14-idb-fix@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "safari-14-idb-fix@npm:3.0.0"
+  checksum: c30e41677b00eb039486f39033bf045d0410d1eaed78158900d9d170b718e26b791567a363a2f4cca853359ba69c273e1b9ef1746b3f97d717233d67b56f6ed4
+  languageName: node
+  linkType: hard
+
 "safe-buffer@npm:5.1.1":
   version: 5.1.1
   resolution: "safe-buffer@npm:5.1.1"
@@ -26190,6 +26206,7 @@ __metadata:
     "@redwoodjs/web": 2.0.0
     bulma: ^0.9.4
     bulma-helpers: ^0.4.2
+    idb-keyval: ^6.2.0
     material-design-icons: ^3.0.1
     pdf-viewer-reactjs: ^2.2.3
     pdfjs-dist: ^2.15.349
