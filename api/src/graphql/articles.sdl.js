@@ -1,18 +1,14 @@
 export const schema = gql`
 	type Article {
-		id: Int!
-		user: User!
-		userId: Int!
+		id: Int
 		title: String
 		author: String
 		pages: Int
 		pageOffset: Int
 		doi: String
-		uploaded: Boolean!
+		uploaded: Boolean
 		url: String
-		course: Course!
-		courseId: Int!
-		lessons: [ArticleOnLesson]!
+		courseId: Int
 	}
 
 	type Query {

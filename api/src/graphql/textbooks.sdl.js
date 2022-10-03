@@ -1,17 +1,14 @@
 export const schema = gql`
 	type Textbook {
-		id: Int!
-		user: User!
-		userId: Int!
-		title: String!
+		id: Int
+		courseId: Int
+		title: String
 		author: String
 		pages: Int
+		uploaded: Boolean
 		pageOffset: Int
 		isbn: String
 		url: String
-		course: Course!
-		courseId: Int!
-		sections: [TextbookSection]!
 	}
 
 	type UploadedMaterial {
@@ -23,6 +20,7 @@ export const schema = gql`
 
 	type Query {
 		textbooks(userId: Int!, courseId: Int!): [UploadedMaterial] @requireAuth
+		allTextbooks(userId: Int!): [Textbook]! @requireAuth
 		textbook(id: Int!): Textbook @requireAuth
 		textbookURL(userId: Int!, id: Int!): String! @requireAuth
 	}

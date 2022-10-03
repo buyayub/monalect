@@ -1,13 +1,13 @@
 export const schema = gql`
 	type Answer {
-		id: Int!
-		answer: String!
-		correct: Boolean!
-		questionId: Int!
+		id: Int
+		answer: String
+		correct: Boolean
+		questionId: Int
 	}
 
 	type Query {
-		answers: [Answer!]! @requireAuth
+		answers: [Answer]! @requireAuth
 		answer(id: Int!): Answer @requireAuth
 	}
 

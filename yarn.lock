@@ -9198,6 +9198,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"await-handler@npm:^1.1.0":
+  version: 1.1.2
+  resolution: "await-handler@npm:1.1.2"
+  checksum: 70f7b830c495c5197c4416bbece128bcc21147c68566fbb8b3798ab528f718cfac485a6f8e4b36b708d860ea003112fb5f580e110235d32a8826e13a8e783163
+  languageName: node
+  linkType: hard
+
 "aws-sdk@npm:^2.1190.0":
   version: 2.1190.0
   resolution: "aws-sdk@npm:2.1190.0"
@@ -10396,7 +10403,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chalk@npm:^2.0.0, chalk@npm:^2.4.1":
+"chalk@npm:^2.0.0, chalk@npm:^2.0.1, chalk@npm:^2.3.1, chalk@npm:^2.4.1":
   version: 2.4.2
   resolution: "chalk@npm:2.4.2"
   dependencies:
@@ -10719,6 +10726,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"cli-spinners@npm:^1.1.0":
+  version: 1.3.1
+  resolution: "cli-spinners@npm:1.3.1"
+  checksum: 4211cbf342f42279c0896c98de8857cc4231a2a2521f726950a94ce78deac62e5d976102deed594c9ca6a0dc02ac2eef7806c5d866c3695d75993a3f27dc8bd4
+  languageName: node
+  linkType: hard
+
 "cli-spinners@npm:^2.5.0":
   version: 2.6.1
   resolution: "cli-spinners@npm:2.6.1"
@@ -10961,7 +10975,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"commander@npm:^2.19.0, commander@npm:^2.20.0":
+"commander@npm:^2.19.0, commander@npm:^2.20.0, commander@npm:^2.9.0":
   version: 2.20.3
   resolution: "commander@npm:2.20.3"
   checksum: 74c781a5248c2402a0a3e966a0a2bba3c054aad144f5c023364be83265e796b20565aa9feff624132ff629aa64e16999fa40a743c10c12f7c61e96a794b99288
@@ -12684,6 +12698,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"empty-dir@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "empty-dir@npm:1.0.0"
+  checksum: 6d1f47b65e3bbc3ceb058160a641641e368739f0f876199385ab03a06af01fdc83af4055d413a1c7cb5abab79136dfc4618100311cc2bfd8948d217f78cf6a6d
+  languageName: node
+  linkType: hard
+
 "encodeurl@npm:~1.0.2":
   version: 1.0.2
   resolution: "encodeurl@npm:1.0.2"
@@ -12908,6 +12929,13 @@ __metadata:
   version: 4.6.7
   resolution: "es5-shim@npm:4.6.7"
   checksum: f285a58ed1901d46872828776164c0837272d28374a3c74b31a893dc6b16c67d417509c4f587a87c7cdfa9faf9c97c70d774c81d8bf9dcca6d3d6bfdf4a7a28e
+  languageName: node
+  linkType: hard
+
+"es6-promise@npm:^3.0.2":
+  version: 3.3.1
+  resolution: "es6-promise@npm:3.3.1"
+  checksum: b4fc87cb8509c001f62f860f97b05d1fd3f87220c8b832578e6a483c719ca272b73a77f2231cb26395fa865e1cab2fd4298ab67786b69e97b8d757b938f4fc1f
   languageName: node
   linkType: hard
 
@@ -18531,6 +18559,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"log-symbols@npm:^2.2.0":
+  version: 2.2.0
+  resolution: "log-symbols@npm:2.2.0"
+  dependencies:
+    chalk: ^2.0.1
+  checksum: 574eb4205f54f0605021aa67ebb372c30ca64e8ddd439efeb8507af83c776dce789e83614e80059014d9e48dcc94c4b60cef2e85f0dc944eea27c799cec62353
+  languageName: node
+  linkType: hard
+
 "log-symbols@npm:^4.0.0, log-symbols@npm:^4.1.0":
   version: 4.1.0
   resolution: "log-symbols@npm:4.1.0"
@@ -19327,6 +19364,34 @@ __metadata:
   languageName: node
   linkType: hard
 
+"modclean-patterns-default@npm:latest":
+  version: 1.1.2
+  resolution: "modclean-patterns-default@npm:1.1.2"
+  checksum: bfff93304fe90c9e0ab1e3e66a2e3e9b68e806d28730296927797260d00843b6304d7dfb637207386825258dc7baa804dbe9c1f38b12b6ebd7e3a7a370d45d04
+  languageName: node
+  linkType: hard
+
+"modclean@npm:^3.0.0-beta.1":
+  version: 3.0.0-beta.1
+  resolution: "modclean@npm:3.0.0-beta.1"
+  dependencies:
+    await-handler: ^1.1.0
+    chalk: ^2.4.1
+    commander: ^2.9.0
+    empty-dir: ^1.0.0
+    glob: ^7.1.2
+    lodash.uniq: ^4.5.0
+    modclean-patterns-default: latest
+    ora: ^2.1.0
+    progress: ^2.0.0
+    rimraf: ^2.5.4
+    subdirs: ^1.0.1
+  bin:
+    modclean: ./bin/modclean.js
+  checksum: a63a897a37b459a92c3d980e38f092cffea5429d9567bdb53f57dc0bdb694dad803e6390bba328fa80fb76cdb4d6759c7c42ffe2ea2318146eda888ee99e427e
+  languageName: node
+  linkType: hard
+
 "module-not-found-error@npm:^1.0.1":
   version: 1.0.1
   resolution: "module-not-found-error@npm:1.0.1"
@@ -20114,6 +20179,20 @@ __metadata:
     strip-ansi: ^6.0.0
     wcwidth: ^1.0.1
   checksum: 10ff14aace236d0e2f044193362b22edce4784add08b779eccc8f8ef97195cae1248db8ec1ec5f5ff076f91acbe573f5f42a98c19b78dba8c54eefff983cae85
+  languageName: node
+  linkType: hard
+
+"ora@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "ora@npm:2.1.0"
+  dependencies:
+    chalk: ^2.3.1
+    cli-cursor: ^2.1.0
+    cli-spinners: ^1.1.0
+    log-symbols: ^2.2.0
+    strip-ansi: ^4.0.0
+    wcwidth: ^1.0.1
+  checksum: b534cfc4bd8acc3f091ef85a84e5262784594b0f1d07afff82c9f80bd5c0418c93c80c22bae16cd1643fa1b0c401400184b1ffcdceb7edf46857a6034ea87331
   languageName: node
   linkType: hard
 
@@ -21548,7 +21627,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"progress@npm:2.0.3":
+"progress@npm:2.0.3, progress@npm:^2.0.0":
   version: 2.0.3
   resolution: "progress@npm:2.0.3"
   checksum: 1697e07cb1068055dbe9fe858d242368ff5d2073639e652b75a7eb1f2a1a8d4afd404d719de23c7b48481a6aa0040686310e2dac2f53d776daa2176d3f96369c
@@ -23048,6 +23127,7 @@ __metadata:
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
     "@redwoodjs/core": 2.0.0
+    modclean: ^3.0.0-beta.1
   languageName: unknown
   linkType: soft
 
@@ -24508,6 +24588,15 @@ __metadata:
   version: 4.0.13
   resolution: "stylis@npm:4.0.13"
   checksum: bd567c440b4f1acf8962b1b3aa7985c4e04d7badfe1e0f1c7ee2a60912de2718973850c524001a3d52f5fc9a0e3dcd204b8bd7e2d47d4934462e9f749fd9c7bc
+  languageName: node
+  linkType: hard
+
+"subdirs@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "subdirs@npm:1.0.1"
+  dependencies:
+    es6-promise: ^3.0.2
+  checksum: 2961e255cf61c9c73f96f51539631074557e8bff5bc4ed3d34be85c03598b34306b32bf30ff462a50449bacbd438a780a18fcc2bf53ee11302758dd1f881f5b3
   languageName: node
   linkType: hard
 

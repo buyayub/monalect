@@ -11,8 +11,8 @@ const getPresigned = async () => {
 
 	const bucketParams = {
 		Bucket: 'monalectpdf',
-		Key: url + ".pdf",
-		ContentType: 'application/pdf'
+		Key: url + '.pdf',
+		ContentType: 'application/pdf',
 	}
 
 	const command = new PutObjectCommand(bucketParams)
@@ -65,7 +65,7 @@ export const createBatchCourse = async ({ input }) => {
 				payload.push({
 					materialId: textbook.id,
 					localId: material.localId,
-					presigned: signedUrl
+					presigned: signedUrl,
 				})
 			}
 
@@ -112,7 +112,7 @@ export const createBatchCourse = async ({ input }) => {
 				payload.push({
 					materialId: article.id,
 					localId: material.localId,
-					presigned: signedUrl
+					presigned: signedUrl,
 				})
 			}
 
@@ -199,4 +199,153 @@ export const createBatchCourse = async ({ input }) => {
 	}
 
 	return payload
+}
+
+export const all = async ({ userId }) => {
+	isOwner(userId)
+
+	const course = await db.course.findMany({
+		where: {
+			userId: userId,
+		},
+		select: {
+			id: true,
+			title: true,
+			description: true,
+			createdAt: true,
+			active: true,
+		},
+	})
+
+	const lesson = await db.lesson.findMany({
+		where: {
+			userId: userId,
+		},
+		select: {
+			id: true,
+			courseId: true,
+			title: true,
+			index: true,
+		},
+	})
+
+	const textbook = await db.textbook.findMany({
+		where: {
+			userId: userId,
+		},
+		select: {
+			id: true,
+			courseId: true,
+			title: true,
+			author: true,
+			pages: true,
+			uploaded: true,
+			pageOffset: true,
+			isbn: true,
+			url: true,
+		},
+	})
+
+	const section = await db.textbookSection.findMany({
+		where: {
+			userId: userId,
+		},
+		select: {
+			id: true,
+			title: true,
+			start: true,
+			end: true,
+			textbookId: true,
+		},
+	})
+
+	const article = await db.article.findMany({
+		where: {
+			userId: userId,
+		},
+		select: {
+			id: true,
+			courseId: true,
+			title: true,
+			author: true,
+			pages: true,
+			uploaded: true,
+			pageOffset: true,
+			doi: true,
+			url: true,
+		},
+	})
+
+	const question = await db.question.findMany({
+		where: {
+			userId: userId,
+		},
+		select: {
+			id: true,
+			lessonId: true,
+			courseId: true,
+			question: true,
+			multiple: true,
+			choices: true,
+		},
+	})
+
+	const answer = await db.answer.findMany({
+		where: {
+			userId: userId,
+		},
+		select: {
+			id: true,
+			answer: true,
+			correct: true,
+			questionId: true,
+		},
+	})
+
+	const test = await db.test.findMany({
+		where: {
+			userId: userId,
+		},
+		select: {
+			id: true,
+			courseId: true,
+			correct: true,
+			count: true,
+			quiz: true,
+		},
+	})
+
+	const sectionOnLesson = await db.sectionOnLesson.findMany({
+		where: {
+			lesson: {
+				userId: {
+					equals: userId,
+				},
+			},
+			section: {
+				userId: {
+					equals: userId,
+				},
+			},
+		},
+	})
+
+	const articleOnLesson = []
+	const testOnLesson = []
+
+	const all = {
+		course: course,
+		lesson: lesson,
+		textbook: textbook,
+		section: section,
+		article: article,
+		question: question,
+		answer: answer,
+		test: test,
+		sectionOnLesson: sectionOnLesson,
+		articleOnLesson: articleOnLesson,
+		testOnLesson: testOnLesson,
+	}
+
+	return all
 }

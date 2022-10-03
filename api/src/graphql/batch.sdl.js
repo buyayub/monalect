@@ -12,6 +12,20 @@ export const schema = gql`
 		sections: [BatchSection]
 	}
 
+	type All {
+		course: [Course]!
+		lesson: [Lesson]!
+		textbook: [Textbook]!
+		section: [TextbookSection]!
+		article: [Article]!
+		question: [Question]!
+		answer: [Answer]!
+		test: [Test]!
+		sectionOnLesson: [SectionOnLesson]!
+		articleOnLesson: [ArticleOnLesson]!
+		testOnLesson: [TestOnLesson]!
+	}
+
 	input BatchSection {
 		localId: Int!
 		title: String!
@@ -33,6 +47,10 @@ export const schema = gql`
 		lesson: [BatchLesson]
 	}
 
+	type Query {
+		all(userId: Int!): All @requireAuth
+	}
+
 	type Uploaded {
 		materialId: Int!
 		localId: Int!
@@ -41,5 +59,10 @@ export const schema = gql`
 
 	type Mutation {
 		createBatchCourse(input: CreateBatchCourseInput!): [Uploaded]! @requireAuth
+	}
+
+	type BatchUser {
+		courses: [Course] 
+		lessons: [Lesson]
 	}
 `

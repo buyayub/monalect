@@ -1,10 +1,8 @@
 export const schema = gql`
 	type SectionOnLesson {
-		id: Int!
-		lesson: Lesson!
-		lessonId: Int!
-		section: TextbookSection!
-		sectionId: Int!
+		id: Int
+		lessonId: Int
+		sectionId: Int
 	}
 
 	type Query {

@@ -1,11 +1,11 @@
 export const schema = gql`
 	type Question {
-		id: Int!
+		id: Int
 		lessonId: Int
-		question: String!
-		multiple: Boolean!
+		courseId: Int
+		question: String
+		multiple: Boolean
 		choices: Int
-		answers: [Answer]!
 	}
 
 	type QuestionLesson {

@@ -181,6 +181,9 @@ export const courses = async ({ userId }) => {
 		select: {
 			id: true,
 			title: true,
+			description: true,
+			createdAt: true,
+			active: true
 		},
 	})
 
@@ -194,6 +197,7 @@ export const updateCourse = async ({ userId, id, input }) => {
 		where: {
 			id: id,
 		}})
+
 	isOwner(course.userId)
 
 	const update = await db.course.update({

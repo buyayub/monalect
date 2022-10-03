@@ -1,18 +1,58 @@
-import { get, set, getAll, entries } from 'idb-keyval'
+import { get, set, setMany } from 'idb-keyval'
 import { useMemo, useState } from 'react'
 import { useApolloClient } from '@apollo/client'
-import { GET_COURSE_CARDS } from 'src/shared/queries'
 import { useAuth } from '@redwoodjs/auth'
+import { GET_ALL } from 'src/shared/queries/'
 
 export default function Database({ children }) {
 	const { currentUser } = useAuth()
 	const client = useApolloClient()
 
-	if (currentUser && client) {initDB(client, currentUser)}
+	const synced = localStorage.getItem('synced')
 
-	entries().then((entries) => console.log(entries));
+	// sync database if it's undefined
+	if (currentUser && client && (synced === undefined)) {
+		syncDB(client, currentUser.id)
+	}
+
 	return <>{children}</>
 }
 
-const initDB = async (client, currentUser) => {
+const syncDB = async (client, userId) => {
+	client
+		.query({
+			query: GET_ALL,
+			variables: { userId: userId },
+		})
+		.then((response) => {
+			const data = response.data.all
+			const propNames = Object.keys(data)
+			const values = Object.values(data)
+
+			let ugh = []
+			// start at 1 to remove __typename, not going to deal with apollo configuration 
+			for (let i = 1; i < propNames.length; i++) {
+				ugh.push([propNames[i], values[i]])
+			}
+
+			setMany(ugh)
+				.then(() => {
+					localStorage.setItem('synced', true)
+				})
+				.catch((err) => console.error(err))
+		})
+		.catch((err) => console.error(err))
+}
+
+const syncItem = async (client, userId, item) => {
+	try {
+		const response = await client.query({
+			query: item.query,
+			variables: { userId: userId },
+		})
+		const data = response.data[item.queryName]
+		set(item.name, data)
+	} catch (err) {
+		console.error(err)
+	}
 }

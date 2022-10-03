@@ -1,15 +1,9 @@
 export const schema = gql`
 	type Course {
 		id: Int
-		user: User
-		userId: Int
 		title: String
 		description: String
 		createdAt: DateTime
-		lessons: [Lesson]
-		textbooks: [Textbook]
-		articles: [Article]
-		goals: [Goal]
 	}
 
 	type Card {

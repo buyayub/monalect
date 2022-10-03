@@ -1,21 +1,11 @@
 export const schema = gql`
 	type Lesson {
-		id: Int!
-		user: User!
-		sections: [TextbookSection]!
-		userId: Int!
-		course: Course!
-		courseId: Int!
+		id: Int
+		courseId: Int
 		index: Int
-		title: String!
-		notebookWords: Int
-		questionCount: Int
-		notebookPages: [NotebookPage]!
-		articles: [Article]!
-		mark: Int
+		title: String
 	}
 
-	# I have absolutely no clue why this one works but Lesson doesn't. Not a single fucking clue. 
 	type LessonDisplay {
 		id: Int!
 		user: User!
@@ -33,6 +23,7 @@ export const schema = gql`
 
 	type Query {
 		lessons(courseId:Int!, userId: Int!): [LessonDisplay!]! @requireAuth
+		allLessons(userId: Int!): [Lesson]! @requireAuth
 		lesson(userId: Int!, id: Int!): Lesson @requireAuth
 	}
 

@@ -75,3 +75,20 @@ export const lessons = async ({ courseId, userId }) => {
 	}
 	return payload
 }
+
+export const allLessons = async ({userId}) => {
+	isOwner(userId)
+
+	const lessons = await db.lesson.findMany({
+		where: {
+			userId: userId,
+		},
+		select: {
+			id: true,
+			courseId: true,
+			title: true,
+			index: true,
+		}
+	})
+	return lessons
+}

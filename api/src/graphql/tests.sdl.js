@@ -1,19 +1,17 @@
 export const schema = gql`
 	type Test {
-		id: Int!
-		userId: Int!
-		courseId: Int!
-		correct: Int!
-		count: Int!
-		mark: Int
-		quiz: Boolean!
-		lessons: [TestOnLesson]!
+		id: Int
+		courseId: Int
+		correct: Int
+		count: Int
+		quiz: Boolean
 	}
 
 	type TestOnLesson {
+		id: Int
 		mark: Int
-		correct: Int!
-		count: Int!
+		correct: Int
+		count: Int
 		lessonId: Int
 		lessonTitle: String
 		testId: Int
