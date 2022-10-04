@@ -9,9 +9,8 @@ export default function Database({ children }) {
 	const client = useApolloClient()
 
 	const synced = localStorage.getItem('synced')
-
 	// sync database if it's undefined
-	if (currentUser && client && (synced === undefined)) {
+	if (currentUser && client && (synced === null)) {
 		syncDB(client, currentUser.id)
 	}
 

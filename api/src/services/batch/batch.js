@@ -315,6 +315,13 @@ export const all = async ({ userId }) => {
 		},
 	})
 
+	const notebookPage = await db.notebookPage.findMany({
+		where: {
+			userId: userId,
+		}
+	})
+		
+
 	const sectionOnLesson = await db.sectionOnLesson.findMany({
 		where: {
 			lesson: {
@@ -330,8 +337,34 @@ export const all = async ({ userId }) => {
 		},
 	})
 
-	const articleOnLesson = []
-	const testOnLesson = []
+	const articleOnLesson = await db.articleOnLesson.findMany({
+		where: {
+			lesson: {
+				userId: {
+					equals: userId,
+				},
+			},
+			article: {
+				userId: {
+					equals: userId,
+				},
+			},
+		},
+	})
+	const testOnLesson = await db.testOnLesson.findMany({
+		where: {
+			lesson: {
+				userId: {
+					equals: userId,
+				},
+			},
+			test: {
+				userId: {
+					equals: userId,
+				},
+			},
+		},
+	})
 
 	const all = {
 		course: course,
@@ -342,6 +375,7 @@ export const all = async ({ userId }) => {
 		question: question,
 		answer: answer,
 		test: test,
+		notebookPage: notebookPage,
 		sectionOnLesson: sectionOnLesson,
 		articleOnLesson: articleOnLesson,
 		testOnLesson: testOnLesson,

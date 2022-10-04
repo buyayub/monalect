@@ -1,6 +1,6 @@
 import NavBar from 'src/components/NavBar'
 import Button from 'src/components/Button'
-import CourseCardsCell from 'src/components/CourseCardsCell'
+import CourseCardList from 'src/components/CourseCardList'
 import { Link, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import { useAuth } from '@redwoodjs/auth'
@@ -21,7 +21,7 @@ const MonalectPage = () => {
 					<p>TBD</p>
 				</div>
 				<div className="mn-layout-half mn-height-full">
-					<CourseCardsCell userId={currentUser.id} />
+					<CourseCardList userId={currentUser.id} />
 				</div>
 			</div>
 		</>

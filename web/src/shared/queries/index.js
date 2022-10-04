@@ -63,6 +63,13 @@ export const GET_ALL = gql`
 				count
 				quiz
 			}
+			notebookPage {
+				id
+				lessonId
+				content
+				lessonTitle
+				courseId
+			}
 			sectionOnLesson {
 				id
 				lessonId

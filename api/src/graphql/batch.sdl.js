@@ -21,6 +21,7 @@ export const schema = gql`
 		question: [Question]!
 		answer: [Answer]!
 		test: [Test]!
+		notebookPage: [NotebookPage]!
 		sectionOnLesson: [SectionOnLesson]!
 		articleOnLesson: [ArticleOnLesson]!
 		testOnLesson: [TestOnLesson]!
