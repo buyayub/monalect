@@ -21,7 +21,7 @@ const LessonList = ({ courseId }) => {
 			{!lessons
 				? 'Loading...'
 				: lessons.map((lesson, i) => {
-						return <LessonBlock lesson={lesson} />
+						return <LessonBlock lesson={lesson} key={i} />
 				  })}
 		</div>
 	)

@@ -201,3 +201,13 @@ export const GET_COURSE_CARDS = gql`
 		}
 	}
 `
+
+export const CREATE_BATCH = gql`
+	mutation CreateBatchCourseMutation($input: CreateBatchCourseInput!) {
+		createBatchCourse(input: $input) {
+			materialId
+			localId
+			presigned
+		}
+	}
+`

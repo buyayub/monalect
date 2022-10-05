@@ -7,33 +7,36 @@ import { useAuth } from '@redwoodjs/auth'
 
 import { FiHelpCircle, FiList } from 'react-icons/fi'
 import { RiBook2Line } from 'react-icons/ri'
-import { deleteCourse } from 'src/controller/course'
+import { deleteCourse, updateCourse } from 'src/controller/course'
 
 const CourseCard = ({
-	courseId,
-	courseTitle = 'Untitled',
-	courseDescription = 'No description.',
-	notebookWords = 0,
-	questionCount = 0,
-	mark = 0,
-	lessons = 0,
+	course,
 	edit = true,
 	handleDelete=null,
 }) => {
 	const [editDescription, setEditDescription] = useState(false)
 	const [editTitle, setEditTitle] = useState(false)
-	const [title, setTitle] = useState(courseTitle)
-	const [description, setDescription] = useState(courseDescription)
+	const [title, setTitle] = useState(course.title)
+	const [description, setDescription] = useState(course.description)
 	const { currentUser } = useAuth()
 
 	const descriptionForm = useRef(null)
 	const titleForm = useRef(null)
 
-	const submitUpdate = () => {}
+	const submitUpdate = (titleData=null, descriptionData=null) => {
+		updateCourse({
+			id: course.id,
+			title: titleData,
+			description: descriptionData
+		})
+
+		if (titleData) setTitle(titleData)
+		if (descriptionData) setDescription(descriptionData)
+	}
 
 	const submitDelete = () => {
-		deleteCourse(courseId)
-		handleDelete(courseId)
+		deleteCourse(course.id)
+		handleDelete(course.id)
 	}
 
 	// focus on title if edit is true and toggled, place caret at the end
@@ -75,32 +78,32 @@ const CourseCard = ({
 				// VIEW MODE
 				<Link
 					to={routes.courseHome({
-						courseId: courseId,
-						courseTitle: courseTitle,
-						questionCount: questionCount,
-						notebookWord: notebookWords,
-						mark: mark,
+						courseId: course.id,
+						courseTitle: course.title,
+						questionCount: course.questionCount,
+						notebookWord: course.notebookWords,
+						mark: course.mark,
 					})}
 				>
 					<div className="mn-c-card">
 						<div className="mn-flex-column mn-gap-small">
 							<div className="mn-flex-row mn-justify-space-between">
 								<h2>{title}</h2>
-								<h3>{mark}%</h3>
+								<h3>{course.mark ? course.mark : 0}%</h3>
 							</div>
 							<div>{description}</div>
 							<div className="mn-flex-row mn-gap-large mn-justify-end">
 								<div className="mn-flex-row mn-gap-small">
 									<FiList />
-									<p>{lessons}</p>
+									<p>{course.lessonCount}</p>
 								</div>
 								<div className="mn-flex-row mn-gap-small">
 									<RiBook2Line />
-									<p>{notebookWords}</p>
+									<p>{course.notebookWords}</p>
 								</div>
 								<div className="mn-flex-row mn-gap-small">
 									<FiHelpCircle />
-									<p>{questionCount}</p>
+									<p>{course.questionCount}</p>
 								</div>
 							</div>
 						</div>
@@ -198,15 +201,15 @@ const CourseCard = ({
 						<div className="mn-flex-row mn-gap-large mn-justify-end">
 							<div className="mn-flex-row mn-gap-small">
 								<FiList />
-								<p>{lessons}</p>
+								<p>{course.lessonCount}</p>
 							</div>
 							<div className="mn-flex-row mn-gap-small">
 								<RiBook2Line />
-								<p>{notebookWords}</p>
+								<p>{course.notebookWords}</p>
 							</div>
 							<div className="mn-flex-row mn-gap-small">
 								<FiHelpCircle />
-								<p>{questionCount}</p>
+								<p>{course.questionCount}</p>
 							</div>
 						</div>
 					</div>

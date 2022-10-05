@@ -1,4 +1,4 @@
-import { get, getMany, setMany} from 'idb-keyval'
+import { get, getMany, setMany, update } from 'idb-keyval'
 import { useApolloClient } from '@apollo/client'
 
 export const deleteCourse = async (courseId) => {
@@ -55,7 +55,6 @@ const deleteCourseDB = async (courseId) => {
 		'textbook',
 	])
 
-
 	let db = {}
 
 	// easy stuff first
@@ -102,7 +101,45 @@ const deleteCourseDB = async (courseId) => {
 
 	await setMany(elements)
 
-	console.log(`course ${courseId} deleted from database`)
+	console.log(`course ${courseId} deleted from idb`)
 
 	// never do your own cascades
 }
+
+// course: id, title, description
+export const updateCourse = (input) => {
+	const key = `course-${input.id}`
+	let data = JSON.parse(localStorage.getItem(key))
+
+	if (data) {
+		if (input.title) data.title = input.title
+		if (input.description) data.description = input.description
+		localStorage.setItem(key, JSON.stringify(data))
+		sessionStorage.setItem(key, JSON.stringify(data))
+	}
+
+	updateCourseCard({id: input.id, title: input.title, description: input.description})
+
+	update('course', (courses) => {
+		const index = courses.findIndex((item) => item.id == input.id)
+		if (input.title) courses[index].title = input.title
+		if (input.description) courses[index].description = input.description
+		return courses
+	})
+
+}
+
+export const updateCourseCard = (input) => {
+	const key = `course-cards`
+
+	let data = JSON.parse(localStorage.getItem(key))
+	if (data) {
+		const index = data.findIndex(item => item.id == input.id) 
+		if (input.title) data[index].title = input.title
+		if (input.description) data[index].description = input.description
+
+		localStorage.setItem(key, JSON.stringify(data))
+		sessionStorage.setItem(key, JSON.stringify(data))
+	}
+}
+

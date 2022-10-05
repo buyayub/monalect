@@ -50,20 +50,10 @@ const CourseCardList = ({userId}) => {
 					{cards ? cards.map((item) => {
 						return (
 							<CourseCard
-								courseId={item.id}
-								courseTitle={
-									item.title !== '' && item.title != null
-										? item.title
-										: 'Untitled'
-								}
-								notebookWords={item.notebookWords ? item.notebookWords : 0}
-								questionCount={item.questionCount}
-								mark={item.mark}
+								course={item}
 								edit={edit}
 								handleDelete={deleteCard}
 								key={item.id}
-								courseDescription={item.description}
-								lessons={item.lessonCount}
 							/>
 						)
 					}): "loading..."}

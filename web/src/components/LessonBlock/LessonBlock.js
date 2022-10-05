@@ -41,8 +41,8 @@ const LessonBlock = ({ lesson }) => {
 					!expand ? 'mn-is-hidden' : ''
 				}`}
 			>
-				{lesson.articles.map((article) => (
-					<LessonMaterialDisplay type="article" section={section} />
+				{lesson.articles.map((article, i) => (
+					<LessonMaterialDisplay type="article" section={section} key={i} />
 				))}
 				{lesson.sections.map((section, i) => (
 					<LessonMaterialDisplay

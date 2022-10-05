@@ -12,16 +12,8 @@ import { Link, routes, navigate } from '@redwoodjs/router'
 import { MetaTags, useMutation } from '@redwoodjs/web'
 import { useAuth } from '@redwoodjs/auth'
 import { useState } from 'react'
+import { CREATE_BATCH } from 'src/shared/queries'
 
-const CREATE_BATCH = gql`
-	mutation CreateBatchCourseMutation($input: CreateBatchCourseInput!) {
-		createBatchCourse(input: $input) {
-			materialId
-			localId
-			presigned
-		}
-	}
-`
 
 const CreateCoursePage = () => {
 	const { currentUser } = useAuth()
@@ -155,7 +147,7 @@ const CreateCoursePage = () => {
 	const [createBatch] = useMutation(CREATE_BATCH)
 
 	const submitCourse = (courseTitle, courseMaterials, courseLessons) => {
-		//We have to translate all the ids in the lesson material from their location in the array, to their local identifiers
+		// We have to translate all the ids in the lesson material from their location in the array, to their local identifiers
 		// We have to deepcopy here, so it doesn't overwrite the actual lessons state
 		let linkedLessons = JSON.parse(JSON.stringify(lessons))
 
