@@ -1,14 +1,14 @@
 import { render } from '@redwoodjs/testing/web'
 
-import LessonDisplay from './LessonDisplay'
+import CourseTitle from './CourseTitle'
 
 //   Improve this test with help from the Redwood Testing Doc:
 //    https://redwoodjs.com/docs/testing#testing-components
 
-describe('LessonDisplay', () => {
+describe('CourseTitle', () => {
 	it('renders successfully', () => {
 		expect(() => {
-			render(<LessonDisplay />)
+			render(<CourseTitle />)
 		}).not.toThrow()
 	})
 })

@@ -12,7 +12,6 @@ import { Link, routes, navigate } from '@redwoodjs/router'
 import { MetaTags, useMutation } from '@redwoodjs/web'
 import { useAuth } from '@redwoodjs/auth'
 import { useState } from 'react'
-import { QUERY } from 'src/components/CourseCardsCell'
 
 const CREATE_BATCH = gql`
 	mutation CreateBatchCourseMutation($input: CreateBatchCourseInput!) {

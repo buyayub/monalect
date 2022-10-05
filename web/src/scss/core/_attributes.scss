@@ -384,3 +384,8 @@
 .mn-wait {
 	cursor: wait;
 }
+
+.fade-in {
+	opacity: 100%;
+	transition: 0.1s;
+}

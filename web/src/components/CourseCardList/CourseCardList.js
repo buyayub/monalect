@@ -1,29 +1,27 @@
 import CourseCard from 'src/components/CourseCard'
 import Button from 'src/components/Button'
 import { Link, routes } from '@redwoodjs/router'
-import { useState, useEffect} from 'react'
+import { useState, useLayoutEffect} from 'react'
 import { getCourseCards } from 'src/models/courseCard'
 
 const CourseCardList = ({userId}) => {
 	const [cards, setCards] = useState(null)
 	const [edit, setEdit] = useState(false)
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		if (!cards) {
 			getCourseCards().then((data) => setCards(data))
 		}
 	})
 
-	/*
 	const deleteCard = (id) => {
-		let newCards = JSON.parse(JSON.stringify(cardDisplay))
-		setCardDisplay([
+		let newCards = JSON.parse(JSON.stringify(cards))
+		setCards([
 			...newCards.filter((card) => {
 				return card.id != id
 			}),
 		])
 	}
-	*/
 
 	return (
 		<div className="mn-flex-column mn-gap-medium mn-height-full">
@@ -62,7 +60,7 @@ const CourseCardList = ({userId}) => {
 								questionCount={item.questionCount}
 								mark={item.mark}
 								edit={edit}
-								handleDelete={() => console.log("delete")}
+								handleDelete={deleteCard}
 								key={item.id}
 								courseDescription={item.description}
 								lessons={item.lessonCount}

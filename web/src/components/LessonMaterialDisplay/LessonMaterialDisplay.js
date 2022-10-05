@@ -1,15 +1,15 @@
 import { FiBook, FiFileText } from 'react-icons/fi'
 
-const LessonMaterialDisplay = ({ type, title, start, end }) => {
+const LessonMaterialDisplay = ({ type, section }) => {
 	return (
 		<div className="mn-flex-row mn-justify-space-between">
 			<div className="mn-flex-row mn-gap-small">
 				{type == 'section' ? <FiBook /> : <FiFileText />}
-				<p>{title}</p>
+				<p>{section.title}</p>
 			</div>
 			<div className="mn-flex-row">
 				{type == 'section' ? <p>
-					{start} - {end}
+					{section.start} - {section.end}
 				</p>
 				:
 						""

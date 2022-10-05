@@ -4,10 +4,10 @@ import IconButton from 'src/components/IconButton'
 import Button from 'src/components/Button'
 import { useState, useEffect, useRef } from 'react'
 import { useAuth } from '@redwoodjs/auth'
-import { UPDATE_COURSE, DELETE_COURSE} from 'src/shared/queries'
 
 import { FiHelpCircle, FiList } from 'react-icons/fi'
 import { RiBook2Line } from 'react-icons/ri'
+import { deleteCourse } from 'src/controller/course'
 
 const CourseCard = ({
 	courseId,
@@ -24,41 +24,15 @@ const CourseCard = ({
 	const [editTitle, setEditTitle] = useState(false)
 	const [title, setTitle] = useState(courseTitle)
 	const [description, setDescription] = useState(courseDescription)
-
-	const [updateCourse] = useMutation(UPDATE_COURSE)
-	const [deleteCourse] = useMutation(DELETE_COURSE)
 	const { currentUser } = useAuth()
+
 	const descriptionForm = useRef(null)
 	const titleForm = useRef(null)
 
-	const submitUpdate = (titleData = null, descriptionData = null) => {
-		updateCourse({
-			variables: {
-				userId: currentUser.id,
-				id: courseId,
-				input: {
-					title: titleData,
-					description: descriptionData,
-				},
-			},
-		}).then((response) => {
-			console.log(response)
-		})
-
-		if (titleData) {
-			setTitle(titleData)
-		}
-		if (descriptionData) {
-			setDescription(descriptionData)
-		}
-	}
+	const submitUpdate = () => {}
 
 	const submitDelete = () => {
-		deleteCourse({variables: {
-			userId: currentUser.id,
-			id: courseId
-		}})
-
+		deleteCourse(courseId)
 		handleDelete(courseId)
 	}
 
