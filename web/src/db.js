@@ -1,4 +1,4 @@
-import { get, set, setMany } from 'idb-keyval'
+import { get, set, setMany, values } from 'idb-keyval'
 import { useMemo, useState } from 'react'
 import { useApolloClient } from '@apollo/client'
 import { useAuth } from '@redwoodjs/auth'
@@ -10,12 +10,14 @@ export default function Database({ children }) {
 
 	const synced = localStorage.getItem('synced')
 	// sync database if it's undefined
-	if (currentUser && client && (synced === null)) {
-		syncDB(client, currentUser.id)
+	if (currentUser && client && synced === null) {
+		syncDB(client, currentUser.id).then(() => setUniqueId())
 	}
+
 
 	return <>{children}</>
 }
+
 
 const syncDB = async (client, userId) => {
 	client
@@ -29,7 +31,7 @@ const syncDB = async (client, userId) => {
 			const values = Object.values(data)
 
 			let ugh = []
-			// start at 1 to remove __typename, not going to deal with apollo configuration 
+			// start at 1 to remove __typename, not going to deal with apollo configuration
 			for (let i = 1; i < propNames.length; i++) {
 				ugh.push([propNames[i], values[i]])
 			}
@@ -54,4 +56,17 @@ const syncItem = async (client, userId, item) => {
 	} catch (err) {
 		console.error(err)
 	}
+}
+
+export const setUniqueId = async () => {
+	const stuff = await values()
+	let ids = []
+	for (const val of stuff) {
+		if (val.length > 0) {
+			val.forEach((item) => ids.push(item.id))
+		}
+	}
+	const max = Math.max(...ids)
+	localStorage.setItem('unique-id', JSON.stringify(max))
+	sessionStorage.setItem('unique-id', JSON.stringify(max))
 }

@@ -118,6 +118,15 @@ export const updateCourse = (input) => {
 		sessionStorage.setItem(key, JSON.stringify(data))
 	}
 
+	const key2 = `course-dropdown`
+	let dropdown = JSON.parse(localStorage.getItem(key2))
+
+	if (dropdown) {
+		dropdown.find((item) => item.value == input.id).title = input.title
+		localStorage.setItem(key2, JSON.stringify(dropdown))
+		sessionStorage.setItem(key2, JSON.stringify(dropdown))
+	}
+
 	updateCourseCard({id: input.id, title: input.title, description: input.description})
 
 	update('course', (courses) => {

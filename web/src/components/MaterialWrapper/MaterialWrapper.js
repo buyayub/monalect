@@ -6,14 +6,10 @@ import { FiPlus } from 'react-icons/fi'
 import { useState } from 'react'
 
 const LearningMaterialSection = ({
-	type,
-	title,
-	pages,
+	material,
 	sections,
-	sectionDelete,
-	materialDelete,
-	index,
 	uploaded,
+	tools,
 	setSectionRoot,
 	showSection,
 	linkMode,
@@ -23,99 +19,96 @@ const LearningMaterialSection = ({
 	return (
 		<div className={`mn-flex-column mn-gap-medium`}>
 			<LearningMaterial
-				type={type}
-				className={linkMode && type == 'textbook' ? 'mn-is-inactive' : ''}
-				title={title}
-				pages={pages}
-				fileAdded={uploaded}
-				onClick={(e) => {
-					if (linkMode && type == 'article') {
-						linkSection(lessonRoot, 'article', index)
+				className={linkMode && material.type === 'textbook' ? 'mn-is-inactive' : ''}
+				material={material}
+				onClick={() => {
+					// add link to lesson
+					if (linkMode && material.type == 'article') {
+						tools.add('link', {
+							type: 'article',
+							title: material.title,
+							materialId: material.localId,
+							lessonId: lessonRoot,
+						})
 					}
 					return null
 				}}
 				handleDelete={() => {
-					materialDelete(index)
+					tools.delete('material', material.localId)
 				}}
 			/>
-			{sections != null && (
-				<div className="mn-flex-column mn-gap-small mn-indent">
-					{sections != null &&
-						sections.map((section, i) => {
-							return (
-								<MaterialSection
-									key={i}
-									start={section.start}
-									end={section.end}
-									title={section.title}
-									onClick={(e) => {
-										if (linkMode) {
-											linkSection(lessonRoot, 'section', index, i)
-										}
-										return null
-									}}
-									handleDelete={() => sectionDelete(index, i)}
-								/>
-							)
-						})}
-					{type == 'textbook' ? (
-							<MaterialSectionAdd
-								className={linkMode ? 'mn-inactive-text' : ''}
-								onClick={
-									!linkMode
-										? () => {
-												setSectionRoot(index)
-												showSection(true)
-										  }
-										: null
-								}
-							>
-								<FiPlus />
-							</MaterialSectionAdd>
-					) : (
-						''
-					)}
-				</div>
-			)}
+			<div className="mn-flex-column mn-gap-small mn-indent">
+				{sections
+					.map((section, i) => {
+						return (
+							<MaterialSection
+								key={i}
+								section={section}
+								onClick={() => {
+									// add link to lesson
+									if (linkMode) {
+										tools.add('link', {
+											type: 'section',
+											title: section.title,
+											materialId: section.localId,
+											lessonId: lessonRoot,
+										})
+									}
+									return null
+								}}
+								handleDelete={() => tools.delete('section', section.localId)}
+							/>
+						)
+					})}
+				{material.type == 'textbook' ? (
+					<MaterialSectionAdd
+						className={linkMode ? 'mn-inactive-text' : ''}
+						onClick={
+							!linkMode
+								? () => {
+										setSectionRoot(material.localId)
+										showSection(true)
+								  }
+								: null
+						}
+					>
+						<FiPlus />
+					</MaterialSectionAdd>
+				) : (
+					''
+				)}
+			</div>
 		</div>
 	)
 }
 
 const MaterialWrapper = ({
 	className,
-	materials = [],
+	course,
+	tools,
 	showForm,
 	showSection,
-	sectionDelete,
-	materialDelete,
 	setSectionRoot,
 	linkMode,
 	lessonRoot,
-	linkSection,
 }) => {
 	return (
 		<div className={`mn-flex-column mn-gap-medium ${className}`}>
 			<h2 className="mn-text-blue"> Learning Material </h2>
 			<div className="mn-flex-column mn-gap-large mn-c-card">
-				{materials.map((material, i) => {
-					const sections =
-						material.type == 'textbook' ? material.sections : null
+				{course.material.map((material, i) => {
 					return (
 						<LearningMaterialSection
 							key={i}
-							index={i}
-							type={material.type}
-							title={material.title}
-							pages={material.pages}
-							uploaded={material.uploaded}
-							sections={sections}
-							sectionDelete={sectionDelete}
-							materialDelete={materialDelete}
+							material={material}
+							sections={course.section.filter(
+								(section) => section.textbookId == material.localId
+							)}
 							setSectionRoot={setSectionRoot}
 							showSection={showSection}
 							linkMode={linkMode}
 							lessonRoot={lessonRoot}
-							linkSection={linkSection}
+							tools={tools}
 						/>
 					)
 				})}

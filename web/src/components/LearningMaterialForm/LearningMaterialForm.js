@@ -5,37 +5,23 @@ import Button from 'src/components/Button'
 
 const LearningMaterialForm = ({
 	cancel,
-	addMaterial,
-	identifier,
-	setIdentifier,
-	addUploaded,
+	tools
 }) => {
 	const onSubmit = (e) => {
 		e.preventDefault()
-		const materialType = e.target[0].value
-		const title = e.target[1].value
-		const author = e.target[2].value
-		const standardId = e.target[3].value
-		const file = e.target[4].files[0]
-		const uploaded = file != undefined ? true : false
-		const pages = parseInt(e.target[5].value)
-		const offset = parseInt(e.target[6].value)
 
-		const textbook = {
-			type: materialType,
-			title: title,
-			author: author,
-			identifier: standardId,
-			pages: parseInt(pages),
-			offset: offset,
-			uploaded: uploaded,
-			sections: [],
-			localId: identifier,
+		const material = {
+			type: e.target[0].value,
+			title: e.target[1].value,
+			author: e.target[2].value,
+			identifier: e.target[3].value,
+			file: e.target[4].files[0],
+			pages: parseInt(e.target[5].value),
+			offset: parseInt(e.target[6].value),
+			uploaded: e.target[4].files[0] ? true : false,
 		}
-		addMaterial(textbook)
-		addUploaded(file, identifier)
 
-		setIdentifier(identifier + 1)
+		tools.add('material', material)
 		e.target.reset()
 		cancel()
 	}

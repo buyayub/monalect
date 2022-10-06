@@ -41,11 +41,18 @@ export const schema = gql`
 			material: [Int]
 	}
 
+	input BatchLink {
+		type: String!
+		lessonId: Int!
+		materialId: Int!
+	}
+
 	input CreateBatchCourseInput{
 		userId: Int!
 		title: String!
 		material: [BatchMaterial]
 		lesson: [BatchLesson]
+		link: [BatchLink]
 	}
 
 	type Query {
@@ -58,8 +65,18 @@ export const schema = gql`
 		presigned: String!
 	}
 
+	type Ids {
+		localId: Int!
+		Id: Int
+	}
+
+	type BatchReturn {
+		uploaded: [Uploaded]
+		ids: [Ids]		
+	}
+
 	type Mutation {
-		createBatchCourse(input: CreateBatchCourseInput!): [Uploaded]! @requireAuth
+		createBatchCourse(input: CreateBatchCourseInput!): BatchReturn @requireAuth
 	}
 
 	type BatchUser {

@@ -13,17 +13,22 @@ import { MetaTags, useMutation } from '@redwoodjs/web'
 import { useAuth } from '@redwoodjs/auth'
 import { useState } from 'react'
 import { CREATE_BATCH } from 'src/shared/queries'
-
+import { setUniqueId } from 'src/db'
+import { cache } from 'src/shared/cache'
 
 const CreateCoursePage = () => {
 	const { currentUser } = useAuth()
 	const [page, setPage] = useState(0)
-	const [title, setTitle] = useState('')
-	const [materials, setMaterial] = useState([])
-	const [uploaded, setUploaded] = useState([])
-	const [lessons, setLessons] = useState([])
-	const [courseId, setCourseId] = useState(null)
 	const [uploading, setUploading] = useState(false)
+
+	const [course, setCourse] = useState({
+		title: null,
+		description: null,
+		material: [],
+		lesson: [],
+		link: [],
+		section: [],
+	})
 
 	const [showMaterialForm, setMaterialForm] = useState(false)
 	const [showSectionForm, setSectionForm] = useState(false)
@@ -33,169 +38,63 @@ const CreateCoursePage = () => {
 	const [lessonRoot, setLessonRoot] = useState(0)
 
 	const [linkMode, setLinkMode] = useState(false)
-	const [identifier, setIdentifier] = useState(0)
 
-	const materialDelete = (id) => {
-		setUploaded(
-			uploaded.filter((element) => element.localId != materials[id].localId)
-		)
-		setMaterial(materials.filter((element, index) => index != id))
-	}
-
-	const sectionDelete = (materialId, id) => {
-		// remove material
-		let materialsCopy = materials
-		materialsCopy[materialId].sections = materialsCopy[
-			materialId
-		].sections.filter((element, index) => index != id)
-
-		// recreate the array so react knows to re-render
-		setMaterial([...materialsCopy])
-
-		//remove section links
-		let lessonsCopy = lessons
-		let lessonIndex = 0
-		let materialIndex = 0
-
-		for (lesson of lessonsCopy) {
-			for (lessonMaterial of lesson.material) {
-				if (lessonMaterial.type == 'section') {
-					if (
-						lessonMaterial.materialId == materialId &&
-						lessonMaterial.sectionId == id
-					) {
-						unlinkSection(lessonIndex, materialIndex)
-					}
-				} else if (lessonMAterial.type == 'article') {
-					if (lessonMaterial.materialId == materialId) {
-						unlinkSection(lessonIndex, materialIndex)
-					}
-				}
-				materialIndex += 1
-			}
-			lessonIndex += 1
-			materialIndex = 0
-		}
-	}
-
-	const addMaterial = (material) => {
-		setMaterial([...materials, material])
-	}
-
-	const addSection = (section, materialId) => {
-		let materialsCopy = materials
-		materialsCopy[materialId].sections.push(section)
-		setMaterial([...materialsCopy])
-	}
-
-	const addLesson = (lesson) => {
-		setLessons([...lessons, lesson])
-	}
-
-	const deleteLesson = (id) => {
-		setLessons(lessons.filter((element, index) => index != id))
-	}
-
-	const linkSection = (lesson, sectionType, materialId, sectionId = null) => {
-		let lessonsCopy = lessons
-		if (sectionType == 'section') {
-			for (const section of lessons[lesson].material) {
-				if (
-					section.materialId == materialId &&
-					section.sectionId == sectionId
-				) {
-					return null
-				}
-			}
-
-			lessonsCopy[lesson].material.push({
-				type: 'section',
-				materialId: materialId,
-				sectionId: sectionId,
-			})
-		} else if (sectionType == 'article') {
-			for (const section of lessons[lesson].material) {
-				if (section.materialId == materialId) {
-					return null
-				}
-			}
-
-			lessonsCopy[lesson].material.push({
-				type: 'article',
-				materialId: materialId,
-			})
-		}
-		setLessons([...lessonsCopy])
-	}
-
-	const unlinkSection = (lessonIndex, i) => {
-		let lessonsCopy = lessons
-		lessonsCopy[lessonIndex].material = lessonsCopy[
-			lessonIndex
-		].material.filter((element, index) => index != i)
-
-		// recreate the array so react knows to re-render
-		setLessons([...lessonsCopy])
-	}
-
-	const addUploaded = (file, localId) => {
-		const newUploaded = uploaded
-		newUploaded.push({ file: file, localId: localId })
-		setUploaded([...newUploaded])
-	}
-
-	const [createBatch] = useMutation(CREATE_BATCH)
-
-	const submitCourse = (courseTitle, courseMaterials, courseLessons) => {
-		// We have to translate all the ids in the lesson material from their location in the array, to their local identifiers
-		// We have to deepcopy here, so it doesn't overwrite the actual lessons state
-		let linkedLessons = JSON.parse(JSON.stringify(lessons))
-
-		for (let lesson of linkedLessons) {
-			let links = []
-			if (lesson.material.length > 0) {
-				for (const reference of lesson.material) {
-					if (reference.type == 'section') {
-						links.push(
-							materials[reference.materialId].sections[reference.sectionId]
-								.localId
-						)
-					} else if (reference.type == 'article') {
-						links.push(materials[reference.materialId].localId)
-					}
-				}
-			}
-			lesson.material = links
-		}
-
-		let index = 0
-
-		for (let lesson of linkedLessons) {
-			lesson.index = index
-			index += 1
-		}
-
-		let input = {
-			userId: currentUser.id,
-			title: title,
-			material: materials,
-			lesson: linkedLessons,
-		}
-
-		createBatch({ variables: { input: input } }).then((response) => {
-			// Upload textbook, send success
-			const uploadArray = response.data.createBatchCourse
-
-			// search through uploaded record, get the file, upload it
-			for (let item of uploadArray) {
-				const stuff = uploaded.find((e) => e.localId == item.localId)
-				uploadTextbook(stuff.file, item.presigned)
-			}
-
-			// go to home
-			navigate(routes.home())
+	// we do this to set a continual unique identifier in the case of creating another course while offline
+	if (!sessionStorage.getItem('unique-id')) {
+		setUniqueId().then(() => {
+			// give course an initial unique id
+			let courseCopy = JSON.parse(JSON.stringify(course)) // deep copy
+			;({ prev: courseCopy.localId } = cache.apply(
+				'unique-id',
+				(val) => val + 1
+			)) / setCourse(courseCopy)
 		})
+	} else if (!course.localId) {
+		// give course an initial unique id
+		let courseCopy = JSON.parse(JSON.stringify(course)) // deep copy
+		;({ prev: courseCopy.localId } = cache.apply(
+			'unique-id',
+			(val) => val + 1
+		)) / setCourse(courseCopy)
 	}
+
+	const tools = {
+		add: (type, item) => {
+			;({ prev: item.localId } = cache.apply('unique-id', (val) => val + 1))
+			const courseCopy = JSON.parse(JSON.stringify(course)) // deep copy
+			courseCopy[type].push(item)
+			setCourse(courseCopy)
+		},
+		delete: (type, id) => {
+			const courseCopy = JSON.parse(JSON.stringify(course))
+			courseCopy[type] = courseCopy[type].filter((item) => item.localId != id)
+			// a few cascade deletions
+
+			if (type == 'article' || type == 'section')
+				courseCopy['link'] = courseCopy['link'].filter(
+					(item) => item.materialId != id
+				)
+			if (type == 'lesson')
+				courseCopy['link'] = courseCopy['link'].filter(
+					(item) => item.lessonId != id
+				)
+
+			if (type == 'material') {
+				courseCopy['section'] = courseCopy['section'].filter((section) => {
+					// remove links before removing sections
+					if (section.textbookId == id)
+						courseCopy['link'] = courseCopy['link'].filter(
+							(link) => link.materialId != section.localId
+						)
+					return section.textbookId != id
+				})
+			}
+
+			setCourse(courseCopy)
+		},
+	}
+
+	console.log(course)
 
 	const uploadTextbook = (file, url) => {
 		var data = new FormData()
@@ -225,33 +124,31 @@ const CreateCoursePage = () => {
 					className="mn-form-width-medium"
 					label="Course Title:"
 					onChange={(e) => {
-						setTitle(e.target.value)
+						let courseCopy = course
+						courseCopy['title'] = e.target.value
+						setCourse(courseCopy)
 					}}
 				/>
 				<div className="mn-flex-row mn-gap-large mn-justify-space-around mn-grow">
 					<MaterialWrapper
 						className="mn-layout-half"
-						materials={materials}
+						course={course}
 						showForm={() => setMaterialForm(true)}
 						showSection={() => setSectionForm(true)}
-						materialDelete={materialDelete}
-						sectionDelete={sectionDelete}
+						tools={tools}
 						setSectionRoot={setSectionRoot}
 						linkMode={linkMode}
 						lessonRoot={lessonRoot}
-						linkSection={linkSection}
 					/>
 					<LessonWrapper
 						className="mn-layout-half"
-						lessons={lessons}
-						materials={materials}
+						course={course}
+						tools={tools}
 						setLessonForm={setLessonForm}
 						setLessonRoot={setLessonRoot}
-						deleteLesson={deleteLesson}
 						setLinkMode={setLinkMode}
 						linkMode={linkMode}
 						lessonRoot={lessonRoot}
-						unlinkSection={unlinkSection}
 					/>
 				</div>
 			</div>
@@ -271,7 +168,6 @@ const CreateCoursePage = () => {
 						<Button
 							onClick={() => {
 								setUploading(true)
-								submitCourse(title, materials, lessons)
 							}}
 						>
 							Create
@@ -288,10 +184,7 @@ const CreateCoursePage = () => {
 					cancel={() => {
 						setMaterialForm(false)
 					}}
-					addMaterial={addMaterial}
-					identifier={identifier}
-					setIdentifier={setIdentifier}
-					addUploaded={addUploaded}
+					tools={tools}
 				/>
 			</Modal>
 			<Modal
@@ -301,10 +194,8 @@ const CreateCoursePage = () => {
 			>
 				<SectionForm
 					cancel={() => setSectionForm(false)}
-					addSection={addSection}
+					tools={tools}
 					sectionRoot={sectionRoot}
-					identifier={identifier}
-					setIdentifier={setIdentifier}
 				/>
 			</Modal>
 			<Modal
@@ -312,12 +203,7 @@ const CreateCoursePage = () => {
 				show={showLessonForm}
 				changeState={() => setLessonForm(false)}
 			>
-				<LessonForm
-					cancel={() => setLessonForm(false)}
-					addLesson={addLesson}
-					identifier={identifier}
-					setIdentifier={setIdentifier}
-				/>
+				<LessonForm cancel={() => setLessonForm(false)} tools={tools} />
 			</Modal>
 		</>
 	)
