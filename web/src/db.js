@@ -11,7 +11,7 @@ export default function Database({ children }) {
 	const synced = localStorage.getItem('synced')
 	// sync database if it's undefined
 	if (currentUser && client && synced === null) {
-		syncDB(client, currentUser.id).then(() => setUniqueId())
+		syncDB(client, currentUser.id)
 	}
 
 
@@ -39,6 +39,7 @@ const syncDB = async (client, userId) => {
 			setMany(ugh)
 				.then(() => {
 					localStorage.setItem('synced', true)
+					setUniqueId()
 				})
 				.catch((err) => console.error(err))
 		})
@@ -66,6 +67,7 @@ export const setUniqueId = async () => {
 			val.forEach((item) => ids.push(item.id))
 		}
 	}
+	console.log(ids)
 	const max = Math.max(...ids)
 	localStorage.setItem('unique-id', JSON.stringify(max))
 	sessionStorage.setItem('unique-id', JSON.stringify(max))

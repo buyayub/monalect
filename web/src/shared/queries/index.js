@@ -203,11 +203,17 @@ export const GET_COURSE_CARDS = gql`
 `
 
 export const CREATE_BATCH = gql`
-	mutation CreateBatchCourseMutation($input: CreateBatchCourseInput!) {
-		createBatchCourse(input: $input) {
-			materialId
-			localId
-			presigned
+	mutation CreateBatchCourseMutation($userId: Int!, $input: CreateBatchCourseInput!) {
+		createBatchCourse(userId: $userId, input: $input) {
+			uploaded {
+				type
+				materialId
+				presigned
+			}
+			record {
+				local
+				real
+			}
 		}
 	}
 `

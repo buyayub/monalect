@@ -9,17 +9,19 @@ import LessonForm from 'src/components/LessonForm'
 import Modal from 'src/components/Modal'
 
 import { Link, routes, navigate } from '@redwoodjs/router'
-import { MetaTags, useMutation } from '@redwoodjs/web'
-import { useAuth } from '@redwoodjs/auth'
+import { MetaTags } from '@redwoodjs/web'
 import { useState } from 'react'
-import { CREATE_BATCH } from 'src/shared/queries'
 import { setUniqueId } from 'src/db'
 import { cache } from 'src/shared/cache'
+import { createBatch } from 'src/controller/batch'
+import { useApolloClient } from '@apollo/client'
+import { useAuth } from '@redwoodjs/auth'
 
 const CreateCoursePage = () => {
-	const { currentUser } = useAuth()
 	const [page, setPage] = useState(0)
 	const [uploading, setUploading] = useState(false)
+	const { currentUser } = useAuth()
+	const client = useApolloClient()
 
 	const [course, setCourse] = useState({
 		title: null,
@@ -58,6 +60,26 @@ const CreateCoursePage = () => {
 		)) / setCourse(courseCopy)
 	}
 
+	const onSubmit = () => {
+		let boomba = JSON.parse(JSON.stringify(course)) // deep copy
+
+		// setup notebooks
+		boomba.page = []
+		if (!course.page) {
+			course.lesson.forEach((lesson, i) => {
+				const { prev: localId } = cache.apply('unique-id', (val) => val + 1)
+				boomba.page.push({
+					localId: localId,
+					lessonId: lesson.localId,
+					content: null,
+					index: i,
+					lessonTitle: lesson.title,
+				})
+			})
+		}
+		createBatch(boomba, client, currentUser.id)
+	}
+
 	const tools = {
 		add: (type, item) => {
 			;({ prev: item.localId } = cache.apply('unique-id', (val) => val + 1))
@@ -94,20 +116,6 @@ const CreateCoursePage = () => {
 		},
 	}
 
-	console.log(course)
-
-	const uploadTextbook = (file, url) => {
-		var data = new FormData()
-		data.append('file', file)
-		fetch(url, {
-			mode: 'cors',
-			method: 'PUT',
-			headers: {
-				'Content-Type': 'application/pdf',
-			},
-			body: data,
-		})
-	}
 
 	return (
 		<>
@@ -129,6 +137,7 @@ const CreateCoursePage = () => {
 						setCourse(courseCopy)
 					}}
 				/>
+				<p> Sectionroot: {sectionRoot} </p>
 				<div className="mn-flex-row mn-gap-large mn-justify-space-around mn-grow">
 					<MaterialWrapper
 						className="mn-layout-half"
@@ -167,7 +176,7 @@ const CreateCoursePage = () => {
 						</Button>
 						<Button
 							onClick={() => {
-								setUploading(true)
+								onSubmit()
 							}}
 						>
 							Create

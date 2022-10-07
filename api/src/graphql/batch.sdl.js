@@ -1,17 +1,4 @@
 export const schema = gql`
-
-	input BatchMaterial {
-		type: String!
-		localId: Int!
-		title: String!
-		identifier: String
-		uploaded: Boolean
-		author: String
-		pages: Int
-		offset: Int
-		sections: [BatchSection]
-	}
-
 	type All {
 		course: [Course]!
 		lesson: [Lesson]!
@@ -27,32 +14,53 @@ export const schema = gql`
 		testOnLesson: [TestOnLesson]!
 	}
 
-	input BatchSection {
+	input BatchMaterial {
+		type: String!
 		localId: Int!
 		title: String!
-		start: Int!
-		end: Int!
+		identifier: String
+		uploaded: Boolean
+		author: String
+		pages: Int
+		offset: Int
+	}
+
+	input BatchSection {
+		localId: Int!
+		title: String
+		textbookId: Int!
+		start: Int
+		end: Int
 	}
 
 	input BatchLesson {
-			title: String!
-			index: Int!
-			localId: Int!
-			material: [Int]
+		title: String
+		index: Int!
+		localId: Int!
 	}
 
 	input BatchLink {
+		localId: Int!
 		type: String!
 		lessonId: Int!
 		materialId: Int!
 	}
 
+	input BatchPage {
+		localId: Int!
+		lessonId: Int!
+	}
+
 	input CreateBatchCourseInput{
-		userId: Int!
-		title: String!
+		title: String
+		description: String
+		localId: Int
 		material: [BatchMaterial]
+		section: [BatchSection]
 		lesson: [BatchLesson]
 		link: [BatchLink]
+		page: [BatchPage]
+
 	}
 
 	type Query {
@@ -60,23 +68,24 @@ export const schema = gql`
 	}
 
 	type Uploaded {
+		type: String!
 		materialId: Int!
-		localId: Int!
 		presigned: String!
+		url: String!
 	}
 
 	type Ids {
-		localId: Int!
-		Id: Int
+		local: Int!
+		real: Int
 	}
 
 	type BatchReturn {
 		uploaded: [Uploaded]
-		ids: [Ids]		
+		record: [Ids]		
 	}
 
 	type Mutation {
-		createBatchCourse(input: CreateBatchCourseInput!): BatchReturn @requireAuth
+		createBatchCourse(userId: Int!, input: CreateBatchCourseInput!): BatchReturn @requireAuth
 	}
 
 	type BatchUser {

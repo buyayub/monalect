@@ -1,36 +1,40 @@
 const set = (key, value) => {
-	sessionStorage.setItem(key, JSON.stringify(value))
-	localStorage.setItem(key, JSON.stringify(value))
+	sessionStorage.setItem(key, JSON.stringify(value ? value : null))
+	localStorage.setItem(key, JSON.stringify(value ? value : null))
 }
 
 const get = (key) => {
 	const session = sessionStorage.getItem(key)
-	if (session) return JSON.parse(session)
+	if (session)  {
+		console.log({session})
+		return JSON.parse(session)
+	}
 	const local = localStorage.getItem(key)
-	if (local) return JSON.parse(session)
+	if (local) return JSON.parse(local)
 	console.error("can't find ", key)
 	return undefined
 }
 
 const apply = (key, func) => {
-	let value = get(key)
-	const prev = value
-	value = func(value)
-	set(key, value)
-	return { prev: prev, curr: value }
+	let entry = get(key)
+	const modified = func(entry)
+	set(key, modified)
+	return { prev: entry , curr: modified}
 }
 
 // push to cache value which happens to be an array
 const push = (key, value) => {
-	apply(key, (val) => val.push(value))
+	apply(key, val => [...val, value])
 }
 
 // safe creation
 const create = (key, value) => {
-	if (!get(key)) {
+	console.log("create key:", key)
+	if (!get(key)){
+		console.log("yo")
 		set(key, value)
 	} else {
-		console.error('already created')
+		console.error(`${key} already created`)
 	}
 }
 
@@ -43,5 +47,11 @@ const update = (key, value) => {
 	}
 }
 
-
-export const cache = { set: set, get: get, apply: apply, push: push, create: create, update: update }
+export const cache = {
+	set: set,
+	get: get,
+	apply: apply,
+	push: push,
+	create: create,
+	update: update,
+}
