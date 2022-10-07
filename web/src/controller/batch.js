@@ -54,7 +54,7 @@ export const createBatchWeb = async (course) => {
 				.filter((link) => link.type == 'article')
 				.map((link) =>
 					course.material.find(
-						(material) => (material.localId == link.materialId)
+						(material) => material.localId == link.materialId
 					)
 				)
 
@@ -122,7 +122,7 @@ export const createBatchDB = async (course) => {
 			lessonId: page.lessonId,
 			content: page.content,
 			index: page.index,
-			lessonTitle: page.lessonTitle
+			lessonTitle: page.lessonTitle,
 		})
 	}
 
@@ -152,6 +152,7 @@ export const createBatchDB = async (course) => {
 
 export const createBatchAPI = async (course, client, userId) => {
 	let input = JSON.parse(JSON.stringify(course))
+	console.debug({ course })
 
 	// some pre-mutation modifications
 	input.lesson.forEach((lesson, i) => (lesson.index = i))
@@ -162,7 +163,7 @@ export const createBatchAPI = async (course, client, userId) => {
 		delete page.lessonTitle
 	})
 
-	response = await client.mutate({
+	const response = await client.mutate({
 		mutation: CREATE_BATCH,
 		variables: {
 			userId: userId,
@@ -171,9 +172,10 @@ export const createBatchAPI = async (course, client, userId) => {
 	})
 
 	const data = response.data.createBatchCourse
+	console.log(data)
 
-	// make sure all ids are synced before we get the textbook ids
-	await syncIds(data.record)
+	syncIdDB(data.record)
+	syncIdCache(data.record, course.id)
 
 	for (item of data.uploaded) {
 		// get file from the passed course object using the localid we have to get again from the record -.-
@@ -186,24 +188,91 @@ export const createBatchAPI = async (course, client, userId) => {
 	return null
 }
 
-const syncIds = async (record) => {
-	let entries = await entries()
-	for (let entry of entries) {
+const syncIdDB = async (record) => {
+	let data = await entries()
+	for (let entry of data) {
 		entry[1].forEach((item) => {
-			item.id = record.find((blah) => blah.local == item.id).real
-			if (item.lessonId)
-				item.lessonId = record.find((blah) => blah.local == item.lessonId).real
-			if (item.textbookId)
-				item.textbookId= record.find((blah) => blah.local == item.textbookId).real
-			if (item.sectionId)
-				item.sectionId= record.find((blah) => blah.local == item.sectionId).real
-			if (item.courseId)
-				item.courseId= record.find((blah) => blah.local == item.courseId).real
-			if (item.testId)
-				item.testId = record.find((blah) => blah.local == item.testId).real
+			let id = undefined
+			if (item.id) {
+				id = record.find((blah) => blah.local == item.id)
+				if (id) item.id = id.real
+			}
+			if (item.lessonId) {
+				id = record.find((blah) => blah.local == item.lessonId)
+				if (id) item.lessonId = id.real
+			}
+			if (item.textbookId) {
+				id = record.find((blah) => blah.local == item.textbookId)
+				if (id) item.textbookId = id.real
+			}
+			if (item.sectionId) {
+				id = record.find((blah) => blah.local == item.sectionId)
+				if (id) item.sectionId = id.real
+			}
+			if (item.courseId) {
+				id = record.find((blah) => blah.local == item.courseId)
+				if (id) item.courseId = id.real
+			}
+			if (item.testId) {
+				id = record.find((blah) => blah.local == item.testId)
+				if (id) item.testId = id.real
+			}
+			// I know it's bad but I'm brain-fogged right now, and I don't want to think
 		})
 	}
-	setMany(entries)
+	setMany(data).then(() => cache.update('id-map', []))
+}
+
+const syncIdCache = async (record, courseId) => {
+	cache.apply('course-cards', (val) => {
+		let unique = record.find((item) => item.localId == val.id)
+		if (unique) val.id = unique.real
+	})
+
+	cache.apply('course-dropdown', (val) => {
+		let unique = record.find((item) => item.localId == val.id)
+		if (unique) val.id = unique.real
+	})
+
+	const iterate = (obj, func = null) => {
+		for (item in obj) {
+			if (typeof item == 'object') {
+				iterate(obj)
+			} else if (func) {
+				func(item)
+			}
+		}
+	}
+
+	cache.apply(`course-${courseId}`, (val) => {
+		iterate(val, (item) => {
+			let id = undefined
+			if (item.id) {
+				id = record.find((blah) => blah.local == item.id)
+				if (id) item.id = id.real
+			}
+			if (item.lessonId) {
+				id = record.find((blah) => blah.local == item.lessonId)
+				if (id) item.lessonId = id.real
+			}
+			if (item.textbookId) {
+				id = record.find((blah) => blah.local == item.textbookId)
+				if (id) item.textbookId = id.real
+			}
+			if (item.sectionId) {
+				id = record.find((blah) => blah.local == item.sectionId)
+				if (id) item.sectionId = id.real
+			}
+			if (item.courseId) {
+				id = record.find((blah) => blah.local == item.courseId)
+				if (id) item.courseId = id.real
+			}
+			if (item.testId) {
+				id = record.find((blah) => blah.local == item.testId)
+				if (id) item.testId = id.real
+			}
+		})
+	})
 }
 
 const uploadTextbook = async (file, url) => {

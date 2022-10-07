@@ -7,7 +7,9 @@ import { useAuth } from '@redwoodjs/auth'
 
 import { FiHelpCircle, FiList } from 'react-icons/fi'
 import { RiBook2Line } from 'react-icons/ri'
-import { deleteCourse, updateCourse } from 'src/controller/course'
+import { deleteCourse } from 'src/controller/course'
+import { updateCourse } from 'src/controller/course/cache'
+import { useApolloClient } from '@apollo/client'
 
 const CourseCard = ({
 	course,
@@ -19,6 +21,7 @@ const CourseCard = ({
 	const [title, setTitle] = useState(course.title)
 	const [description, setDescription] = useState(course.description)
 	const { currentUser } = useAuth()
+	const client = useApolloClient()
 
 	const descriptionForm = useRef(null)
 	const titleForm = useRef(null)
@@ -35,7 +38,7 @@ const CourseCard = ({
 	}
 
 	const submitDelete = () => {
-		deleteCourse(course.id)
+		deleteCourse(client, currentUser.id, course.id)
 		handleDelete(course.id)
 	}
 
@@ -91,7 +94,7 @@ const CourseCard = ({
 								<h2>{title}</h2>
 								<h3>{course.mark ? course.mark : 0}%</h3>
 							</div>
-							<div>{description}</div>
+							<div>{description ? description : "No description"}</div>
 							<div className="mn-flex-row mn-gap-large mn-justify-end">
 								<div className="mn-flex-row mn-gap-small">
 									<FiList />
@@ -195,7 +198,7 @@ const CourseCard = ({
 									setEditDescription(true)
 								}}
 							>
-								{description}
+								{description ? description : "No description"}
 							</div>
 						)}
 						<div className="mn-flex-row mn-gap-large mn-justify-end">

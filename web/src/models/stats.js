@@ -1,12 +1,13 @@
 import { get, getMany } from 'idb-keyval'
+import { cache } from 'src/shared/cache'
 
 export const getCourseWords = async (courseId) => {
-	const key = `${courseId}-stats`
+	const key = `course-${courseId}`
 
 	// gets course stats and returns if it contains the words
-	const stats = JSON.parse(sessionStorage.getItem(key))
-	if (stats && stats.words) {
-		return stats.words
+	const course = get(key)
+	if (course && course.words) {
+		return course.words
 	}
 
 	// if there isn't, we have to create them from indexedDB
@@ -16,87 +17,47 @@ export const getCourseWords = async (courseId) => {
 		for (const item of data) {
 			words += item.words * (item.courseId == courseId)
 		}
-
-		// add it to session and local storage
-		(async () => {
-			if (stats) {
-				sessionStorage.setItem(key, JSON.stringify({ ...stats, words: words }))
-				localStorage.setItem(key, JSON.stringify({ ...stats, words: words }))
-			} else {
-				sessionStorage.setItem(key, JSON.stringify({ words: words }))
-				localStorage.setItem(key, JSON.stringify({ words: words }))
-			}
-		})();
-
 		return words
 	}
 
-	// if there isn't any notebookPages entry, we throw an exception for someone else to handle
-	throw ReferenceError()
+	// if there isn't any notebookPages entry, we message the error
+	console.error('idb: no notebookPage table')
 }
 
-export const getLessonCount = async(courseId) => {
-	const key = `${courseId}-stats`
-	const stats = JSON.parse(sessionStorage.getItem(key))
-	if (stats && stats.lessons) {
-		return stats.lessons
+export const getLessonCount = async (courseId) => {
+	const key = `course-${courseId}`
+	const course = cache.get(key)
+	if (course && course.lessons) {
+		return course.lessons.length
 	}
 
 	const data = await get('lesson')
 	if (data) {
 		let lessons = 0
-		for (const item of data)
-		{
-			lessons += item.courseId == courseId
-		}
-
-		(async () => {
-			if (stats) {
-				sessionStorage.setItem(key, JSON.stringify({ ...stats, lessons: lessons}))
-				localStorage.setItem(key, JSON.stringify({ ...stats, lessons: lessons}))
-			} else {
-
-				sessionStorage.setItem(key, JSON.stringify({ lessons: lessons}))
-				localStorage.setItem(key, JSON.stringify({ lessons: lessons}))
-				}
-		})();
-
+		for (const item of data) lessons += item.courseId == courseId
 		return lessons
 	}
 
-	throw ReferenceError()
+	console.error('idb: no lesson table.')
 }
 
-export const getQuestionCount = async(courseId) => {
-	const key = `${courseId}-stats`
-	const stats = JSON.parse(sessionStorage.getItem(key))
-	if (stats && stats.questions) {
-		return stats.questions
+export const getQuestionCount = async (courseId) => {
+	const key = `course-${courseId}`
+	const course = cache.get(key)
+	if (course && course.questions) {
+		return course.questions.length
 	}
 
 	const data = await get('question')
 	if (data) {
 		let questions = 0
-		for (const item of data)
-			questions += (item.courseId == courseId)
-
-		(async () => {
-			if (stats) {
-				sessionStorage.setItem(key, JSON.stringify({ ...stats, questions: questions}))
-				localStorage.setItem(key, JSON.stringify({ ...stats, questions: questions}))
-			} else {
-
-				sessionStorage.setItem(key, JSON.stringify({ questions: questions}))
-				localStorage.setItem(key, JSON.stringify({ questions: questions}))
-				}
-		})();
-
+		for (const item of data) questions += item.courseId == courseId
 		return questions
 	}
 
-	throw ReferenceError()
+	console.error('idb: no question table')
 }
 
-export const getCourseMark = async(courseId) => {
+export const getCourseMark = async (courseId) => {
 	const key = `${courseId}-stats`
 }

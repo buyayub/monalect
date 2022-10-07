@@ -61,14 +61,14 @@ const CreateCoursePage = () => {
 	}
 
 	const onSubmit = () => {
-		let boomba = JSON.parse(JSON.stringify(course)) // deep copy
+		let courseCopy = JSON.parse(JSON.stringify(course)) // deep copy
 
 		// setup notebooks
-		boomba.page = []
+		courseCopy.page = []
 		if (!course.page) {
 			course.lesson.forEach((lesson, i) => {
 				const { prev: localId } = cache.apply('unique-id', (val) => val + 1)
-				boomba.page.push({
+				courseCopy.page.push({
 					localId: localId,
 					lessonId: lesson.localId,
 					content: null,
@@ -77,7 +77,7 @@ const CreateCoursePage = () => {
 				})
 			})
 		}
-		createBatch(boomba, client, currentUser.id)
+		createBatch(courseCopy, client, currentUser.id)
 	}
 
 	const tools = {

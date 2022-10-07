@@ -3,10 +3,13 @@ import Button from 'src/components/Button'
 import { Link, routes } from '@redwoodjs/router'
 import { useState, useLayoutEffect} from 'react'
 import { getCourseCards } from 'src/models/courseCard'
+import { deleteCourse } from 'src/controller/course'
+import { useApolloClient } from '@apollo/client'
 
 const CourseCardList = ({userId}) => {
 	const [cards, setCards] = useState(null)
 	const [edit, setEdit] = useState(false)
+	const client = useApolloClient()
 
 	useLayoutEffect(() => {
 		if (!cards) {

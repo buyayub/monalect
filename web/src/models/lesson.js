@@ -77,8 +77,10 @@ export const getLessonWordCount = async (courseId, lessonId) => {
 
 	let pages = await get('notebookPage');
 	if (pages) {
-		let count = pages.find((page) => page.lessonId == lessonId).words;
+		const page = pages.find((page) => page.lessonId == lessonId);
+		if (!page) console.warn(`Lesson ${lessonId} does not have a corresponding notebook page in client database.`)
 
+		let count = page ? page.words : 0
 		// when multiple pages for a single lesson becomes supported, use this:
 		// for (page of pages) count += page.words * (page.lessonId * lessonId);
 

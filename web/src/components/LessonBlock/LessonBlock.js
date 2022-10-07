@@ -12,7 +12,7 @@ const LessonBlock = ({ lesson }) => {
 				onClick={() => setExpand(!expand)}
 				className="mn-hover mn-flex-row mn-gap-medium mn-clickable"
 			>
-				<div className="index">{lesson.index}</div>
+				<div className="index">{lesson.index + 1}</div>
 				<div
 					className={`mn-flex-row mn-gap-large mn-grow mn-justify-space-between mn-text-padding ${
 						expand ? 'mn-border-left mn-border-bottom' : 'mn-border-left'
@@ -42,7 +42,7 @@ const LessonBlock = ({ lesson }) => {
 				}`}
 			>
 				{lesson.articles.map((article, i) => (
-					<LessonMaterialDisplay type="article" section={section} key={i} />
+					<LessonMaterialDisplay type="article" section={{title: article.title}} key={i} />
 				))}
 				{lesson.sections.map((section, i) => (
 					<LessonMaterialDisplay
