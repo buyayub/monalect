@@ -14,6 +14,11 @@ const get = (key) => {
 	return undefined
 }
 
+const remove = (key) => {
+	sessionStorage.removeItem(key)
+	localStorage.removeItem(key)
+}
+
 const apply = (key, func) => {
 	let entry = get(key)
 	const modified = func(entry)
@@ -83,6 +88,7 @@ const statistics = async () => {
 	console.info(`session size: ${sessionStorageSize()}kb`)
 }
 
+
 export const cache = {
 	set: set,
 	get: get,
@@ -91,5 +97,6 @@ export const cache = {
 	create: create,
 	update: update,
 	updateProp: updateProp,
-	statistics: statistics
+	statistics: statistics,
+	remove: remove
 }

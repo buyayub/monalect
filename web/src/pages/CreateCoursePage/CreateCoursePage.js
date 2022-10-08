@@ -44,8 +44,10 @@ const CreateCoursePage = () => {
 	// we do this to set a continual unique identifier in the case of creating another course while offline
 	if (!sessionStorage.getItem('unique-id')) {
 		setUniqueId().then(() => {
+			// structuredClone() can deep copy while retaining the File object unlike JSON.stringify(). 
+			// it's new though (88.1% support last time i checked) so TODO: create backup
+			let courseCopy = structuredClone(course) 
 			// give course an initial unique id
-			let courseCopy = JSON.parse(JSON.stringify(course)) // deep copy
 			;({ prev: courseCopy.localId } = cache.apply(
 				'unique-id',
 				(val) => val + 1
@@ -53,7 +55,7 @@ const CreateCoursePage = () => {
 		})
 	} else if (!course.localId) {
 		// give course an initial unique id
-		let courseCopy = JSON.parse(JSON.stringify(course)) // deep copy
+		let courseCopy = structuredClone(course) // deep copy
 		;({ prev: courseCopy.localId } = cache.apply(
 			'unique-id',
 			(val) => val + 1
@@ -61,7 +63,7 @@ const CreateCoursePage = () => {
 	}
 
 	const onSubmit = () => {
-		let courseCopy = JSON.parse(JSON.stringify(course)) // deep copy
+		let courseCopy = structuredClone(course) // deep copy
 
 		// setup notebooks
 		courseCopy.page = []
@@ -83,15 +85,16 @@ const CreateCoursePage = () => {
 	const tools = {
 		add: (type, item) => {
 			;({ prev: item.localId } = cache.apply('unique-id', (val) => val + 1))
-			const courseCopy = JSON.parse(JSON.stringify(course)) // deep copy
+			let courseCopy = structuredClone(course) // deep copy
+
 			courseCopy[type].push(item)
 			setCourse(courseCopy)
 		},
 		delete: (type, id) => {
-			const courseCopy = JSON.parse(JSON.stringify(course))
+			let courseCopy = structuredClone(course) // deep copy
 			courseCopy[type] = courseCopy[type].filter((item) => item.localId != id)
-			// a few cascade deletions
 
+			// a few cascade deletions
 			if (type == 'article' || type == 'section')
 				courseCopy['link'] = courseCopy['link'].filter(
 					(item) => item.materialId != id
@@ -116,6 +119,7 @@ const CreateCoursePage = () => {
 		},
 	}
 
+	console.log("create course page: ", course)
 
 	return (
 		<>

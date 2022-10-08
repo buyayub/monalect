@@ -8,7 +8,7 @@ import { CREATE_BATCH } from 'src/shared/queries'
 
 export const createBatch = async (course, client, userId) => {
 	await createBatchWeb(course)
-	await createBatchDB(course) // we await so that the API doesn't prematurely retrieve and sync ids before the client database is set up
+	await createBatchDB(course) // we await so that the API doesn't prematurely retrieve and sync ids before the client database and cache is set up
 	await createBatchAPI(course, client, userId)
 	return null
 }
@@ -162,6 +162,7 @@ export const createBatchAPI = async (course, client, userId) => {
 		delete page.index
 		delete page.lessonTitle
 	})
+	input.material.forEach((material) => delete material.file)
 
 	const response = await client.mutate({
 		mutation: CREATE_BATCH,
@@ -175,15 +176,20 @@ export const createBatchAPI = async (course, client, userId) => {
 	console.log(data)
 
 	syncIdDB(data.record)
-	syncIdCache(data.record, course.id)
+	syncIdCache(data.record, course.localId)
 
-	for (item of data.uploaded) {
+	for (const item of data.uploaded) {
 		// get file from the passed course object using the localid we have to get again from the record -.-
-		const local = data.record.find((item) => item.real == item.id).localId
+		let local = data.record.find((record) => {
+			return (
+				(record.type == 'article' || record.type == 'textbook') &&
+				record.real == item.materialId
+			)
+		}).local
 		const file = course.material.find((item) => item.localId == local).file
 		uploadTextbook(file, item.presigned)
 		// update url
-		db.updateVal(data.type, item.materialId, 'url', item.url)
+		db.updateVal(item.type, item.materialId, 'url', item.url)
 	}
 	return null
 }
@@ -224,55 +230,70 @@ const syncIdDB = async (record) => {
 }
 
 const syncIdCache = async (record, courseId) => {
-	cache.apply('course-cards', (val) => {
-		let unique = record.find((item) => item.localId == val.id)
-		if (unique) val.id = unique.real
+	cache.apply('course-cards', (buff) => {
+		let val = buff
+		val = val.map((stuff) => {
+			let entry = stuff
+			let unique = record.find((item) => item.local == entry.id)
+			if (unique) entry.id = unique.real
+			return entry
+		})
+		return val
 	})
 
-	cache.apply('course-dropdown', (val) => {
-		let unique = record.find((item) => item.localId == val.id)
-		if (unique) val.id = unique.real
+	cache.apply('course-dropdown', (buff) => {
+		let val = buff
+		val = val.map((stuff) => {
+			let entry = stuff
+			let unique = record.find((item) => item.local == entry.id)
+			if (unique) entry.value = unique.real
+			return entry
+		})
+		return val
 	})
 
-	const iterate = (obj, func = null) => {
-		for (item in obj) {
+	const iterate = (obj, func) => {
+		for (let item in obj) {
 			if (typeof item == 'object') {
-				iterate(obj)
+				iterate(item, func)
 			} else if (func) {
 				func(item)
 			}
 		}
 	}
 
-	cache.apply(`course-${courseId}`, (val) => {
-		iterate(val, (item) => {
-			let id = undefined
-			if (item.id) {
-				id = record.find((blah) => blah.local == item.id)
-				if (id) item.id = id.real
-			}
-			if (item.lessonId) {
-				id = record.find((blah) => blah.local == item.lessonId)
-				if (id) item.lessonId = id.real
-			}
-			if (item.textbookId) {
-				id = record.find((blah) => blah.local == item.textbookId)
-				if (id) item.textbookId = id.real
-			}
-			if (item.sectionId) {
-				id = record.find((blah) => blah.local == item.sectionId)
-				if (id) item.sectionId = id.real
-			}
-			if (item.courseId) {
-				id = record.find((blah) => blah.local == item.courseId)
-				if (id) item.courseId = id.real
-			}
-			if (item.testId) {
-				id = record.find((blah) => blah.local == item.testId)
-				if (id) item.testId = id.real
-			}
-		})
+	let courseEntry = cache.get(`course-${courseId}`)
+	console.log(courseEntry)
+	iterate(courseEntry, (item) => {
+		let id = undefined
+		if (item.id) {
+			id = record.find((blah) => blah.local == item.id)
+			if (id) item.id = id.real
+		}
+		if (item.lessonId) {
+			id = record.find((blah) => blah.local == item.lessonId)
+			if (id) item.lessonId = id.real
+		}
+		if (item.textbookId) {
+			id = record.find((blah) => blah.local == item.textbookId)
+			if (id) item.textbookId = id.real
+		}
+		if (item.sectionId) {
+			id = record.find((blah) => blah.local == item.sectionId)
+			if (id) item.sectionId = id.real
+		}
+		if (item.courseId) {
+			id = record.find((blah) => blah.local == item.courseId)
+			if (id) item.courseId = id.real
+		}
+		if (item.testId) {
+			id = record.find((blah) => blah.local == item.testId)
+			if (id) item.testId = id.real
+		}
+		return item
 	})
+	cache.remove(`course-${courseId}`)
+	cache.create(`course-${courseEntry.id}`, courseEntry)
 }
 
 const uploadTextbook = async (file, url) => {
@@ -285,5 +306,5 @@ const uploadTextbook = async (file, url) => {
 			'Content-Type': 'application/pdf',
 		},
 		body: data,
-	})
+	}).then((response) => console.info(response))
 }

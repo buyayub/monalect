@@ -1,7 +1,6 @@
 import { get, set, setMany, update} from 'idb-keyval'
 
 const push = (key, item) => {
-	console.log("push db key ", key)
 	update(key, (val) => [...val, item])
 }
 
@@ -19,9 +18,8 @@ const updateVal = async (key, id, name, value) => {
 		(item) => { 
 			if (item.id == id) {
 				item[name] = value
-				return item
 			}
-			else return item
+			return item
 		}))
 }
 

@@ -193,6 +193,7 @@ export const CREATE_BATCH = gql`
 				presigned
 			}
 			record {
+				type
 				local
 				real
 			}

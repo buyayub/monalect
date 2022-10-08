@@ -21,6 +21,8 @@ const LearningMaterialForm = ({
 			uploaded: e.target[4].files[0] ? true : false,
 		}
 
+		console.debug({material})
+		console.debug({e})
 		tools.add('material', material)
 		e.target.reset()
 		cancel()
