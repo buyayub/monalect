@@ -117,6 +117,7 @@ export const createBatchDB = async (course) => {
 	}
 
 	for (const page of course.page) {
+		console.log(page)
 		db.push('notebookPage', {
 			id: page.localId,
 			lessonId: page.lessonId,
@@ -190,12 +191,16 @@ export const createBatchAPI = async (course, client, userId) => {
 		uploadTextbook(file, item.presigned)
 		// update url
 		db.updateVal(item.type, item.materialId, 'url', item.url)
+		db.updateVal(item.type, item.materialId, 'presigned', item.presigned)
+		let expiry = new Date();
+		db.updateVal(item.type, item.materialId, 'presignedExpiry', expiry.setDate(expiry.getDate() + 0.5).toISOString())
 	}
 	return null
 }
 
 const syncIdDB = async (record) => {
 	let data = await entries()
+	console.log("Before: ", {data})
 	for (let entry of data) {
 		entry[1].forEach((item) => {
 			let id = undefined
@@ -226,6 +231,8 @@ const syncIdDB = async (record) => {
 			// I know it's bad but I'm brain-fogged right now, and I don't want to think
 		})
 	}
+	console.log({record})
+	console.log("After: ", {data})
 	setMany(data).then(() => cache.update('id-map', []))
 }
 
@@ -263,7 +270,6 @@ const syncIdCache = async (record, courseId) => {
 	}
 
 	let courseEntry = cache.get(`course-${courseId}`)
-	console.log(courseEntry)
 	iterate(courseEntry, (item) => {
 		let id = undefined
 		if (item.id) {
@@ -292,6 +298,7 @@ const syncIdCache = async (record, courseId) => {
 		}
 		return item
 	})
+	console.log(courseEntry)
 	cache.remove(`course-${courseId}`)
 	cache.create(`course-${courseEntry.id}`, courseEntry)
 }

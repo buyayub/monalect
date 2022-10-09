@@ -130,7 +130,7 @@ const QuestionFullForm = ({
 		<form
 			className="mn-form-width-medium mn-form-middle mn-flex-column mn-gap-small"
 			onSubmit={onSubmit}
-			autoComplete={false}
+			autoComplete="off"
 		>
 			<Dropdown
 				label="Lesson"

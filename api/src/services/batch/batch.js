@@ -40,7 +40,7 @@ export const createBatchCourse = async ({ userId, input }) => {
 		},
 	})
 
-	record.push({ local: input.localId, real: course.id })
+	record.push({ type: 'course', local: input.localId, real: course.id })
 
 	for (material of input.material) {
 		if (material.type == 'textbook') {
@@ -72,12 +72,15 @@ export const createBatchCourse = async ({ userId, input }) => {
 					type: 'textbook',
 					materialId: textbook.id,
 					presigned: signedUrl,
-					url: url
-
+					url: url,
 				})
 			}
 
-			record.push({ local: material.localId, real: textbook.id })
+			record.push({
+				type: 'textbook',
+				local: material.localId,
+				real: textbook.id,
+			})
 		} else if (material.type == 'article') {
 			const article = await db.article.create({
 				data: {
@@ -106,10 +109,15 @@ export const createBatchCourse = async ({ userId, input }) => {
 					type: 'article',
 					materialId: article.id,
 					presigned: signedUrl,
+					url: url,
 				})
 			}
 
-			record.push({ local: material.localId, real: article.id })
+			record.push({
+				type: 'article',
+				local: material.localId,
+				real: article.id,
+			})
 		}
 	}
 
@@ -125,7 +133,7 @@ export const createBatchCourse = async ({ userId, input }) => {
 			},
 		})
 
-		record.push({ local: lesson.localId, real: newLesson.id })
+		record.push({ type: 'lesson', local: lesson.localId, real: newLesson.id })
 	}
 
 	for (page of input.page) {
@@ -138,7 +146,7 @@ export const createBatchCourse = async ({ userId, input }) => {
 				userId: userId,
 			},
 		})
-		record.push({ local: page.localId, real: page.id })
+		record.push({ type: 'notebookPage', local: page.localId, real: newPage.id })
 	}
 
 	for (section of input.section) {
@@ -148,32 +156,44 @@ export const createBatchCourse = async ({ userId, input }) => {
 				title: section.title,
 				start: section.start,
 				end: section.end,
-				textbookId: record.find((item) => item.local == section.textbookId),
+				textbookId: record.find((item) => item.local == section.textbookId)
+					.real,
 			},
 		})
-		record.push({ local: section.localId, real: section.id })
+		record.push({
+			type: 'section',
+			local: section.localId,
+			real: newSection.id,
+		})
 	}
 
 	// Create many-to-many relations
 
-	for (link of input.links) {
+	for (link of input.link) {
 		if (link.type == 'article') {
 			const newLink = await db.articleOnLesson.create({
 				data: {
-					lessonId: record.find((item) => item.local == link.lessonId),
-					articleId: article.find((item) => item.local == link.materialId),
+					lessonId: record.find((item) => item.local == link.lessonId).real,
+					articleId: record.find((item) => item.local == link.materialId).real,
 				},
 			})
-
-			record.push({ local: link.localId, real: newLink.id })
+			record.push({
+				type: 'articleOnLesson',
+				local: link.localId,
+				real: newLink.id,
+			})
 		} else if (link.type == 'section') {
-			const newLink = await db.articleOnLesson.create({
+			const newLink = await db.sectionOnLesson.create({
 				data: {
-					lessonId: record.find((item) => item.local == link.lessonId),
-					textbookId: article.find((item) => item.local == link.materialId),
+					lessonId: record.find((item) => item.local == link.lessonId).real,
+					sectionId: record.find((item) => item.local == link.materialId).real,
 				},
 			})
-			record.push({ local: link.localId, real: newLink.id })
+			record.push({
+				type: 'sectionOnLesson',
+				local: link.localId,
+				real: newLink.id,
+			})
 		}
 	}
 

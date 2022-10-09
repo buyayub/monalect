@@ -9,16 +9,25 @@ export const schema = gql`
 	}
 
 	type QuestionLesson {
-		id: Int,
-		index: Int,
-		title: String,
+		id: Int
+		index: Int
+		title: String
 		questions: [Question]!
 	}
 
 	type Query {
 		questionsByLesson(userId: Int!, courseId: Int!): [QuestionLesson] @requireAuth
-		questions: [Question!]! @requireAuth
+		questions: [QuestionDisplay!]! @requireAuth
 		question(id: Int!): Question @requireAuth
+	}
+
+	type QuestionDisplay {
+		id: Int!
+		lessonId: Int
+		question: String!
+		multiple: Boolean!
+		choices: Int
+		answers: [Answer]!
 	}
 
 	input CreateQuestionInput {

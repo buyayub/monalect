@@ -68,7 +68,7 @@ export const setUniqueId = async () => {
 		}
 	}
 	console.log(ids)
-	const max = Math.max(...ids)
+	const max = Math.max(...ids) + 1
 	localStorage.setItem('unique-id', JSON.stringify(max))
 	sessionStorage.setItem('unique-id', JSON.stringify(max))
 }

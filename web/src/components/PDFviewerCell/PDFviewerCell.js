@@ -34,7 +34,6 @@ export const Success = ({ textbooks }) => {
 	}
 
 	const selectTextbook = (e) => {
-		console.log(e.target.value)
 		setBookUrl(e.target.value)
 	}
 

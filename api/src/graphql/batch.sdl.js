@@ -75,6 +75,7 @@ export const schema = gql`
 	}
 
 	type Ids {
+		type: String
 		local: Int!
 		real: Int
 	}

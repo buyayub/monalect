@@ -19,12 +19,10 @@ const getPresigned = async (url) => {
 	return signedUrl
 }
 
-const uploaded = async ({ userId, courseId }) => {}
-
-export const textbooks = async ({ userId, courseId }) => {
+export const allPresigned = async ({ userId, courseId }) => {
 	isOwner(userId)
 
-	let payload = await db.textbook.findMany({
+	let textbooks = await db.textbook.findMany({
 		where: {
 			userId: userId,
 			courseId: courseId,
@@ -36,6 +34,21 @@ export const textbooks = async ({ userId, courseId }) => {
 			title: true,
 		},
 	})
+
+	let articles = await db.textbook.findMany({
+		where: {
+			userId: userId,
+			courseId: courseId,
+			uploaded: true,
+		},
+		select: {
+			id: true,
+			url: true,
+			title: true,
+		},
+	})
+
+	let payload = [...textbooks, ...articles]
 
 	for (item of payload) {
 		const presigned = await getPresigned(item.url)
@@ -64,4 +77,40 @@ export const allTextbooks = async ({ userId }) => {
 	})
 
 	return textbooks
+}
+
+export const presigned = async({ userId, id}) => {
+	isOwner(userId)
+	let material = await db.textbook.findMany({
+		where: {
+			userId: userId,
+			id: id
+		},
+		select: {
+			url: true,
+			title: true
+		}})
+
+	if (!material){
+		material = await db.article.findMany({
+		where: {
+			userId: userId,
+			id: id
+		},
+		select: {
+			url: true,
+			title: true
+		}})
+	}
+
+
+	if (!material) return []
+
+	const presignedUrl = getPresigned(material[0].url)
+	return { 
+		id: id,
+		url: material[0].url,
+		presigned: presignedUrl,
+		title: material[0].title
+	}
 }

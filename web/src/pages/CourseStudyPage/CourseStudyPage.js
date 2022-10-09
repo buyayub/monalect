@@ -7,8 +7,8 @@ import Button from 'src/components/Button'
 
 import CourseNavBar from 'src/components/CourseNavBar'
 import { useState } from 'react'
-import NotebookCell from 'src/components/NotebookCell'
-import PDFviewerCell from 'src/components/PDFviewerCell'
+import NotebookList from 'src/components/NotebookList'
+import PdfViewer from 'src/components/PDFViewer'
 
 const CourseStudyPage = ({ courseId }) => {
 	const { currentUser } = useAuth()
@@ -37,14 +37,14 @@ const CourseStudyPage = ({ courseId }) => {
 				<CourseNavBar courseId={courseId} />
 				<main className="mn-padding-page mn-align-stretch mn-gap-medium mn-flex-row mn-grow mn-justify-space-around mn-page-height-100">
 					<div className="mn-layout-half">
-						<PDFviewerCell
+						<PdfViewer
 							userId={currentUser.id}
 							courseId={parseInt(courseId)}
 						/>
 					</div>
 					<div className="mn-layout-half mn-flex-column mn-gap-medium">
 						<Button className="mn-is-secondary" onClick={() => {setShowForm(true)}}>Add Question</Button>
-						<NotebookCell
+						<NotebookList
 							userId={currentUser.id}
 							courseId={parseInt(courseId)}
 						/>

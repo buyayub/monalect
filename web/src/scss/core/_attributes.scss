@@ -385,7 +385,16 @@
 	cursor: wait;
 }
 
-.fade-in {
-	opacity: 100%;
-	transition: 0.1s;
+.mn-full-skeleton {
+	height: 100%;
+	background-color: color.$light-grey;
+}
+
+.mn-hide-scrollbar {
+	-ms-overflow-style: none; /* for Internet Explorer, Edge */
+    scrollbar-width: none; /* for Firefox */
+}
+
+.mn-hide-scrollbar::-webkit-scrollbar {
+	display: none;
 }

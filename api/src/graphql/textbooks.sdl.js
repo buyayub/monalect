@@ -19,10 +19,11 @@ export const schema = gql`
 	}
 
 	type Query {
-		textbooks(userId: Int!, courseId: Int!): [UploadedMaterial] @requireAuth
+		allPresigned(userId: Int!, courseId: Int!): [UploadedMaterial] @requireAuth
 		allTextbooks(userId: Int!): [Textbook]! @requireAuth
 		textbook(id: Int!): Textbook @requireAuth
 		textbookURL(userId: Int!, id: Int!): String! @requireAuth
+		presigned(userId: Int!, id: Int!): UploadedMaterial @requireAuth
 	}
 
 	input CreateTextbookInput {

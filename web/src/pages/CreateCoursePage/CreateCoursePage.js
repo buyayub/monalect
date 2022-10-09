@@ -44,22 +44,21 @@ const CreateCoursePage = () => {
 	// we do this to set a continual unique identifier in the case of creating another course while offline
 	if (!sessionStorage.getItem('unique-id')) {
 		setUniqueId().then(() => {
-			// structuredClone() can deep copy while retaining the File object unlike JSON.stringify(). 
+			// structuredClone() can deep copy while retaining the File object unlike JSON.stringify().
 			// it's new though (88.1% support last time i checked) so TODO: create backup
-			let courseCopy = structuredClone(course) 
+			let courseCopy = structuredClone(course)
 			// give course an initial unique id
 			;({ prev: courseCopy.localId } = cache.apply(
 				'unique-id',
 				(val) => val + 1
-			)) / setCourse(courseCopy)
+			))
+			setCourse(courseCopy)
 		})
 	} else if (!course.localId) {
 		// give course an initial unique id
 		let courseCopy = structuredClone(course) // deep copy
-		;({ prev: courseCopy.localId } = cache.apply(
-			'unique-id',
-			(val) => val + 1
-		)) / setCourse(courseCopy)
+		;({ prev: courseCopy.localId } = cache.apply('unique-id', (val) => val + 1))
+		setCourse(courseCopy)
 	}
 
 	const onSubmit = () => {
@@ -79,7 +78,10 @@ const CreateCoursePage = () => {
 				})
 			})
 		}
-		createBatch(courseCopy, client, currentUser.id)
+		setUploading(true)
+		createBatch(courseCopy, client, currentUser.id).then(() => {
+			navigate(routes.home())
+		})
 	}
 
 	const tools = {
@@ -118,8 +120,6 @@ const CreateCoursePage = () => {
 			setCourse(courseCopy)
 		},
 	}
-
-	console.log("create course page: ", course)
 
 	return (
 		<>

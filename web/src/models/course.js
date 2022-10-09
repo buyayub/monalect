@@ -10,7 +10,6 @@ export const getDropdown = async () => {
 	const courses = await get('course')
 	if (courses) {
 		const dropdown = courses.map((course) => ({ value: course.id, title: course.title }))
-		console.log(dropdown)
 		;(async () => {
 			sessionStorage.setItem(key, JSON.stringify(dropdown))
 			localStorage.setItem(key, JSON.stringify(dropdown))
