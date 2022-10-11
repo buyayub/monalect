@@ -35,7 +35,7 @@ export const allPresigned = async ({ userId, courseId }) => {
 		},
 	})
 
-	let articles = await db.textbook.findMany({
+	let articles = await db.article.findMany({
 		where: {
 			userId: userId,
 			courseId: courseId,
@@ -50,7 +50,7 @@ export const allPresigned = async ({ userId, courseId }) => {
 
 	let payload = [...textbooks, ...articles]
 
-	for (item of payload) {
+	for (let item of payload) {
 		const presigned = await getPresigned(item.url)
 		item.presigned = presigned
 	}

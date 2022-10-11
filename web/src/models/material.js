@@ -9,6 +9,7 @@ export const getMaterialFiles = async (client, userId, courseId) => {
 
 	// We're going to get the presigned urls directly from the API, this model has no interaction with the database
 	const files = await getAllPresigned(client, userId, courseId)
+	console.log({files})
 	if (files) {
 		;(async () => {
 			cache.updateProp(key, 'files', files)
@@ -63,6 +64,7 @@ export const getPresigned = async (client, userId, id) => {
 }
 
 export const getAllPresigned = async (client, userId, courseId) => {
+	console.info("Sent query for all presigned.")
 	const response = await client.query({
 		query: GET_ALL_PRESIGNED,
 		variables: {
@@ -70,5 +72,5 @@ export const getAllPresigned = async (client, userId, courseId) => {
 			courseId: courseId,
 		},
 	})
-	return response.data.presigned
+	return response.data.allPresigned
 }

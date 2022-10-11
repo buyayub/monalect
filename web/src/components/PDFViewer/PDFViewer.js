@@ -6,6 +6,7 @@ import {
 	updatePresigned,
 } from 'src/models/material'
 import { useApolloClient } from '@apollo/client'
+import { Bars } from 'react-loading-icons'
 
 const PdfViewer = ({ courseId, userId }) => {
 	const [bookUrl, setBookUrl] = useState(null)
@@ -38,8 +39,7 @@ const PdfViewer = ({ courseId, userId }) => {
 						updatePresigned(client, userId, courseId, file.id).then((item) => {
 							setBookUrl(item.presigned)
 						})
-					}
-					else {
+					} else {
 						setBookUrl(file.presigned)
 					}
 				}
@@ -59,9 +59,18 @@ const PdfViewer = ({ courseId, userId }) => {
 				name="textbook"
 				label="Select textbook:"
 			/>
+			{loaded ? (
+				''
+			) : (
+				<div className="mn-flex-row mn-height-full mn-justify-center mn-align-center">
+					<Bars width="60px" fill="#a8c1e9" />
+				</div>
+			)}
 			<object
 				data={bookUrl}
-				className={`${loaded ? 'mn-is-fadein' : 'mn-is-fadeout'} mn-height-full`}
+				className={`${
+					loaded ? 'mn-is-fadein-slow' : 'mn-is-fadeout'
+				} mn-height-full`}
 				onLoad={() => setLoaded(true)}
 				type="application/pdf"
 			></object>

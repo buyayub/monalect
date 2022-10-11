@@ -9,7 +9,8 @@ import Dropdown from 'src/components/Dropdown'
 import Button from 'src/components/Button'
 import Modal from 'src/components/Modal'
 import QuestionAnswer from 'src/components/QuestionAnswer'
-import { GET_LESSONS, CREATE_QUESTION } from 'src/shared/queries'
+import { CREATE_QUESTION } from 'src/shared/queries'
+import { getLessonList } from 'src/models/lesson'
 
 const QuestionFullForm = ({
 	userId = null,
@@ -22,6 +23,7 @@ const QuestionFullForm = ({
 	const [answerKey, setAnswerKey] = useState(0)
 	const [showForm, setShowForm] = useState(false)
 	const [createQuestion] = useMutation(CREATE_QUESTION)
+	const [lessons, setLessons] = useState(null)
 
 	const timeout = 2
 	const [timer, setTimer] = useState(0)
@@ -41,30 +43,15 @@ const QuestionFullForm = ({
 		}
 	}, [timer])
 
-	// Create queury for the lessons to populate the lessons dropdown
-	const {
-		loading,
-		error,
-		data: lessonData,
-	} = useQuery(GET_LESSONS, {
-		variables: {
-			userId: userId,
-			courseId: courseId,
-		},
-	})
-
-	if (loading) {
-		return `Loading...`
-	}
-
-	if (error) {
-		return `ERROR  ${error}`
-	}
-
 	// organize lesson data into items for dropdown
+
+	if (!lessons) {
+		getLessonList(courseId).then((data) => setLessons(data))
+	}
+
 	let lessonItems = []
-	if (lessonData.lessons) {
-		for (const lesson of lessonData.lessons) {
+	if (lessons) {
+		for (const lesson of lessons) {
 			lessonItems.push({
 				title: `${lesson.index}:  ${lesson.title}`,
 				value: lesson.id,

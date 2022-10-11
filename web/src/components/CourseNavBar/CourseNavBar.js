@@ -4,11 +4,13 @@ import { getDropdown } from 'src/models/course'
 import NavBar from 'src/components/NavBar'
 import Dropdown from 'src/components/Dropdown'
 
-const CourseNavBar = ({courseId}) => {
-	const [courses, setCourses] = useState(null);
-	
-	if (!courses) {
-		getDropdown().then((data) => setCourses(data))
+const CourseNavBar = ({ courseId }) => {
+	const [courses, setCourses] = useState(null)
+
+	if (!courses){
+		getDropdown().then((data) => {
+			setCourses(data)
+		})
 	}
 
 	return (
@@ -17,7 +19,7 @@ const CourseNavBar = ({courseId}) => {
 				<NavBar courseId={courseId} />
 				<Dropdown
 					className="mn-is-long mn-border-left-light"
-					selected={courseId}
+					selected={parseInt(courseId)}
 					items={courses ? courses : []}
 					onChange={(e) => {
 						navigate(routes.courseHome({ courseId: e.target.value }))

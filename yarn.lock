@@ -22231,6 +22231,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-loading-icons@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "react-loading-icons@npm:1.1.0"
+  checksum: 4b8ca43f1ba0ca708cd3b67c69a21586f23ad12e9d7c3b5cb7820a0a5cb72382318a4523964d2a1d91c0973544c42b0e2976f97e4ca8456936dcb5601b2f90bb
+  languageName: node
+  linkType: hard
+
 "react-modal@npm:^3.15.1":
   version: 3.15.1
   resolution: "react-modal@npm:3.15.1"
@@ -26308,6 +26315,7 @@ __metadata:
     react-draggable: ^4.4.5
     react-draggable-list: ^4.0.4
     react-icons: ^4.4.0
+    react-loading-icons: ^1.1.0
     react-modal: ^3.15.1
     react-pdf: ^5.7.2
     react-quilljs: ^1.3.1

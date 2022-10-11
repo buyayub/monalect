@@ -6,7 +6,6 @@ import { RiBook2Line } from 'react-icons/ri'
 const LessonBlock = ({ lesson }) => {
 	const [expand, setExpand] = useState(false)
 
-	console.log(lesson)
 	return (
 		<div className="mn-flex-column">
 			<div
