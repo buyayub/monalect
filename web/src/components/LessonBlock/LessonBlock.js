@@ -23,7 +23,7 @@ const LessonBlock = ({ lesson }) => {
 						<div className="mn-flex-row mn-on-hover-active mn-is-inactive mn-gap-small">
 							<span className="mn-flex-row mn-gap-x-small">
 								<RiBook2Line />
-								<p>{lesson.notebookWords == null ? 0 : lesson.notebookWords}</p>
+								<p>{lesson.words == null ? 0 : lesson.words}</p>
 							</span>
 							<span className="mn-flex-row mn-gap-x-small">
 								<FiHelpCircle />

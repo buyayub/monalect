@@ -6,9 +6,10 @@ export const questionsByLesson = async ({ userId, courseId }) => {
 
 	const courseAuth = await db.course.findUnique({
 		where: {
-			id: courseId
-		}})
-	
+			id: courseId,
+		},
+	})
+
 	isOwner(courseAuth.userId)
 
 	let payload = await db.lesson.findMany({
@@ -84,41 +85,51 @@ export const createQuestion = async ({ userId, input }) => {
 		},
 	})
 
+	let record = [
+		{
+			real: question.id,
+			local: input.localId,
+		},
+	]
 	let answers = []
 
 	if (input.answers.length > 0) {
 		for (answer of input.answers) {
-			answers.push(
-				await db.answer.create({
-					data: {
-						userId: userId,
-						questionId: question.id,
-						correct: answer.correct,
-						answer: answer.answer,
-					},
-					select: {
-						id: true,
-						questionId: true,
-						correct: true,
-						answer: true,
-					},
-				})
-			)
+			const newAnswer = await db.answer.create({
+				data: {
+					userId: userId,
+					questionId: question.id,
+					correct: answer.correct,
+					answer: answer.answer,
+				},
+				select: {
+					id: true,
+					questionId: true,
+					correct: true,
+					answer: true,
+				},
+			})
+
+			record.push({
+				real: newAnswer.id,
+				local: answer.localId
+			}) 
 		}
 	}
 
 	question.answers = answers
 
-	return question
+	return record
 }
 
 export const deleteQuestion = async ({ userId, questionId }) => {
 	isOwner(userId)
 
-	const questionAuth = db.question.findUnique({
+	const questionAuth = await db.question.findUnique({
 		where: {
-			id: questionId
-		}})
+			id: questionId,
+		},
+	})
 
 	isOwner(questionAuth.userId)
 

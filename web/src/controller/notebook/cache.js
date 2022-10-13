@@ -13,4 +13,17 @@ export const updatePage = (courseId, input) => {
 		if (input.words) page.words = input.words
 		return course
 	})
+
+	if (input.words) updateWords(courseId, input.lessonId, input.words)
+}
+
+export const updateWords = (courseId, lessonId, words) => {
+	const key = `course-${courseId}`
+	cache.apply(key, (item) => {
+		let course = item
+		let lesson = course.lessons.find((item) => item.id == lessonId)
+		course.words = words
+		lesson.words = words
+		return course
+	})
 }

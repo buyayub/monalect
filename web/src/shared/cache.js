@@ -88,6 +88,74 @@ const statistics = async () => {
 	console.info(`session size: ${sessionStorageSize()}kb`)
 }
 
+const syncId = (record, courseId) => {
+	console.log({ record })
+	apply('course-cards', (buff) => {
+		let val = buff
+		val = val.map((stuff) => {
+			let entry = stuff
+			let unique = record.find((item) => item.local == entry.id)
+			if (unique) entry.id = unique.real
+			return entry
+		})
+		return val
+	})
+
+	apply('course-dropdown', (buff) => {
+		let val = buff
+		val = val.map((stuff) => {
+			let entry = stuff
+			let unique = record.find((item) => item.local == entry.id)
+			if (unique) entry.value = unique.real
+			return entry
+		})
+		return val
+	})
+
+	// recursively iterate through object w/ support for arrays
+	const iterate = (obj, func) => {
+		if (typeof obj == 'object') {
+			for (let item in obj) {
+				if (typeof obj[item] == 'object' || Array.isArray(obj[item])) {
+					iterate(obj[item], func)
+				} else if (func) {
+					func(obj, item)
+				}
+			}
+		} else if (Array.isArray(obj)) {
+			for (let item of obj) {
+				if (typeof item == 'object' || Array.isArray(item)) {
+					iterate(item, func)
+				} else if (func) {
+					func(item)
+				}
+			}
+		}
+	}
+
+	let courseEntry = get(`course-${courseId}`)
+	let idList = [
+		'id',
+		'lessonId',
+		'courseId',
+		'questionId',
+		'testId',
+		'textbookId',
+		'articleId',
+		'sectionId',
+	]
+	iterate(courseEntry, (item, prop) => {
+		let id = undefined
+		if (idList.includes(prop)) {
+			id = record.find((blah) => blah.local == item[prop])
+			if (id) {
+				item[prop] = id.real
+			}
+		}
+	})
+	remove(`course-${courseId}`)
+	create(`course-${courseEntry.id}`, courseEntry)
+}
 
 export const cache = {
 	set: set,
@@ -98,5 +166,6 @@ export const cache = {
 	update: update,
 	updateProp: updateProp,
 	statistics: statistics,
-	remove: remove
+	remove: remove,
+	syncId: syncId,
 }

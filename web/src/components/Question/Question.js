@@ -5,9 +5,9 @@ import { FiPlus } from 'react-icons/fi'
 import { FiXCircle, FiCheckCircle, FiX } from 'react-icons/fi'
 import { useState } from 'react'
 import { useAuth } from '@redwoodjs/auth'
-
-import { DELETE_QUESTION } from 'src/shared/queries'
-import { useMutation } from '@apollo/client'
+import { useParams } from '@redwoodjs/router'
+import { deleteQuestion } from 'src/controller/question/'
+import { useApolloClient } from '@apollo/client'
 
 const Question = ({
 	question,
@@ -21,16 +21,11 @@ const Question = ({
 }) => {
 	const [active, setActive] = useState(false)
 	const { currentUser } = useAuth()
-	const [deleteQuestion, {}] = useMutation(DELETE_QUESTION)
+	const { courseId } = useParams()
+	const client = useApolloClient()
 
 	const submitDelete = () => {
-		deleteQuestion({
-			variables: {
-				userId: currentUser.id,
-				questionId: question.id,
-			},
-		})
-
+		deleteQuestion(client, currentUser.id, courseId, question.id)
 		if (handleDelete) {
 			handleDelete(question)
 		}

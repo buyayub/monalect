@@ -4,6 +4,7 @@ export const schema = gql`
 		answer: String
 		correct: Boolean
 		questionId: Int
+		courseId: Int
 	}
 
 	type Query {
@@ -12,9 +13,16 @@ export const schema = gql`
 	}
 
 	input CreateAnswerInput {
+		localId: Int!
 		answer: String!
 		correct: Boolean!
 		questionId: Int
+	}
+
+	type CreateAnswerOutput {
+		real: Int!
+		local: Int!
+		
 	}
 
 	input UpdateAnswerInput {
@@ -23,7 +31,7 @@ export const schema = gql`
 	}
 
 	type Mutation {
-		createAnswer(userId: Int!, input: CreateAnswerInput!): Answer @requireAuth
+		createAnswer(userId: Int!, input: CreateAnswerInput!): CreateAnswerOutput @requireAuth
 		updateAnswer(id: Int!, input: UpdateAnswerInput!): Answer! @requireAuth
 		deleteAnswer(userId: Int!, id: Int!): Int @requireAuth
 	}

@@ -111,16 +111,8 @@ export const LOAD_QUESTIONS = gql`
 export const CREATE_QUESTION = gql`
 	mutation CreateQuestionMutation($userId: Int!, $input: CreateQuestionInput!) {
 		createQuestion(userId: $userId, input: $input) {
-			id
-			lessonId
-			question
-			multiple
-			choices
-			answers {
-				id
-				answer
-				correct
-			}
+			real
+			local
 		}
 	}
 `
@@ -136,10 +128,8 @@ export const DELETE_QUESTION = gql`
 export const CREATE_ANSWER = gql`
 	mutation CreateAnswerMutation($userId: Int!, $input: CreateAnswerInput!) {
 		createAnswer(userId: $userId, input: $input) {
-			id
-			answer
-			correct
-			questionId
+			real
+			local
 		}
 	}
 `

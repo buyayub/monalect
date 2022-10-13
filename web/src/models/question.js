@@ -1,5 +1,6 @@
 import { cache } from 'src/shared/cache'
 import { get } from 'idb-keyval'
+import { updateQuestions as updateQuestionsCache  } from 'src/controller/question/cache'
 
 export const getQuestions = async (courseId) => {
 	const key = `course-${courseId}`
@@ -40,6 +41,32 @@ export const getQuestions = async (courseId) => {
 			})
 		})()
 
-		return pages
+		return questions
+	}
+}
+
+export const getQuestionLessons = async (courseId) => {
+	const key = `course-${courseId}`
+	const course = cache.get(key)
+	if (course && course.lessons) {
+		let lessons = [...course.lessons]
+
+		// check if any lesson questions are undefined.
+		let update = lessons.find((lesson) => lesson.questions == undefined)
+
+		if (!update) {
+			lessons = lessons.map((lesson) => {return {
+					id: lesson.id,
+					title: lesson.title, 
+					index: lesson.index,
+					questions: lesson.questions}})
+			return lessons
+		} 
+		else if (update) {
+			// if so, then we have to update the thing first, and redo this 
+			await updateQuestionsCache(courseId)
+			const list = await getQuestionLessons(courseId)
+			return list
+		}
 	}
 }

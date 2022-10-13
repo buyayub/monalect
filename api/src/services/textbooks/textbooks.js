@@ -11,10 +11,11 @@ const getPresigned = async (url) => {
 		Bucket: 'monalectpdf',
 		Key: url + '.pdf',
 		ContentType: 'application/pdf',
+		ResponseCacheControl: 'max-age=604800, immutable'
 	}
 
 	const command = new GetObjectCommand(bucketParams)
-	const signedUrl = await getSignedUrl(s3Client, command, { expiresIn: 43200 })
+	const signedUrl = await getSignedUrl(s3Client, command, { expiresIn: 604800 })
 
 	return signedUrl
 }

@@ -4,7 +4,7 @@ import { isOwner } from 'src/lib/auth'
 export const createAnswer = async ({ userId, input }) => {
 	isOwner(userId)
 
-	if (answer == "")
+	if (input.answer == "")
 		return null
 
 	const answer = await db.answer.create({
@@ -22,7 +22,7 @@ export const createAnswer = async ({ userId, input }) => {
 		},
 	})
 
-	return answer
+	return { real: answer.id, local: input.localId }
 }
 
 export const deleteAnswer = async ({userId, id }) => {

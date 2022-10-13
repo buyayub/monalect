@@ -12,11 +12,12 @@ export const schema = gql`
 		id: Int
 		index: Int
 		title: String
-		questions: [Question]!
+		questions: [QuestionDisplay]!
 	}
 
 	type Query {
-		questionsByLesson(userId: Int!, courseId: Int!): [QuestionLesson] @requireAuth
+		questionsByLesson(userId: Int!, courseId: Int!): [QuestionLesson]
+			@requireAuth
 		questions: [QuestionDisplay!]! @requireAuth
 		question(id: Int!): Question @requireAuth
 	}
@@ -32,6 +33,7 @@ export const schema = gql`
 
 	input CreateQuestionInput {
 		courseId: Int!
+		localId: Int!
 		lessonId: Int!
 		question: String!
 		choices: Int
@@ -39,14 +41,27 @@ export const schema = gql`
 		answers: [CreateAnswerInput]!
 	}
 
+	type CreateQuestionOutput {
+		real: Int!
+		local: Int!
+		answers: [CreateAnswerOutput]
+	}
+
 	input UpdateQuestionInput {
 		question: String
 		multiple: Boolean
 	}
 
+	type Record {
+		real: Int!
+		local: Int!
+	}
+
 	type Mutation {
-		createQuestion(userId: Int!, input: CreateQuestionInput!): Question! @requireAuth
-		updateQuestion(id: Int!, input: UpdateQuestionInput!): Question! @requireAuth
+		createQuestion(userId: Int!, input: CreateQuestionInput!): [Record]
+			@requireAuth
+		updateQuestion(id: Int!, input: UpdateQuestionInput!): Question!
+			@requireAuth
 		deleteQuestion(userId: Int!, questionId: Int!): Question @requireAuth
 	}
 `
