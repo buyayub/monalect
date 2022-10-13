@@ -1,8 +1,11 @@
 import { useQuery, useMutation } from '@apollo/client'
 import { useState, useEffect, useRef } from 'react'
-import { LOAD_QUESTIONS, CREATE_TEST } from 'src/shared/queries'
 import Button from 'src/components/Button'
 import TextInput from 'src/components/TextInput'
+import { createTest } from 'src/controller/test/'
+import { useApolloClient } from '@apollo/client'
+import { getQuestionLessons } from 'src/models/question'
+import { cache } from 'src/shared/cache'
 
 const randomizeArray = (array) => {
 	for (var i = array.length - 1; i > 0; i--) {
@@ -20,22 +23,14 @@ const Test = ({
 	cancel = null,
 	updateLessons = null,
 }) => {
-	const {
-		data: questionLessons,
-		loading,
-		error,
-	} = useQuery(LOAD_QUESTIONS, {
-		variables: { userId: userId, courseId: parseInt(courseId) },
-	})
-
-	const [createTest] = useMutation(CREATE_TEST)
 	const [questions, setQuestions] = useState(undefined)
 	const submitForm = useRef(null)
+	const client = useApolloClient()
 
 	// filter for selected lessons, and expand questions into a single array, then randomize the questions
-	useEffect(() => {
-		if (questionLessons && selectedLessonIds) {
-			let lessons = questionLessons.questionsByLesson.filter((lesson) =>
+	if (!questions) {
+		getQuestionLessons(courseId).then((list) => {
+			let lessons = list.filter((lesson) =>
 				selectedLessonIds.includes(lesson.id)
 			)
 
@@ -45,8 +40,8 @@ const Test = ({
 			}
 			randomizeArray(questionData)
 			setQuestions(questionData)
-		}
-	}, [questionLessons])
+		})
+	}
 
 	// TIMER
 
@@ -118,20 +113,19 @@ const Test = ({
 			totalCorrect += correct
 		}
 
+		const { prev: localId } = cache.apply('unique-id', (val) => val + 1)
 		// submit the test
 		// update the lesson marks and exit
-		createTest({
-			variables: {
-				userId: userId,
-				input: {
-					count: totalCount,
-					correct: totalCorrect,
-					quiz: false,
-					courseId: parseInt(courseId),
-					tests: lessonMarks,
-				},
-			},
-		})
+		const input = {
+			id: localId,
+			count: totalCount,
+			correct: totalCorrect,
+			quiz: false,
+			courseId: parseInt(courseId),
+			tests: lessonMarks,
+		}
+		createTest(client, userId, courseId, input)
+
 
 		updateLessons(lessonMarks)
 		cancel()

@@ -42,7 +42,7 @@ const AnswerForm = ({
 	return (
 		<form
 			className="mn-form-width-medium mn-flex-column mn-gap-large"
-			autoComplete={false}
+			autoComplete="off"
 			onSubmit={onSubmit}
 		>
 			<TextInput label="Answer" name="answer" />

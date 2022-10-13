@@ -14,6 +14,12 @@ export const getLessonCount = (courseId) => {
 	}
 }
 
+export const getMark = (courseId) => {
+	const course = cache.get(`course-${courseId}`)
+	let count = 0
+	let correct = 0
+}
+
 export const getQuestionCount = (courseId) => {
 	const course = cache.get(`course-${courseId}`)
 	if (course && course.lessons) {
@@ -31,8 +37,7 @@ export const getLessonWordCount = (courseId, lessonId) => {
 		const lesson = course.lessons.find((lesson) => lesson.id == lessonId)
 		let words = 0
 		if (lesson.pages) {
-			for (let page of lesson.pages)
-				words += page.words
+			for (let page of lesson.pages) words += page.words
 		}
 		return words
 	}
@@ -42,7 +47,7 @@ export const getLessonQuestionCount = (courseId, lessonId) => {
 	const course = cache.get(`course-${courseId}`)
 	if (course && course.lessons) {
 		const lesson = course.lessons.find((lesson) => lesson.id == lessonId)
-		if (lesson.questions)
-			return lesson.questions.length
-		console.warn("No questions entry in lesson w/ id ", lessonId)
+		if (lesson.questions) return lesson.questions.length
+		console.warn('No questions entry in lesson w/ id ', lessonId)
+	}
 }

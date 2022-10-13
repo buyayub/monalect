@@ -26,7 +26,7 @@ export const createTest = async ({ userId, input }) => {
 		})
 	}
 
-	return null
+	return { real: test.id, local: input.id}
 }
 
 export const tests = async ({ courseId, userId }) => {

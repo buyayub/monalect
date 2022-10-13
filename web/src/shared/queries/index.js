@@ -151,11 +151,8 @@ export const GET_LESSONS = gql`
 export const CREATE_TEST = gql`
 	mutation CreateTestMutation($userId: Int!, $input: CreateTestInput!) {
 		createTest(userId: $userId, input: $input) {
-			mark	
-			lessons {
-				mark	
-				lessonId
-			}
+			real
+			local
 		}
 	}
 `
