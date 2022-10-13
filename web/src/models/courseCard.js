@@ -63,7 +63,6 @@ export const getCourseCards = async () => {
 		return cards
 	}
 
-	throw ReferenceError()
 }
 
 export const getCourseCard = async(courseId) => {
@@ -116,6 +115,4 @@ export const getCourseCard = async(courseId) => {
 			return card;
 		}
 	}
-
-	throw ReferenceError()
 }

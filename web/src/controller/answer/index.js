@@ -20,7 +20,7 @@ export const createAnswer = async (client, userId, courseId, input) => {
 
 export const deleteAnswer = async (client, userId, courseId, answerId) => {
 	await deleteAnswerCache(courseId, answerId)
-	await deleteAnswerDB(courseId, answerId)
+	await deleteAnswerDB(answerId)
 	await deleteAnswerAPI(client, userId, answerId)
 }
 

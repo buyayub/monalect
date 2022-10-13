@@ -1,21 +1,23 @@
 import CourseCard from 'src/components/CourseCard'
 import Button from 'src/components/Button'
 import { Link, routes } from '@redwoodjs/router'
-import { useState, useLayoutEffect} from 'react'
+import { useState, useLayoutEffect } from 'react'
 import { getCourseCards } from 'src/models/courseCard'
 import { deleteCourse } from 'src/controller/course'
 import { useApolloClient } from '@apollo/client'
 
-const CourseCardList = ({userId}) => {
+const CourseCardList = ({ userId }) => {
 	const [cards, setCards] = useState(null)
 	const [edit, setEdit] = useState(false)
 	const client = useApolloClient()
 
-	useLayoutEffect(() => {
-		if (!cards) {
+	if (!cards) {
+		getCourseCards().then((data) => setCards(data))
+		window.addEventListener('initialized', (e) => {
 			getCourseCards().then((data) => setCards(data))
-		}
-	})
+		})
+	}
+
 
 	const deleteCard = (id) => {
 		let newCards = JSON.parse(JSON.stringify(cards))
@@ -50,16 +52,18 @@ const CourseCardList = ({userId}) => {
 			</div>
 			<div className="mn-scrollable mn-height-full">
 				<div className="mn-flex-column mn-gap-medium mn-padding-right-small">
-					{cards ? cards.map((item) => {
-						return (
-							<CourseCard
-								course={item}
-								edit={edit}
-								handleDelete={deleteCard}
-								key={item.id}
-							/>
-						)
-					}): "loading..."}
+					{cards
+						? cards.map((item) => {
+								return (
+									<CourseCard
+										course={item}
+										edit={edit}
+										handleDelete={deleteCard}
+										key={item.id}
+									/>
+								)
+						  })
+						: 'loading...'}
 				</div>
 			</div>
 		</div>

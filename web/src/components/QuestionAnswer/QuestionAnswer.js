@@ -1,9 +1,9 @@
 import { FiXCircle, FiCheckCircle, FiX } from 'react-icons/fi'
 import IconButton from 'src/components/IconButton'
-
-import { DELETE_ANSWER } from 'src/shared/queries'
-import { useMutation } from '@apollo/client'
 import { useAuth } from '@redwoodjs/auth'
+import { deleteAnswer } from 'src/controller/answer/'
+import { useParams } from '@redwoodjs/router'
+import { useApolloClient } from '@apollo/client'
 
 const QuestionAnswer = ({
 	title = 'Unnamed',
@@ -13,17 +13,12 @@ const QuestionAnswer = ({
 	answer = null,
 }) => {
 	let correctDisplay = correct ? 'mn-is-correct' : 'mn-is-incorrect'
-
-	const [deleteAnswer] = useMutation(DELETE_ANSWER)
 	const { currentUser } = useAuth()
+	const { courseId } = useParams()
+	const client = useApolloClient()
 
 	const submitDelete = () => {
-		deleteAnswer({
-			variables: {
-				userId: currentUser.id,
-				id: answer.id,
-			},
-		})
+		deleteAnswer(client, currentUser.id, courseId, answer.id)
 
 		if (handleDelete) {
 			handleDelete(answer)

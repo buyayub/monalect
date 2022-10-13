@@ -19,8 +19,9 @@ export const createQuestion = async (client, userId, courseId, input) => {
 		},
 	})
 	const record = response.data.createQuestion
-	db.syncId(record)
-	cache.syncId(record, courseId)
+	db.syncId([record])
+	cache.syncId([record], courseId)
+	console.log("api return ", {record})
 	return record
 }
 

@@ -1,5 +1,5 @@
 import { get, set, setMany, values } from 'idb-keyval'
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useReducer } from 'react'
 import { useApolloClient } from '@apollo/client'
 import { useAuth } from '@redwoodjs/auth'
 import { GET_ALL } from 'src/shared/queries/'
@@ -14,36 +14,30 @@ export default function Database({ children }) {
 		syncDB(client, currentUser.id)
 	}
 
-
 	return <>{children}</>
 }
 
-
 const syncDB = async (client, userId) => {
-	client
-		.query({
-			query: GET_ALL,
-			variables: { userId: userId },
-		})
-		.then((response) => {
-			const data = response.data.all
-			const propNames = Object.keys(data)
-			const values = Object.values(data)
+	const response = await client.query({
+		query: GET_ALL,
+		variables: { userId: userId },
+	})
+	const data = response.data.all
+	const propNames = Object.keys(data)
+	const values = Object.values(data)
 
-			let ugh = []
-			// start at 1 to remove __typename, not going to deal with apollo configuration
-			for (let i = 1; i < propNames.length; i++) {
-				ugh.push([propNames[i], values[i]])
-			}
+	let ugh = []
+	// start at 1 to remove __typename, not going to deal with apollo configuration
+	for (let i = 1; i < propNames.length; i++) {
+		ugh.push([propNames[i], values[i]])
+	}
 
-			setMany(ugh)
-				.then(() => {
-					localStorage.setItem('synced', true)
-					setUniqueId()
-				})
-				.catch((err) => console.error(err))
-		})
-		.catch((err) => console.error(err))
+	await setMany(ugh)
+	localStorage.setItem('synced', true)
+	window.dispatchEvent(new Event('initialized'))
+	await setUniqueId()
+
+	return null
 }
 
 const syncItem = async (client, userId, item) => {

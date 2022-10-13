@@ -22,7 +22,7 @@ const MonalectPage = () => {
 					<p>TBD</p>
 				</div>
 				<div className="mn-layout-half mn-height-full">
-					<CourseCardList userId={currentUser.id} />
+					<CourseCardList userId={currentUser.id} key="updatepls" />
 				</div>
 			</div>
 		</>

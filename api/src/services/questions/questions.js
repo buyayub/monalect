@@ -85,12 +85,6 @@ export const createQuestion = async ({ userId, input }) => {
 		},
 	})
 
-	let record = [
-		{
-			real: question.id,
-			local: input.localId,
-		},
-	]
 	let answers = []
 
 	if (input.answers.length > 0) {
@@ -112,14 +106,17 @@ export const createQuestion = async ({ userId, input }) => {
 
 			record.push({
 				real: newAnswer.id,
-				local: answer.localId
-			}) 
+				local: answer.localId,
+			})
 		}
 	}
 
 	question.answers = answers
 
-	return record
+	return {
+		real: question.id,
+		local: input.localId,
+	}
 }
 
 export const deleteQuestion = async ({ userId, questionId }) => {

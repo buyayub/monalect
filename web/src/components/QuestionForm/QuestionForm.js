@@ -14,7 +14,8 @@ const QuestionForm = ({
 	currentUser,
 	courseId,
 	lessonSelect,
-	update
+	setUpdate,
+	setRecord,
 }) => {
 	const [questionType, setQuestionType] = useState()
 	const client = useApolloClient()
@@ -48,7 +49,7 @@ const QuestionForm = ({
 				question: question,
 				multiple: true,
 				choices: choices,
-				answers: []
+				answers: [],
 			}
 		} else if (questionType == 'word') {
 			input = {
@@ -57,24 +58,24 @@ const QuestionForm = ({
 				lessonId: lessonSelect,
 				question: question,
 				multiple: false,
-				answers: []
+				answers: [],
 			}
 		}
 
 		returnQuestion(input)
 
-		input.localId = input.id
-		delete input.id
-
-		createQuestion(
-				client,
-				currentUser.id,
-				courseId,
-				input,
-		).then((record) => {
-			update(record[0].local, record[0].real)		
+		createQuestion(client, currentUser.id, courseId, {
+			localId: input.id,
+			courseId: input.courseId,
+			lessonId: input.lessonId,
+			question: input.question,
+			multiple: input.multiple,
+			choices: input.choices,
+			answers: [],
+		}).then((record) => {
+			setRecord(record)
+			setUpdate(true)
 		})
-
 	}
 
 	return (

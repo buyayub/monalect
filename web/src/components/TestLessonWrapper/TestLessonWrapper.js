@@ -3,32 +3,12 @@ import Modal from 'src/components/Modal'
 import Test from 'src/components/Test'
 import Button from 'src/components/Button'
 import { useState, useEffect, useRef } from 'react'
-
-const GET_TEST_LESSONS = gql`
-	query GetTestLessonsQuery($userId: Int!, $courseId: Int!) {
-		lessons(courseId: $courseId, userId: $userId) {
-			id
-			title
-			index
-			mark
-			questionCount
-		}
-	}
-`
+import { getLessonList } from 'src/models/lesson'
 
 const TestLessonWrapper = ({ courseId, userId, testSubmit = null }) => {
-	const { data: lessonsData } = useQuery(GET_TEST_LESSONS, {
-		variables: { userId: userId, courseId: parseInt(courseId) },
-	})
 	const [lessons, setLessons] = useState(undefined)
 	const [selectedLessonIds, setSelectedLessonIds] = useState(null)
 	const [takeTest, setTakeTest] = useState(false)
-
-	useEffect(() => {
-		if (lessonsData) {
-			setLessons(lessonsData.lessons)
-		}
-	}, [lessonsData])
 
 	// if selected lessons are set, show test
 	useEffect(() => {
@@ -36,6 +16,10 @@ const TestLessonWrapper = ({ courseId, userId, testSubmit = null }) => {
 			setTakeTest(true)
 		}
 	}, [selectedLessonIds])
+
+	if (!lessons) {
+		getLessonList(courseId).then((list) => setLessons(list))
+	}
 
 	// On form submit, collect all the lessons and update selected lessons for the test.
 	const onSubmit = (e) => {

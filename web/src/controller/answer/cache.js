@@ -19,11 +19,11 @@ export const createAnswer = async (courseId, input) => {
 
 export const deleteAnswer = async (courseId, answerId) => {
 	cache.apply(`course-${courseId}`, (course) => {
-		course.lessons.forEach((lesson) =>
+		course.lessons.forEach((lesson) => {
 			lesson.questions.forEach((question) => {
-				question.answers.filter((answer) => answer.id != answerId)
+				question.answers = question.answers.filter((answer) => answer.id != answerId)
 			})
-		)
+		})
 		return course
 	})
 }

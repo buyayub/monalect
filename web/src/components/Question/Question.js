@@ -44,6 +44,7 @@ const Question = ({
 							title={e.answer}
 							correct={false}
 							handleDelete={deleteAnswer}
+							key = {i}
 							answer={{
 								id: e.id,
 								questionId: question.id,
@@ -115,6 +116,7 @@ const Question = ({
 									title={e.answer}
 									correct={true}
 									handleDelete={deleteAnswer}
+									key={i}
 									answer={{
 										id: e.id,
 										questionId: question.id,

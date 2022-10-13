@@ -12,7 +12,6 @@ import {
 } from './api'
 
 export const createQuestion = async (client, userId, courseId, input) => {
-	console.log(input)
 	await createQuestionCache(courseId, input)
 	await createQuestionDB(courseId, input)
 	const record = await createQuestionAPI(client, userId, courseId, input)

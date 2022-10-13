@@ -11,7 +11,9 @@ const QuestionWrapper = ({ courseId }) => {
 	const { currentUser } = useAuth()
 	const [lessons, setLessons] = useState(undefined)
 	const [updateAns, setUpdateAns] = useState(false)
+	const [updateQues, setUpdateQues] = useState(false)
 	const [record, setRecord] = useState(null)
+	const [recordQues, setRecordQues] = useState(null)
 
 	const [lessonSelect, setLessonSelect] = useState(null)
 	const [questionForm, setQuestionForm] = useState(false)
@@ -21,10 +23,16 @@ const QuestionWrapper = ({ courseId }) => {
 	useEffect(() => {
 		if (updateAns && record) {
 			updateAnswer(record.local, record.real)
-			setRecord(null)
-			setUpdateAns(false)
+			console.log('update ', { lessons })
 		}
-	})
+	}, [updateAns, record])
+
+	useEffect(() => {
+		if (updateQues && recordQues) {
+			updateQuestion(recordQues.local, recordQues.real)
+			console.log('update ', { lessons })
+		}
+	}, [updateQues, recordQues])
 
 	const toggleQuestionForm = () => {
 		setQuestionForm(!questionForm)
@@ -51,12 +59,16 @@ const QuestionWrapper = ({ courseId }) => {
 	}
 
 	const updateQuestion = (id, newId) => {
+		console.log("updateQuestion ", {id}, " ", {newId}, " ", {recordQues})
 		let lessonsCopy = JSON.parse(JSON.stringify(lessons))
 		for (let lesson of lessonsCopy) {
-			let question = lesson.questions.find((question) => (question.id = id))
+			let question = lesson.questions.find((question) => (question.id == id))
 			if (question) question.id = newId
 		}
+		console.log({lessonsCopy})
 		setLessons([...lessonsCopy])
+		setRecordQues(null)
+		setUpdateQues(false)
 	}
 
 	const appendAnswer = (answer) => {
@@ -83,10 +95,10 @@ const QuestionWrapper = ({ courseId }) => {
 
 	const updateAnswer = (id, newId) => {
 		let newLessons = JSON.parse(JSON.stringify(lessons))
-		console.log({newLessons})
-		console.log({lessons})
-		console.log({id})
-		console.log({newId})
+		console.log({ newLessons })
+		console.log({ lessons })
+		console.log({ id })
+		console.log({ newId })
 		let lesson = newLessons.find((les) =>
 			les.questions.find((ques) => ques.answers.find((ans) => ans.id == id))
 		)
@@ -95,6 +107,9 @@ const QuestionWrapper = ({ courseId }) => {
 		)
 		let answer = question.answers.find((ans) => ans.id == id)
 		answer.id = newId
+		console.log({ newLessons })
+		setRecord(null)
+		setUpdateAns(false)
 		setLessons([...newLessons])
 	}
 
@@ -107,7 +122,6 @@ const QuestionWrapper = ({ courseId }) => {
 			.questions.filter((deadQuestion) => deadQuestion.id != question.id)
 		setLessons([...lessonsCopy])
 	}
-
 
 	const handleAnswerDelete = (answer) => {
 		let lessonsCopy = JSON.parse(JSON.stringify(lessons))
@@ -140,7 +154,6 @@ const QuestionWrapper = ({ courseId }) => {
 		setLessons([...lessonsCopy])
 	}
 
-
 	return (
 		<div className="mn-flex-column mn-gap-small">
 			{lessons
@@ -166,7 +179,8 @@ const QuestionWrapper = ({ courseId }) => {
 					currentUser={currentUser}
 					courseId={courseId}
 					lessonSelect={lessonSelect}
-					update={updateQuestion}
+					setUpdate={setUpdateQues}
+					setRecord={setRecordQues}
 				/>
 			</Modal>
 			<Modal
