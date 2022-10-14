@@ -4,62 +4,42 @@ import IconButton from 'src/components/IconButton'
 import Button from 'src/components/Button'
 import { useState, useEffect, useRef } from 'react'
 import { useAuth } from '@redwoodjs/auth'
-import { UPDATE_COURSE, DELETE_COURSE} from 'src/shared/queries'
 
 import { FiHelpCircle, FiList } from 'react-icons/fi'
 import { RiBook2Line } from 'react-icons/ri'
+import { deleteCourse } from 'src/controller/course'
+import { updateCourse } from 'src/controller/course/cache'
+import { useApolloClient } from '@apollo/client'
 
 const CourseCard = ({
-	courseId,
-	courseTitle = 'Untitled',
-	courseDescription = 'No description.',
-	notebookWords = 0,
-	questionCount = 0,
-	mark = 0,
-	lessons = 0,
+	course,
 	edit = true,
 	handleDelete=null,
 }) => {
 	const [editDescription, setEditDescription] = useState(false)
 	const [editTitle, setEditTitle] = useState(false)
-	const [title, setTitle] = useState(courseTitle)
-	const [description, setDescription] = useState(courseDescription)
-
-	const [updateCourse] = useMutation(UPDATE_COURSE)
-	const [deleteCourse] = useMutation(DELETE_COURSE)
+	const [title, setTitle] = useState(course.title)
+	const [description, setDescription] = useState(course.description)
 	const { currentUser } = useAuth()
+	const client = useApolloClient()
+
 	const descriptionForm = useRef(null)
 	const titleForm = useRef(null)
 
-	const submitUpdate = (titleData = null, descriptionData = null) => {
+	const submitUpdate = (titleData=null, descriptionData=null) => {
 		updateCourse({
-			variables: {
-				userId: currentUser.id,
-				id: courseId,
-				input: {
-					title: titleData,
-					description: descriptionData,
-				},
-			},
-		}).then((response) => {
-			console.log(response)
+			id: course.id,
+			title: titleData,
+			description: descriptionData
 		})
 
-		if (titleData) {
-			setTitle(titleData)
-		}
-		if (descriptionData) {
-			setDescription(descriptionData)
-		}
+		if (titleData) setTitle(titleData)
+		if (descriptionData) setDescription(descriptionData)
 	}
 
 	const submitDelete = () => {
-		deleteCourse({variables: {
-			userId: currentUser.id,
-			id: courseId
-		}})
-
-		handleDelete(courseId)
+		deleteCourse(client, currentUser.id, course.id)
+		handleDelete(course.id)
 	}
 
 	// focus on title if edit is true and toggled, place caret at the end
@@ -101,32 +81,32 @@ const CourseCard = ({
 				// VIEW MODE
 				<Link
 					to={routes.courseHome({
-						courseId: courseId,
-						courseTitle: courseTitle,
-						questionCount: questionCount,
-						notebookWord: notebookWords,
-						mark: mark,
+						courseId: course.id,
+						courseTitle: course.title,
+						questionCount: course.questionCount,
+						notebookWord: course.notebookWords,
+						mark: course.mark,
 					})}
 				>
 					<div className="mn-c-card">
 						<div className="mn-flex-column mn-gap-small">
 							<div className="mn-flex-row mn-justify-space-between">
 								<h2>{title}</h2>
-								<h3>{mark}%</h3>
+								<h3>{course.mark ? course.mark : 0}%</h3>
 							</div>
-							<div>{description}</div>
+							<div>{description ? description : "No description"}</div>
 							<div className="mn-flex-row mn-gap-large mn-justify-end">
 								<div className="mn-flex-row mn-gap-small">
 									<FiList />
-									<p>{lessons}</p>
+									<p>{course.lessonCount}</p>
 								</div>
 								<div className="mn-flex-row mn-gap-small">
 									<RiBook2Line />
-									<p>{notebookWords}</p>
+									<p>{course.notebookWords}</p>
 								</div>
 								<div className="mn-flex-row mn-gap-small">
 									<FiHelpCircle />
-									<p>{questionCount}</p>
+									<p>{course.questionCount}</p>
 								</div>
 							</div>
 						</div>
@@ -218,21 +198,21 @@ const CourseCard = ({
 									setEditDescription(true)
 								}}
 							>
-								{description}
+								{description ? description : "No description"}
 							</div>
 						)}
 						<div className="mn-flex-row mn-gap-large mn-justify-end">
 							<div className="mn-flex-row mn-gap-small">
 								<FiList />
-								<p>{lessons}</p>
+								<p>{course.lessonCount}</p>
 							</div>
 							<div className="mn-flex-row mn-gap-small">
 								<RiBook2Line />
-								<p>{notebookWords}</p>
+								<p>{course.notebookWords}</p>
 							</div>
 							<div className="mn-flex-row mn-gap-small">
 								<FiHelpCircle />
-								<p>{questionCount}</p>
+								<p>{course.questionCount}</p>
 							</div>
 						</div>
 					</div>

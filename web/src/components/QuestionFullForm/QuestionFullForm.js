@@ -1,4 +1,3 @@
-import { useQuery, useMutation } from '@apollo/client'
 import { useState, useRef, useEffect } from 'react'
 import { FiPlus } from 'react-icons/fi'
 import { FiXCircle, FiCheckCircle, FiX } from 'react-icons/fi'
@@ -9,7 +8,10 @@ import Dropdown from 'src/components/Dropdown'
 import Button from 'src/components/Button'
 import Modal from 'src/components/Modal'
 import QuestionAnswer from 'src/components/QuestionAnswer'
-import { GET_LESSONS, CREATE_QUESTION } from 'src/shared/queries'
+import { getLessonList } from 'src/models/lesson'
+import { useApolloClient } from '@apollo/client'
+import { createQuestion } from 'src/controller/question'
+import { cache } from 'src/shared/cache'
 
 const QuestionFullForm = ({
 	userId = null,
@@ -21,7 +23,8 @@ const QuestionFullForm = ({
 	const [answers, setAnswers] = useState([])
 	const [answerKey, setAnswerKey] = useState(0)
 	const [showForm, setShowForm] = useState(false)
-	const [createQuestion] = useMutation(CREATE_QUESTION)
+	const [lessons, setLessons] = useState(null)
+	const client = useApolloClient()
 
 	const timeout = 2
 	const [timer, setTimer] = useState(0)
@@ -41,30 +44,15 @@ const QuestionFullForm = ({
 		}
 	}, [timer])
 
-	// Create queury for the lessons to populate the lessons dropdown
-	const {
-		loading,
-		error,
-		data: lessonData,
-	} = useQuery(GET_LESSONS, {
-		variables: {
-			userId: userId,
-			courseId: courseId,
-		},
-	})
-
-	if (loading) {
-		return `Loading...`
-	}
-
-	if (error) {
-		return `ERROR  ${error}`
-	}
-
 	// organize lesson data into items for dropdown
+
+	if (!lessons) {
+		getLessonList(courseId).then((data) => setLessons(data))
+	}
+
 	let lessonItems = []
-	if (lessonData.lessons) {
-		for (const lesson of lessonData.lessons) {
+	if (lessons) {
+		for (const lesson of lessons) {
 			lessonItems.push({
 				title: `${lesson.index}:  ${lesson.title}`,
 				value: lesson.id,
@@ -87,32 +75,27 @@ const QuestionFullForm = ({
 		let questionAnswers = []
 
 		for (const answer of answers) {
-			if (multiple) {
+			const { prev: localId } = cache.apply('unique-id', (val) => val + 1)
 				questionAnswers.push({
 					answer: answer.answer,
 					correct: answer.correct,
-				})
-			} else if (!multiple && answer.correct) {
-				questionAnswers.push({
-					answer: answer.answer,
-					correct: answer.correct,
-				})
-			}
+					localId: localId
+			})
 		}
 
-		createQuestion({
-			variables: {
-				userId: userId,
-				input: {
-					courseId: courseId,
-					lessonId: lessonId,
-					question: question,
-					multiple: multiple,
-					choices: choices,
-					answers: questionAnswers,
-				},
-			},
-		})
+		const { prev: questionLocalId } = cache.apply('unique-id', (val) => val + 1)
+		const input = {
+			courseId: courseId,
+			lessonId: lessonId,
+			question: question,
+			multiple: multiple,
+			choices: choices,
+			answers: questionAnswers,
+			localId: questionLocalId
+		}
+		console.log(input)
+
+		createQuestion(client, userId, courseId, input)
 
 		// reset form
 		e.target[2].value = ''
@@ -130,7 +113,7 @@ const QuestionFullForm = ({
 		<form
 			className="mn-form-width-medium mn-form-middle mn-flex-column mn-gap-small"
 			onSubmit={onSubmit}
-			autoComplete={false}
+			autoComplete="off"
 		>
 			<Dropdown
 				label="Lesson"

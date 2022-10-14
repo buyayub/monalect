@@ -1,40 +1,26 @@
 import { NavLink, routes, navigate } from '@redwoodjs/router'
-import { useQuery } from '@redwoodjs/web'
+import { useState } from 'react'
+import { getDropdown } from 'src/models/course'
 import NavBar from 'src/components/NavBar'
 import Dropdown from 'src/components/Dropdown'
-import { useAuth } from '@redwoodjs/auth'
 
-export const QUERY = gql`
-	query courseQuery($userId: Int!) {
-		courses(userId: $userId) {
-			id
-			title
-		}
-	}
-`
+const CourseNavBar = ({ courseId }) => {
+	const [courses, setCourses] = useState(null)
 
-const CourseNavBar = ({ courseId = null }) => {
-	const { currentUser } = useAuth()
-	const { data } = useQuery(QUERY, { variables: { userId: currentUser.id } })
-
-	let dropdownData = []
-	if (data) {
-		data.courses.forEach((e) => {
-			dropdownData.push({
-				title: e.title,
-				value: e.id,
-			})
+	if (!courses){
+		getDropdown().then((data) => {
+			setCourses(data)
 		})
 	}
 
 	return (
-		<header className="mn-c-header mn-padding-header mn-flex-row mn-align-center mn-justify-space-between">
+		<header className="fade-in mn-c-header mn-padding-header mn-flex-row mn-align-center mn-justify-space-between">
 			<div className="mn-flex-row mn-align-center mn-gap-medium">
 				<NavBar courseId={courseId} />
 				<Dropdown
 					className="mn-is-long mn-border-left-light"
-					selected={courseId}
-					items={dropdownData}
+					selected={parseInt(courseId)}
+					items={courses ? courses : []}
 					onChange={(e) => {
 						navigate(routes.courseHome({ courseId: e.target.value }))
 					}}

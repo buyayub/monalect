@@ -32,8 +32,8 @@ model Course {
 	id		Int	@id @default(autoincrement())
 	user		User	@relation(fields: [userId], references: [id], onDelete: Cascade)
 	userId		Int
-	title		String @default("Untitled")
-	description	String @default("No description")
+	title		String? @default("Untitled")
+	description	String? @default("No description")
 	createdAt 	DateTime 	@default(now())
 	mark		Int @default(0)
 	active 		Boolean @default(true)
@@ -83,8 +83,8 @@ model TextbookSection {
 	user		User	@relation(fields: [userId], references: [id], onDelete: Cascade)
 	userId		Int
 	title		String	@default("Untitled")
-	start		Int
-	end			Int
+	start		Int? 
+	end			Int? 
 	lessons		SectionOnLesson[]
 	textbook 	Textbook @relation(fields: [textbookId], references: [id], onDelete: Cascade)
 	textbookId 	Int

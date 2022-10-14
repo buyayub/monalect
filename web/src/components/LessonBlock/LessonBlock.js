@@ -1,33 +1,54 @@
-import LessonDisplay from 'src/components/LessonDisplay'
 import LessonMaterialDisplay from 'src/components/LessonMaterialDisplay'
 import { useState } from 'react'
+import { FiHelpCircle } from 'react-icons/fi'
+import { RiBook2Line } from 'react-icons/ri'
 
 const LessonBlock = ({ lesson }) => {
 	const [expand, setExpand] = useState(false)
 
 	return (
 		<div className="mn-flex-column">
-			<LessonDisplay
-				index={lesson.index + 1}
-				title={lesson.title}
-				notebookWords={lesson.notebookWords}
-				questionCount={lesson.questionCount}
-				active={expand}
-				onClick={() => {
-					setExpand(!expand)
-				}}
-				mark={lesson.mark}
-			/>
-			<div className={`mn-indent mn-padding-bottom-medium mn-flex-column mn-indent-top-small mn-gap-x-small ${!expand ? 'mn-is-hidden' : ''}`}>
-				{lesson.articles.map((article) => (
-					<LessonMaterialDisplay type="article" title={article.title} />
+			<div
+				onClick={() => setExpand(!expand)}
+				className="mn-hover mn-flex-row mn-gap-medium mn-clickable"
+			>
+				<div className="index">{lesson.index + 1}</div>
+				<div
+					className={`mn-flex-row mn-gap-large mn-grow mn-justify-space-between mn-text-padding ${
+						expand ? 'mn-border-left mn-border-bottom' : 'mn-border-left'
+					}`}
+				>
+					<p> {lesson.title} </p>
+					<div className="mn-flex-row mn-gap-x-large">
+						<div className="mn-flex-row mn-on-hover-active mn-is-inactive mn-gap-small">
+							<span className="mn-flex-row mn-gap-x-small">
+								<RiBook2Line />
+								<p>{lesson.words == null ? 0 : lesson.words}</p>
+							</span>
+							<span className="mn-flex-row mn-gap-x-small">
+								<FiHelpCircle />
+								<p>{lesson.questionCount}</p>
+							</span>
+						</div>
+						<div className="mn-width-large mn-text-align-end">
+							{lesson.mark ? lesson.mark : 0}%
+						</div>
+					</div>
+				</div>
+			</div>
+			<div
+				className={`mn-indent mn-padding-bottom-medium mn-flex-column mn-indent-top-small mn-gap-x-small ${
+					!expand ? 'mn-is-hidden' : ''
+				}`}
+			>
+				{lesson.articles.map((article, i) => (
+					<LessonMaterialDisplay type="article" section={{title: article.title}} key={i} />
 				))}
-				{lesson.sections.map((section) => (
+				{lesson.sections.map((section, i) => (
 					<LessonMaterialDisplay
 						type="section"
-						title={section.title}
-						start={section.start}
-						end={section.end}
+						section={section}
+						key = {i}
 					/>
 				))}
 			</div>

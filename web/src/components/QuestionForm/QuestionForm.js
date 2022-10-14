@@ -2,8 +2,9 @@ import TextInput from 'src/components/TextInput'
 import Dropdown from 'src/components/Dropdown'
 import Button from 'src/components/Button'
 import { useMutation } from '@apollo/client'
-
-import { CREATE_QUESTION } from 'src/shared/queries'
+import { createQuestion } from 'src/controller/question'
+import { cache } from 'src/shared/cache'
+import { useApolloClient } from '@apollo/client'
 
 import { useState } from 'react'
 
@@ -13,9 +14,11 @@ const QuestionForm = ({
 	currentUser,
 	courseId,
 	lessonSelect,
+	setUpdate,
+	setRecord,
 }) => {
 	const [questionType, setQuestionType] = useState()
-	const [createQuestion] = useMutation(CREATE_QUESTION)
+	const client = useApolloClient()
 
 	const onSubmit = (e) => {
 		e.preventDefault()
@@ -36,34 +39,42 @@ const QuestionForm = ({
 
 	const submitQuestion = (questionType, question, choices = null) => {
 		let input = {}
+		const { prev: localId } = cache.apply('unique-id', (val) => val + 1)
 
 		if (questionType == 'multiple') {
 			input = {
+				id: localId,
 				courseId: courseId,
 				lessonId: lessonSelect,
 				question: question,
 				multiple: true,
 				choices: choices,
+				answers: [],
 			}
 		} else if (questionType == 'word') {
 			input = {
+				id: localId,
 				courseId: courseId,
 				lessonId: lessonSelect,
 				question: question,
 				multiple: false,
+				answers: [],
 			}
 		}
 
-		createQuestion({
-			variables: {
-				userId: currentUser.id,
-				input: input,
-			},
-		}).then((response) => {
-			const question = response.data.createQuestion
-			if (returnQuestion) {
-				returnQuestion(question)
-			}
+		returnQuestion(input)
+
+		createQuestion(client, currentUser.id, courseId, {
+			localId: input.id,
+			courseId: input.courseId,
+			lessonId: input.lessonId,
+			question: input.question,
+			multiple: input.multiple,
+			choices: input.choices,
+			answers: [],
+		}).then((record) => {
+			setRecord(record)
+			setUpdate(true)
 		})
 	}
 
@@ -71,9 +82,9 @@ const QuestionForm = ({
 		<form
 			className="mn-flex-column mn-form-width-medium mn-gap-medium"
 			onSubmit={onSubmit}
-			autoComplete={false}
+			autoComplete="off"
 			onReset={(e) => {
-				setQuestionType("word")
+				setQuestionType('word')
 			}}
 		>
 			<Dropdown

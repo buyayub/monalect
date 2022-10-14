@@ -6,8 +6,8 @@ import { useState } from 'react'
 import { useAuth } from '@redwoodjs/auth'
 
 import CourseNavBar from 'src/components/CourseNavBar'
-import CourseTitleCell from 'src/components/CourseTitleCell'
-import LessonDisplayCell from 'src/components/LessonDisplayCell'
+import CourseTitle from 'src/components/CourseTitle'
+import LessonList from 'src/components/LessonList'
 
 const CourseHomePage = ({
 	courseId,
@@ -41,11 +41,10 @@ const CourseHomePage = ({
 						<h2>{mark}%</h2>
 					</div>
 				) : (
-					<CourseTitleCell courseId={parseInt(courseId)} />
+					<CourseTitle courseId={parseInt(courseId)} />
 				)}
-				<LessonDisplayCell
+				<LessonList
 					courseId={parseInt(courseId)}
-					userId={currentUser.id}
 				/>
 			</div>
 		</>

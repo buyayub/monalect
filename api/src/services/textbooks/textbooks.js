@@ -11,20 +11,19 @@ const getPresigned = async (url) => {
 		Bucket: 'monalectpdf',
 		Key: url + '.pdf',
 		ContentType: 'application/pdf',
+		ResponseCacheControl: 'max-age=604800, immutable'
 	}
 
 	const command = new GetObjectCommand(bucketParams)
-	const signedUrl = await getSignedUrl(s3Client, command, { expiresIn: 43200 })
+	const signedUrl = await getSignedUrl(s3Client, command, { expiresIn: 604800 })
 
 	return signedUrl
 }
 
-const uploaded = async ({ userId, courseId }) => {}
-
-export const textbooks = async ({ userId, courseId }) => {
+export const allPresigned = async ({ userId, courseId }) => {
 	isOwner(userId)
 
-	let payload = await db.textbook.findMany({
+	let textbooks = await db.textbook.findMany({
 		where: {
 			userId: userId,
 			courseId: courseId,
@@ -37,7 +36,22 @@ export const textbooks = async ({ userId, courseId }) => {
 		},
 	})
 
-	for (item of payload) {
+	let articles = await db.article.findMany({
+		where: {
+			userId: userId,
+			courseId: courseId,
+			uploaded: true,
+		},
+		select: {
+			id: true,
+			url: true,
+			title: true,
+		},
+	})
+
+	let payload = [...textbooks, ...articles]
+
+	for (let item of payload) {
 		const presigned = await getPresigned(item.url)
 		item.presigned = presigned
 	}
@@ -64,4 +78,43 @@ export const allTextbooks = async ({ userId }) => {
 	})
 
 	return textbooks
+}
+
+export const presigned = async({ userId, id}) => {
+	isOwner(userId)
+	let material = await db.textbook.findMany({
+		where: {
+			userId: userId,
+			id: id
+		},
+		select: {
+			url: true,
+			title: true
+		}})
+
+	if (!material || material.length == 0){
+		console.log("glippity, gloppity, gloop")
+		material = await db.article.findMany({
+		where: {
+			userId: userId,
+			id: id
+		},
+		select: {
+			url: true,
+			title: true
+		}})
+	}
+
+
+	if (!material) return []
+	console.log(JSON.stringify(material, null, 4))
+	console.log(JSON.stringify(id, null, 4))
+
+	const presignedUrl = getPresigned(material[0].url)
+	return { 
+		id: id,
+		url: material[0].url,
+		presigned: presignedUrl,
+		title: material[0].title
+	}
 }

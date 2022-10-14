@@ -23,16 +23,20 @@ export const schema = gql`
 	}
 
 	input CreateTestInput {
+		id: Int!,
 		quiz: Boolean!
 		courseId: Int!
 		correct: Int!
 		count: Int!
+		date: String
 		tests: [TestOnLessonInput]!
 	}
 
 	input TestOnLessonInput {
+		id: Int!
 		correct: Int!
 		count: Int!
+		date: String
 		lessonId: Int!
 	}
 
@@ -42,8 +46,13 @@ export const schema = gql`
 		courseId: Int
 	}
 
+	type RecordOutput {
+		real: Int!
+		local: Int!
+	}
+
 	type Mutation {
-		createTest(userId: Int!, input: CreateTestInput!): Test @requireAuth
+		createTest(userId: Int!, input: CreateTestInput!): RecordOutput @requireAuth
 		updateTest(id: Int!, input: UpdateTestInput!): Test! @requireAuth
 		deleteTest(id: Int!): Test! @requireAuth
 	}

@@ -3,22 +3,18 @@ import TextInput from 'src/components/TextInput'
 
 const SectionForm = ({
 	cancel,
-	addSection,
+	tools,
 	sectionRoot,
-	identifier,
-	setIdentifier,
 }) => {
 	const onSubmit = (e) => {
 		e.preventDefault()
 		const section = {
+			textbookId: sectionRoot,
 			title: e.target[0].value,
-			start: parseInt(e.target[1].value),
-			end: parseInt(e.target[2].value),
-			localId: identifier,
+			start: parseInt(e.target[1].value) ? parseInt(e.target[1].value) : null,
+			end: parseInt(e.target[2].value) ? parseInt(e.target[2].value) : null,
 		}
-
-		addSection(section, sectionRoot)
-		setIdentifier(identifier + 1)
+		tools.add('section', section)
 		e.target.reset()
 		cancel()
 	}

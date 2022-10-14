@@ -1,22 +1,19 @@
 import Button from 'src/components/Button'
 import TextInput from 'src/components/TextInput'
 
-const LessonForm = ({ cancel, addLesson, identifier, setIdentifier }) => {
+const LessonForm = ({ cancel, tools }) => {
 	const onSubmit = (e) => {
 		e.preventDefault()
 		const lesson = {
 			title: e.target[0].value,
-			material: [],
-			localId: identifier,
 		}
-		addLesson(lesson)
-		setIdentifier(identifier + 1)
+		tools.add('lesson', lesson)
 		e.target.reset()
 		cancel()
 	}
 	return (
 		<form
-			autoComplete={false}
+			autoComplete="off"
 			className="mn-flex-column mn-gap-large mn-form-width-medium"
 			onSubmit={onSubmit}
 		>

@@ -3,25 +3,22 @@ import IconButton from 'src/components/IconButton'
 
 const LearningMaterial = ({
 	className = '',
-	title = 'Untitled',
-	pages = 0,
-	type = 'textbook',
+	material,
 	handleDelete,
 	onClick,
-	fileAdded=false,
 }) => {
 	return (
 		<div className={'mn-flex-row mn-justify-space-between mn-clickable mn-hover ' + className}>
 			<div className="mn-flex-row mn-align-center mn-gap-small" onClick={onClick}>
 				<div>
-					{type == 'article' ? <FiFileText className="mn-icon-medium" /> : ''}
-					{type == 'textbook' ? <FiBook className="mn-icon-medium" /> : ''}
+					{material.type == 'article' ? <FiFileText className="mn-icon-medium" /> : ''}
+					{material.type == 'textbook' ? <FiBook className="mn-icon-medium" /> : ''}
 				</div>
 				<div>
-					<h3> {title} </h3>
+					<h3> {material.title} </h3>
 					<div className="mn-flex-row mn-gap-small mn-align-center">
-						<legend> {pages} pages </legend>
-						{fileAdded ? <legend className="mn-text-blue">FILE ADDED</legend> : ""}
+						<legend> {material.pages ? material.pages : 0} pages </legend>
+						{material.uploaded ? <legend className="mn-text-blue">FILE ADDED</legend> : ""}
 					</div>
 				</div>
 			</div>

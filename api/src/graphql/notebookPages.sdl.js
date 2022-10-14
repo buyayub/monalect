@@ -1,9 +1,11 @@
 export const schema = gql`
 	type NotebookPage {
-		id: Int!
-		index: Int!
+		id: Int
+		lessonId: Int
 		content: String
-		lessonTitle: String!
+		words: Int
+		lessonTitle: String
+		courseId: Int
 	}
 
 	type Query {

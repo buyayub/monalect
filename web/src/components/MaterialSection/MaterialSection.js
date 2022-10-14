@@ -2,9 +2,7 @@ import { FiFileText, FiX } from 'react-icons/fi'
 import IconButton from 'src/components/IconButton'
 
 const MaterialSection = ({
-	start = undefined,
-	end = undefined,
-	title = 'Untitled',
+	section = null, 
 	className = '',
 	handleDelete,
 	onClick = null,
@@ -19,12 +17,12 @@ const MaterialSection = ({
 		>
 			<div className="mn-flex-row mn-gap-small mn-align-center" onClick={onClick}>
 				<div>{icon == null ? <FiFileText /> : icon}</div>
-				<p> {title} </p>
+				<p> {section.title} </p>
 			</div>
 			<div className="mn-flex-row mn-gap-large mn-align-center">
-				{start && end && (
+				{section.start && section.end && (
 					<p className="mn-is-secondary">
-						{start} - {end}
+						{section.start} - {section.end}
 					</p>
 				)}
 				<IconButton

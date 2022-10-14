@@ -1,7 +1,8 @@
 import TextInput from 'src/components/TextInput'
 import Button from 'src/components/Button'
-import { CREATE_ANSWER } from 'src/shared/queries'
-import { useMutation } from '@apollo/client'
+import { useApolloClient } from '@apollo/client'
+import { createAnswer } from 'src/controller/answer'
+import { cache } from 'src/shared/cache'
 
 const AnswerForm = ({
 	cancel,
@@ -10,28 +11,30 @@ const AnswerForm = ({
 	courseId,
 	currentUser,
 	answerType,
+	setUpdate,
+	setRecord	
 }) => {
-	const [createAnswer] = useMutation(CREATE_ANSWER)
+	const client = useApolloClient()
 
-	const onSubmit = (e) => {
+	const onSubmit = async (e) => {
 		e.preventDefault()
 
 		const correct = answerType
 		const answer = e.target[0].value
+		const { prev: localId } = cache.apply('unique-id', (val) => val + 1)
+		const input = {
+			id: localId,
+			questionId: questionId,
+			answer: answer,
+			correct: correct,
+		}
 
-		createAnswer({
-			variables: {
-				userId: currentUser.id,
-				input: {
-					questionId: questionId,
-					correct: correct,
-					answer: answer,
-				},
-			},
-		}).then((response) => {
-			const answerResponse = response.data.createAnswer
-			submitAnswer(answerResponse)
+		submitAnswer(input)
+		createAnswer(client, currentUser.id, courseId, input).then((record) => {
+			setUpdate(true)
+			setRecord(record)
 		})
+
 		e.target[0].value = ''
 		cancel()
 	}
@@ -39,7 +42,7 @@ const AnswerForm = ({
 	return (
 		<form
 			className="mn-form-width-medium mn-flex-column mn-gap-large"
-			autoComplete={false}
+			autoComplete="off"
 			onSubmit={onSubmit}
 		>
 			<TextInput label="Answer" name="answer" />

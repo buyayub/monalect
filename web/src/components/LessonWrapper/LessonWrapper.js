@@ -5,15 +5,14 @@ import { FiPlus, FiLink } from 'react-icons/fi'
 
 const LessonNode = ({
 	index,
-	title,
+	tools,
+	lesson,
+	course,
 	handleDelete,
-	lessonMaterial = null,
-	materials = null,
 	setLessonRoot,
 	lessonRoot,
 	linkMode,
 	setLinkMode,
-	unlinkSection,
 }) => {
 	return (
 		<div className="mn-flex-column mn-gap-small">
@@ -24,50 +23,32 @@ const LessonNode = ({
 				}
 				key={index}
 				icon={`${index + 1}`}
-				title={title}
 				handleDelete={handleDelete}
-				sections={lessonMaterial}
+				section={{title: lesson.title}}
 			/>
 			<div className="mn-indent mn-flex-column mn-gap-small">
-				{lessonMaterial.map((material, i) => {
-					if (material.type == 'article') {
-						let materialDisplay = materials[material.materialId]
+				{course.link.filter(link =>  link.lessonId == lesson.localId).map((link, i) => {
+					if (link.type == 'article') {
 						return (
 							<MaterialSection
 								key={i}
-								title={materialDisplay.title}
-								handleDelete={() => unlinkSection(index, i)}
+								handleDelete={() => tools.delete('link', link.localId)}
+								section={course.material.find((material) => (material.localId == link.materialId) && (material.type == 'article'))}
 							/>
 						)
-					}
-					let sectionTitle = ''
-					let startPage = 0
-					let endPage = 0
-
-					// Check if the section exists, and isn't an article. If it goes through, then assign values to variables.
-					if (materials != null) {
-						if (materials[material.materialId].sections.length > 0) {
-							let display =
-								materials[material.materialId].sections[material.sectionId]
-							sectionTitle = display.title
-							startPage = display.start
-							endPage = display.end
-						}
 					}
 					return (
 						<MaterialSection
 							key={i}
-							title={sectionTitle}
-							start={startPage}
-							end={endPage}
-							handleDelete={() => unlinkSection(index, i)}
+							handleDelete={() => tools.delete('link', link.localId)}
+							section={course.section.find((section) => section.localId == link.materialId)}
 						/>
 					)
 				})}
 				<MaterialSectionAdd
 					onClick={() => {
 						setLinkMode(true)
-						setLessonRoot(index)
+						setLessonRoot(lesson.localId)
 					}}
 					label="Link Material"
 				>
@@ -78,16 +59,14 @@ const LessonNode = ({
 	)
 }
 const LessonWrapper = ({
+	course,
+	tools,
 	className,
-	lessons = [],
-	materials,
 	setLessonForm,
-	deleteLesson,
 	setLinkMode,
 	setLessonRoot,
 	linkMode,
 	lessonRoot,
-	unlinkSection = null,
 }) => {
 	return (
 		<div className={`mn-flex-column mn-gap-medium ${className}`}>
@@ -102,16 +81,15 @@ const LessonWrapper = ({
 				</Button>
 			</div>
 			<div className="mn-c-card mn-flex-column mn-gap-medium">
-				{lessons.map((lesson, i) => {
+				{course.lesson.map((lesson, i) => {
 					return (
 						<LessonNode
 							key={i}
 							index={i}
-							title={lesson.title}
-							lessonMaterial={lesson.material}
-							handleDelete={() => deleteLesson(i)}
-							materials={materials}
-							unlinkSection={unlinkSection}
+							lesson={lesson}
+							handleDelete={() => tools.delete('lesson', lesson.localId)}
+							course={course}
+							tools={tools}
 							setLinkMode={setLinkMode}
 							setLessonRoot={setLessonRoot}
 							linkMode={linkMode}

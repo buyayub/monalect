@@ -23,24 +23,30 @@ const getPresigned = async () => {
 	return [url, signedUrl]
 }
 
-export const createBatchCourse = async ({ input }) => {
+export const createBatchCourse = async ({ userId, input }) => {
 	let record = []
-	let payload = []
+	let payload = {
+		uploaded: [],
+		ids: [],
+	}
 
-	isOwner(input.userId) // this is basically just auth, i'm paranoid
+	isOwner(userId) // this is basically just auth, i'm paranoid
 
 	const course = await db.course.create({
 		data: {
-			userId: input.userId,
+			userId: userId,
 			title: input.title,
+			description: input.description,
 		},
 	})
+
+	record.push({ type: 'course', local: input.localId, real: course.id })
 
 	for (material of input.material) {
 		if (material.type == 'textbook') {
 			const textbook = await db.textbook.create({
 				data: {
-					userId: input.userId,
+					userId: userId,
 					courseId: course.id,
 					title: material.title,
 					isbn: material.identifier,
@@ -62,37 +68,27 @@ export const createBatchCourse = async ({ input }) => {
 					},
 				})
 
-				payload.push({
+				payload.uploaded.push({
+					type: 'textbook',
 					materialId: textbook.id,
-					localId: material.localId,
 					presigned: signedUrl,
+					url: url,
 				})
 			}
 
-			record.push([material.localId, textbook.id])
-
-			//create textbook sections
-
-			for (section of material.sections) {
-				const textbookSection = await db.textbookSection.create({
-					data: {
-						userId: input.userId,
-						textbookId: textbook.id,
-						title: section.title,
-						start: section.start,
-						end: section.end,
-					},
-				})
-				record.push([section.localId, textbookSection.id])
-			}
+			record.push({
+				type: 'textbook',
+				local: material.localId,
+				real: textbook.id,
+			})
 		} else if (material.type == 'article') {
 			const article = await db.article.create({
 				data: {
-					userId: input.userId,
+					userId: userId,
 					courseId: course.id,
 					title: material.title,
 					doi: material.identifier,
-					uploaded: false,
+					uploaded: material.uploaded,
 					pages: material.pages,
 					author: material.author,
 				},
@@ -109,95 +105,99 @@ export const createBatchCourse = async ({ input }) => {
 					},
 				})
 
-				payload.push({
+				payload.uploaded.push({
+					type: 'article',
 					materialId: article.id,
-					localId: material.localId,
 					presigned: signedUrl,
+					url: url,
 				})
 			}
 
-			record.push([material.localId, article.id])
+			record.push({
+				type: 'article',
+				local: material.localId,
+				real: article.id,
+			})
 		}
 	}
 
-	// Create lessons and notebookPages
+	// Create lessons, notebookPages, and sections
 
 	for (lesson of input.lesson) {
 		let newLesson = await db.lesson.create({
 			data: {
-				userId: input.userId,
+				userId: userId,
 				courseId: course.id,
 				index: lesson.index,
 				title: lesson.title,
 			},
 		})
 
-		await db.notebookPage.create({
+		record.push({ type: 'lesson', local: lesson.localId, real: newLesson.id })
+	}
+
+	for (page of input.page) {
+		const newPage = await db.notebookPage.create({
 			data: {
 				page: 0,
 				words: 0,
-				lessonId: newLesson.id,
+				lessonId: record.find((item) => item.local == page.lessonId).real,
 				courseId: course.id,
-				userId: input.userId,
+				userId: userId,
 			},
 		})
+		record.push({ type: 'notebookPage', local: page.localId, real: newPage.id })
+	}
 
-		record.push([lesson.localId, newLesson.id])
+	for (section of input.section) {
+		const newSection = await db.textbookSection.create({
+			data: {
+				userId: userId,
+				title: section.title,
+				start: section.start,
+				end: section.end,
+				textbookId: record.find((item) => item.local == section.textbookId)
+					.real,
+			},
+		})
+		record.push({
+			type: 'section',
+			local: section.localId,
+			real: newSection.id,
+		})
 	}
 
 	// Create many-to-many relations
-	// We first check the type of the relation, if it's an article, we create an ArticleOnLesson object, otherwise SectionOnLesson
-	// Lots of for loops to optimize later
 
-	const findType = (material, localId) => {
-		for (const material of input.material) {
-			if (localId == material.localId) {
-				return material.type
-			}
-
-			for (const section of material.sections) {
-				if (localId == section.localId) {
-					return 'section'
-				}
-			}
+	for (link of input.link) {
+		if (link.type == 'article') {
+			const newLink = await db.articleOnLesson.create({
+				data: {
+					lessonId: record.find((item) => item.local == link.lessonId).real,
+					articleId: record.find((item) => item.local == link.materialId).real,
+				},
+			})
+			record.push({
+				type: 'articleOnLesson',
+				local: link.localId,
+				real: newLink.id,
+			})
+		} else if (link.type == 'section') {
+			const newLink = await db.sectionOnLesson.create({
+				data: {
+					lessonId: record.find((item) => item.local == link.lessonId).real,
+					sectionId: record.find((item) => item.local == link.materialId).real,
+				},
+			})
+			record.push({
+				type: 'sectionOnLesson',
+				local: link.localId,
+				real: newLink.id,
+			})
 		}
 	}
 
-	const findRealId = (localId) => {
-		for (const entry of record) {
-			if (localId == entry[0]) {
-				return entry[1]
-			}
-		}
-		return null
-	}
-
-	for (lesson of input.lesson) {
-		for (link of lesson.material) {
-			// search through material for local id
-			let linkType = findType(input.material, link)
-			if (linkType == 'article') {
-				let articleId = findRealId(link)
-				let lessonId = findRealId(lesson.localId)
-				await db.articleOnLesson.create({
-					data: {
-						lessonId: lessonId,
-						articleId: articleId,
-					},
-				})
-			} else if (linkType == 'section') {
-				let sectionId = findRealId(link)
-				let lessonId = findRealId(lesson.localId)
-				await db.sectionOnLesson.create({
-					data: {
-						lessonId: lessonId,
-						sectionId: sectionId,
-					},
-				})
-			}
-		}
-	}
-
+	payload.record = record
 	return payload
 }
 
@@ -315,6 +315,12 @@ export const all = async ({ userId }) => {
 		},
 	})
 
+	const notebookPage = await db.notebookPage.findMany({
+		where: {
+			userId: userId,
+		},
+	})
+
 	const sectionOnLesson = await db.sectionOnLesson.findMany({
 		where: {
 			lesson: {
@@ -330,8 +336,34 @@ export const all = async ({ userId }) => {
 		},
 	})
 
-	const articleOnLesson = []
-	const testOnLesson = []
+	const articleOnLesson = await db.articleOnLesson.findMany({
+		where: {
+			lesson: {
+				userId: {
+					equals: userId,
+				},
+			},
+			article: {
+				userId: {
+					equals: userId,
+				},
+			},
+		},
+	})
+	const testOnLesson = await db.testOnLesson.findMany({
+		where: {
+			lesson: {
+				userId: {
+					equals: userId,
+				},
+			},
+			test: {
+				userId: {
+					equals: userId,
+				},
+			},
+		},
+	})
 
 	const all = {
 		course: course,
@@ -342,6 +374,7 @@ export const all = async ({ userId }) => {
 		question: question,
 		answer: answer,
 		test: test,
+		notebookPage: notebookPage,
 		sectionOnLesson: sectionOnLesson,
 		articleOnLesson: articleOnLesson,
 		testOnLesson: testOnLesson,

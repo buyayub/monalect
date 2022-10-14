@@ -1,4 +1,18 @@
 export const schema = gql`
+	type All {
+		course: [Course]!
+		lesson: [Lesson]!
+		textbook: [Textbook]!
+		section: [TextbookSection]!
+		article: [Article]!
+		question: [Question]!
+		answer: [Answer]!
+		test: [Test]!
+		notebookPage: [NotebookPage]!
+		sectionOnLesson: [SectionOnLesson]!
+		articleOnLesson: [ArticleOnLesson]!
+		testOnLesson: [TestOnLesson]!
+	}
 
 	input BatchMaterial {
 		type: String!
@@ -9,42 +23,44 @@ export const schema = gql`
 		author: String
 		pages: Int
 		offset: Int
-		sections: [BatchSection]
-	}
-
-	type All {
-		course: [Course]!
-		lesson: [Lesson]!
-		textbook: [Textbook]!
-		section: [TextbookSection]!
-		article: [Article]!
-		question: [Question]!
-		answer: [Answer]!
-		test: [Test]!
-		sectionOnLesson: [SectionOnLesson]!
-		articleOnLesson: [ArticleOnLesson]!
-		testOnLesson: [TestOnLesson]!
 	}
 
 	input BatchSection {
 		localId: Int!
-		title: String!
-		start: Int!
-		end: Int!
+		title: String
+		textbookId: Int!
+		start: Int
+		end: Int
 	}
 
 	input BatchLesson {
-			title: String!
-			index: Int!
-			localId: Int!
-			material: [Int]
+		title: String
+		index: Int!
+		localId: Int!
+	}
+
+	input BatchLink {
+		localId: Int!
+		type: String!
+		lessonId: Int!
+		materialId: Int!
+	}
+
+	input BatchPage {
+		localId: Int!
+		lessonId: Int!
 	}
 
 	input CreateBatchCourseInput{
-		userId: Int!
-		title: String!
+		title: String
+		description: String
+		localId: Int
 		material: [BatchMaterial]
+		section: [BatchSection]
 		lesson: [BatchLesson]
+		link: [BatchLink]
+		page: [BatchPage]
+
 	}
 
 	type Query {
@@ -52,13 +68,25 @@ export const schema = gql`
 	}
 
 	type Uploaded {
+		type: String!
 		materialId: Int!
-		localId: Int!
 		presigned: String!
+		url: String!
+	}
+
+	type Ids {
+		type: String
+		local: Int!
+		real: Int
+	}
+
+	type BatchReturn {
+		uploaded: [Uploaded]
+		record: [Ids]		
 	}
 
 	type Mutation {
-		createBatchCourse(input: CreateBatchCourseInput!): [Uploaded]! @requireAuth
+		createBatchCourse(userId: Int!, input: CreateBatchCourseInput!): BatchReturn @requireAuth
 	}
 
 	type BatchUser {
