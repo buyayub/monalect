@@ -26,4 +26,10 @@ export const updateWords = (courseId, lessonId, words) => {
 		lesson.words = words
 		return course
 	})
+
+	cache.apply(`course-cards`, (cards) => {
+		let card = cards.find((card) => card.id == courseId)
+		card.notebookWords = words
+		return cards
+	})
 }

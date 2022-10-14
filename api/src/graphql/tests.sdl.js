@@ -28,12 +28,15 @@ export const schema = gql`
 		courseId: Int!
 		correct: Int!
 		count: Int!
+		date: String
 		tests: [TestOnLessonInput]!
 	}
 
 	input TestOnLessonInput {
+		id: Int!
 		correct: Int!
 		count: Int!
+		date: String
 		lessonId: Int!
 	}
 

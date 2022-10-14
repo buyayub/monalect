@@ -193,7 +193,8 @@ export const createBatchAPI = async (course, client, userId) => {
 		db.updateVal(item.type, item.materialId, 'url', item.url)
 		db.updateVal(item.type, item.materialId, 'presigned', item.presigned)
 		let expiry = new Date();
-		db.updateVal(item.type, item.materialId, 'presignedExpiry', expiry.setDate(expiry.getDate() + 0.5).toISOString())
+		expiry.setDate(expiry.getDate() + 2)
+		db.updateVal(item.type, item.materialId, 'presignedExpiry', expiry.getTime())
 	}
 	return null
 }

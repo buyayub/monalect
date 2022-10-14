@@ -81,6 +81,12 @@ export const GET_ALL = gql`
 			}
 			testOnLesson {
 				id
+				mark
+				correct
+				count
+				lessonId
+				lessonTitle
+				testId
 			}
 		}
 	}
@@ -172,7 +178,10 @@ export const GET_COURSE_CARDS = gql`
 `
 
 export const CREATE_BATCH = gql`
-	mutation CreateBatchCourseMutation($userId: Int!, $input: CreateBatchCourseInput!) {
+	mutation CreateBatchCourseMutation(
+		$userId: Int!
+		$input: CreateBatchCourseInput!
+	) {
 		createBatchCourse(userId: $userId, input: $input) {
 			uploaded {
 				type

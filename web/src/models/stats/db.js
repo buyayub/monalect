@@ -55,3 +55,39 @@ export const getLessonQuestionCount = async(lessonId) => {
 	}
 	console.error('idb: no question table')
 }
+
+export const getCourseMark = async (courseId) => {
+	let tests = await get('testOnLesson')	
+	let lessons = await get('lesson')	
+	console.log({tests})
+	tests.sort((a, b) => (a.date > b.date) ? 1 : -1)
+	lessons = lessons.filter((lesson) => courseId == lesson.courseId)
+	console.log({tests})
+	let correct = 0
+	let count = 0
+	for (let lesson of lessons) {
+		const test = tests.find((test) => test.lessonId == lesson.id)
+		if (test) {
+			count += test.count
+			correct += test.correct
+		}
+	}
+	console.log(correct)
+	console.log(count)
+	return Math.floor((correct / count) * 100)
+}
+
+export const getLessonMark = async (lessonId) => {
+	let tests = await get('testOnLesson')	
+	let lessons = await get('lesson')	
+	let lesson = lessons.find((item) => item.id == lessonId)
+	tests.sort((a, b) => (a.date > b.date) ? 1 : -1)
+	let test = tests.find((item) => item.lessonId == lesson.id)
+	let count = 0
+	let correct = 0
+	if (test) {
+		count = test.count
+		correct = test.correct
+	}
+	return Math.floor((correct / count) * 100)
+}

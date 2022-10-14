@@ -61,3 +61,4 @@ export const getQuestionCount = async (courseId) => {
 export const getCourseMark = async (courseId) => {
 	const key = `${courseId}-stats`
 }
+

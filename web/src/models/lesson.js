@@ -1,4 +1,5 @@
 import { get, getMany } from 'idb-keyval'
+import { getLessonMark } from 'src/models/stats/db'
 
 // for display cases, such as in overview, questions, and tests
 /*
@@ -178,6 +179,7 @@ export const getLessonList = async (courseId) => {
 			const words = await getLessonWordCount(courseId, lesson.id)
 			const questions = await getLessonQuestionCount(courseId, lesson.id)
 			const sections= await getLessonSections(courseId, lesson.id)
+			const mark = await getLessonMark(lesson.id)
 
 			payload.push({
 				id: lesson.id,
@@ -187,7 +189,7 @@ export const getLessonList = async (courseId) => {
 				words: words,
 				sections: sections,
 				articles: [],
-				mark: 0
+				mark: mark
 			})
 		}
 

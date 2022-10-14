@@ -107,6 +107,7 @@ const Test = ({
 				lessonId: lesson,
 				correct: correct,
 				count: count,
+				date: JSON.stringify(Date.now())
 			})
 
 			totalCount += count
@@ -120,6 +121,7 @@ const Test = ({
 			id: localId,
 			count: totalCount,
 			correct: totalCorrect,
+			date: JSON.stringify(Date.now()),
 			quiz: false,
 			courseId: parseInt(courseId),
 			tests: lessonMarks,

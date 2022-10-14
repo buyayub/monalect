@@ -1,5 +1,6 @@
 import { get, getMany } from 'idb-keyval'
-import { getCourseWords, getQuestionCount, getLessonCount, getCourseMark } from './stats'
+import { getCourseWords, getQuestionCount, getLessonCount} from './stats'
+import { getCourseMark } from './stats/db'
 
 // primarily for the home page
 /*
@@ -43,6 +44,7 @@ export const getCourseCards = async () => {
 			const notebookWords = await getCourseWords(course.id)
 			const lessonCount = await getLessonCount(course.id)
 			const questionCount = await getQuestionCount(course.id)
+			const mark = await getCourseMark(course.id)
 
 			cards.push({
 				id: course.id,
@@ -51,7 +53,7 @@ export const getCourseCards = async () => {
 				notebookWords: notebookWords,
 				questionCount: questionCount,
 				lessonCount: lessonCount,
-				mark: 0
+				mark: mark
 			})
 		}
 
@@ -90,6 +92,7 @@ export const getCourseCard = async(courseId) => {
 			const notebookWords = await getCourseWords(courseId)
 			const lessonCount = await getLessonCount(courseId)
 			const questionCount = await getQuestionCount(courseId)
+			const mark = await getCourseMark(courseId)
 
 			const card = {
 				id: course.id,
@@ -98,7 +101,7 @@ export const getCourseCard = async(courseId) => {
 				notebookWords: notebookWords,
 				questionCount: questionCount,
 				lessonCount: lessonCount,
-				mark: 0
+				mark: mark
 			}
 			
 			(async() => {

@@ -92,7 +92,8 @@ export const presigned = async({ userId, id}) => {
 			title: true
 		}})
 
-	if (!material){
+	if (!material || material.length == 0){
+		console.log("glippity, gloppity, gloop")
 		material = await db.article.findMany({
 		where: {
 			userId: userId,
@@ -106,6 +107,8 @@ export const presigned = async({ userId, id}) => {
 
 
 	if (!material) return []
+	console.log(JSON.stringify(material, null, 4))
+	console.log(JSON.stringify(id, null, 4))
 
 	const presignedUrl = getPresigned(material[0].url)
 	return { 

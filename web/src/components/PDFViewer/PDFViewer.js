@@ -17,11 +17,13 @@ const PdfViewer = ({ courseId, userId }) => {
 	const client = useApolloClient()
 
 	const selectTextbook = async (e) => {
-		let file = files.find((file) => file.id == e.target.value)
-		if (!isPresignedValid(file)) {
-			let file = await updatePresigned(client, userId, courseId, file.id)
+		let filesCopy = JSON.parse(JSON.stringify(files))
+		let newFile = filesCopy.find((file) => file.id == parseInt(e.target.value))
+		if (!isPresignedValid(newFile)) {
+			newFile = await updatePresigned(client, userId, courseId, newFile.id)
+			setFiles(filesCopy)
 		}
-		setBookUrl(file.presigned)
+		setBookUrl(newFile.presigned)
 	}
 
 	if (!files || id != courseId) {

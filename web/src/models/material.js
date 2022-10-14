@@ -1,4 +1,5 @@
 import { cache } from 'src/shared/cache'
+import { db } from 'src/shared/db'
 import { GET_PRESIGNED, GET_ALL_PRESIGNED } from 'src/shared/queries/material'
 
 export const getMaterialFiles = async (client, userId, courseId) => {
@@ -24,28 +25,34 @@ export const getMaterialFiles = async (client, userId, courseId) => {
 export const updatePresigned = async (client, userId, courseId, id) => {
 	const data = await getPresigned(client, userId, id)
 	const key = `course-${courseId}`
+	let expiry = new Date(Date.now() + (2880 * 60000))
 
 	console.log(data)
 	cache.apply(key, (val) => {
 		let course = val
 		if (course.files) {
 			let newFile = course.files.find((file) => file.id == id)
-			let expiry = new Date(Date.now() + 720 * 60000)
 			console.log("new", expiry)
 			console.log("now", Date.now())
-			newFile.expiryDate = expiry.toISOString()
+			newFile.expiryDate = expiry.getTime()
 			newFile.presigned = data.presigned
 		}
 		return course
 	})
 
-	return data
+	db.updateVal('textbook', id, 'expiryDate', expiry.getTime())
+	db.updateVal('article', id, 'expiryDate', expiry.getTime())
+
+	return {...data, expiryDate: expiry.getTime()}
 }
 
 export const isPresignedValid = (file) => {
 	if (!file.presigned) return false
-
 	const expiry = new Date(file.expiryDate)
+	console.log(Date.now() < expiry)
+	console.log(Date.now())
+	console.log({expiry})
+	console.log({file})
 	if (Date.now() < expiry) return true
 	else return false
 }
