@@ -1,49 +1,78 @@
-import { get, set, setMany, update, entries} from 'idb-keyval'
+import { get, set, setMany, update as updateIdb, entries } from 'idb-keyval'
 
 const push = (key, item) => {
 	update(key, (val) => [...val, item])
 }
 
-const create = async (key, arr=[]) => {
+const create = async (key, arr = []) => {
 	try {
+		if (!Array.isArray(arr)) {
+			console.error(`${key} value is not array`)
+			return false
+		}
 		await set(key, arr)
 		return true
-	}
-	catch (err) {
+	} catch (err) {
 		return false
 	}
 }
 
-const remove = (key, prop, value) => {
-	update(key, (data) => data.filter((item) => item[prop] !== value))
+const remove = async (key, id) => {
+	const value = await get(key)
+	const removed = value.find((item) => item.id == id)
+	const data = value.filter((item) => item.id !== id)
+	await set(key, data)
+	return removed ? removed : null
 }
 
 const find = async (key, id) => {
-	const data = get(key)
-	return data.find((item) => item.id == id)
+	const data = await get(key)
+
+	if (!data) {
+		console.warn(`${key} doesn't exist`)
+		return null
+	} else if (!Array.isArray(data)) {
+		console.warn(`${key} is not an array`)
+		return null
+	}
+
+	if (Array.isArray(id)) {
+		return data.filter((item) => id.includes(item.id))
+	}
+	else {
+		return data.find((item) => item.id == id)
+	}
 }
 
 const findMany = async (key, obj) => {
-	const data = get(key)
-	const prop = obj.getOwnPropertyNames()[0]
+	const data = await get(key)
+	const prop = Object.getOwnPropertyNames(obj)[0]
 
-	return data.filter((item) => item[prop] == obj[prop])
+	if (!data) {
+		console.warn(`${key} doesn't exist`)
+		return null
+	}
+
+	const payload = data.filter((item) => item[prop] == obj[prop])
+
+	return payload.length > 0 ? payload : null
 }
 
-const updateVal = (key, id, name, value) => {
-	update(key, (data) =>
-		data.map((item) => {
-			if (item.id == id) {
-				item[name] = value
-			}
-			return item
-		})
-	)
+const update = (key, id, obj) => {
+	updateIdb(key, (data) => {
+		if (data) {
+			return data.map((item) => {
+				if (item.id == id) {
+					for (const i in obj) item[i] = obj[i]
+				}
+				return item
+			})
+		}
+	})
 }
 
-const syncId = async (record) => {
+const sync = async (record) => {
 	let data = await entries()
-	console.log('Before: ', { data })
 	for (let entry of data) {
 		entry[1].forEach((item) => {
 			let id = undefined
@@ -74,11 +103,8 @@ const syncId = async (record) => {
 			// I know it's bad but I'm brain-fogged right now, and I don't want to think
 		})
 	}
-	console.log({ record })
-	console.log('After: ', { data })
 	setMany(data)
 }
-
 
 export const db = {
 	create: create,
@@ -86,6 +112,6 @@ export const db = {
 	remove: remove,
 	find: find,
 	findMany: findMany,
-	updateVal: updateVal,
-	syncId: syncId,
+	update: update,
+	sync: sync,
 }
