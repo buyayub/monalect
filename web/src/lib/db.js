@@ -4,13 +4,30 @@ const push = (key, item) => {
 	update(key, (val) => [...val, item])
 }
 
-const del = (key, prop, value) => {
+const create = async (key, arr=[]) => {
+	try {
+		await set(key, arr)
+		return true
+	}
+	catch (err) {
+		return false
+	}
+}
+
+const remove = (key, prop, value) => {
 	update(key, (data) => data.filter((item) => item[prop] !== value))
 }
 
 const find = async (key, id) => {
 	const data = get(key)
 	return data.find((item) => item.id == id)
+}
+
+const findMany = async (key, obj) => {
+	const data = get(key)
+	const prop = obj.getOwnPropertyNames()[0]
+
+	return data.filter((item) => item[prop] == obj[prop])
 }
 
 const updateVal = (key, id, name, value) => {
@@ -64,10 +81,11 @@ const syncId = async (record) => {
 
 
 export const db = {
+	create: create,
 	push: push,
-	del: del,
+	remove: remove,
 	find: find,
+	findMany: findMany,
 	updateVal: updateVal,
 	syncId: syncId,
-	get: get
 }

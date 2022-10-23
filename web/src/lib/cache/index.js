@@ -71,7 +71,8 @@ function Cache() {
 		}
 	}
 
-	// DEFINE collection
+	// define collection
+
 	this.collection = {}
 
 	this.collection.update = (key, id, prop, value) => {
@@ -110,6 +111,7 @@ function Cache() {
 		return val
 	}
 	
+	// remove collection item, not the collection itself 
 	this.collection.remove = (key, id) => {
 		let val = cache.get(key)
 		if (!val || !Array.isArray(val)) {

@@ -151,4 +151,33 @@ describe('cache collection', () => {
 			expect(something.newprop).toBe('propvalue')
 		})
 	})
+
+	describe ('collection remove', () => {
+		beforeEach(() => {
+			cache.collection.create(key)
+			cache.collection.add(key, value)
+			cache.collection.add(key, value2)
+		})
+
+		test('remove', () => {
+			const collection = cache.get('test')
+			const colItem = collection.find((item) => item.id == value2.id)
+			expect(colItem.id).toBe(2)
+
+			cache.collection.remove(key, 2)
+			const collection2 = cache.get('test')
+			const colItem2 = collection2.find((item) => item.id == value2.id)
+			expect(colItem2).toBeFalsy()
+		})
+
+		test('remove return', () => {
+			const deleted = cache.collection.remove(key, 1)
+			expect(deleted.id).toBe(1)
+		})
+
+		test('remove nonexistant', () => {
+			cache.collection.remove(key, 3)
+		})
+
+	})
 })

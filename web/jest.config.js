@@ -3,7 +3,8 @@
 const config = {
 	rootDir: '../',
 	preset: '@redwoodjs/testing/config/jest/web',
-	setup: '/web/src/lib/testing/setup.js'
+	setup: '/web/src/lib/testing/setup.js',
+	setupFiles: ['fake-indexeddb/auto'],
 }
 
 module.exports = config

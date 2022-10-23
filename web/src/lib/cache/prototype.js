@@ -55,33 +55,6 @@ function CacheBase() {
 		console.warn(`${key} does not exist`)
 		return null
 	}
-
-	this.size = async () => {
-		let localStorageSize = function () {
-			let _lsTotal = 0,
-				_xLen,
-				_x
-			for (_x in localStorage) {
-				if (!localStorage.hasOwnProperty(_x)) continue
-				_xLen = (localStorage[_x].length + _x.length) * 2
-				_lsTotal += _xLen
-			}
-			return (_lsTotal / 1024).toFixed(2)
-		}
-		let sessionStorageSize = function () {
-			let _lsTotal = 0,
-				_xLen,
-				_x
-			for (_x in sessionStorage) {
-				if (!sessionStorage.hasOwnProperty(_x)) continue
-				_xLen = (sessionStorage[_x].length + _x.length) * 2
-				_lsTotal += _xLen
-			}
-			return (_lsTotal / 1024).toFixed(2)
-		}
-		console.info(`local size: ${localStorageSize()}kb`)
-		console.info(`session size: ${sessionStorageSize()}kb`)
-	}
 }
 
 export { CacheBase }
