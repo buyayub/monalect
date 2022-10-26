@@ -9,27 +9,45 @@ function Cache() {
 	const cache = new CacheBase()
 
 	this.set = (key, value) => {
-		sessionStorage.setItem(key, JSON.stringify(value ? value : null))
-		localStorage.setItem(key, JSON.stringify(value ? value : null))
-		this.record.update(key) }
+		switch (value) {
+			case undefined:
+				sessionStorage.setItem(key, 'null')
+				localStorage.setItem(key, 'null')
+				break;
+			case false:
+				sessionStorage.setItem(key, 'false')
+				localStorage.setItem(key, 'false')
+				break;
+			case true:
+				sessionStorage.setItem(key, 'true')
+				localStorage.setItem(key, 'true')
+				break;
+			default: 
+				sessionStorage.setItem(key, JSON.stringify(value))
+				localStorage.setItem(key, JSON.stringify(value))
+		}
+		this.record.update(key) 
+	}
 
 	this.get = (key) => {
-		const session = JSON.parse(sessionStorage.getItem(key))
-		if (session) {
-			this.record.update(key)
-			return session
+		let data =  sessionStorage.getItem(key)
+		let sync = false
+		if (!data){ 
+			data = localStorage.getItem(key)
+			if (data) sessionStorage.setItem(key, data)		
 		}
+		if (!data) return null
 
-		// if session isn't found, update session to include it
-		const local = JSON.parse(localStorage.getItem(key))
-		if (local) {
-			this.record.update(key)
-			sessionStorage.setItem(key, JSON.stringify(local ? local : null))
-			return local
+		switch (data) {
+			case 'false':
+				return false;
+				break;
+			case 'true':
+				return true;
+				break;
+			default:
+				return JSON.parse(data);
 		}
-
-		console.warn(`can't find key ${key} in cache.get()`)
-		return null
 	}
 
 	// safe update
@@ -61,7 +79,6 @@ function Cache() {
 
 	// safe creation
 	this.create = (key, value) => {
-		console.debug('create key:', key)
 		if (!this.get(key)) {
 			this.set(key, value)
 			this.record.add(key)
@@ -69,6 +86,33 @@ function Cache() {
 			console.warn(`${key} already created`)
 			this.record.add(key)
 		}
+	}
+
+	this.array = {}
+
+	this.array.push = (key, value) => {
+		let val = cache.get(key)
+		if (!val || !Array.isArray(val)) {
+			console.warn(`${key} is not an array`)
+			return null
+		}
+		this.record.update(key)
+		val.push(value)
+		cache.update(key, val)
+		return val
+	}
+
+	this.array.remove = (key, value) => {
+		let val = cache.get(key)
+		if (!val || !Array.isArray(val)) {
+			console.warn(`${key} is not an array`)
+			return null
+		}
+		this.record.update(key)
+		const original = val.filter((item) => item == value)
+		val = val.filter((item) => item !== value)
+		cache.update(key, val)
+		return original
 	}
 
 	// define collection
@@ -94,7 +138,7 @@ function Cache() {
 	}
 
 
-	this.collection.add = (key, value) => {
+	this.collection.push = (key, value) => {
 		if (!value.id) {
 			console.warn(`${value} is not a valid value`)
 			return null
@@ -166,6 +210,10 @@ function Cache() {
 		}
 		console.info(`local size: ${localStorageSize()}kb`)
 		console.info(`session size: ${sessionStorageSize()}kb`)
+	}
+
+	this.sync = () => {
+		return null
 	}
 }
 

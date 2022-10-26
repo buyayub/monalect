@@ -16,7 +16,7 @@ function CacheBase() {
 			return local
 		}
 
-		console.warn(`can't find key ${key} in cache.get()`)
+		// console.warn(`can't find key ${key} in cache.get()`)
 		return null
 	}
 
@@ -24,7 +24,7 @@ function CacheBase() {
 		const value = this.get(key)
 		sessionStorage.removeItem(key)
 		localStorage.removeItem(key)
-		if (!value) console.warn(`can't find key ${key} in cache.remove()`)
+		// if (!value) console.warn(`can't find key ${key} in cache.remove()`)
 		return value
 	}
 
@@ -37,7 +37,7 @@ function CacheBase() {
 
 	// safe creation
 	this.create = (key, value) => {
-		console.debug('create key:', key)
+		//console.debug('create key:', key)
 		if (!this.get(key)) {
 			this.set(key, value)
 		} else {
@@ -52,7 +52,7 @@ function CacheBase() {
 			this.set(key, value)
 			return val
 		}
-		console.warn(`${key} does not exist`)
+		//console.warn(`${key} does not exist`)
 		return null
 	}
 }

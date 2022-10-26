@@ -12,18 +12,24 @@ describe('cache', () => {
 		let test3 = { prop1: 1, prop2: 2 }
 		let test4 = NaN
 		let test5 = null
+		let test6 = true
+		let test7 = false
 
 		cache.set('test1', test1)
 		cache.set('test2', test2)
 		cache.set('test3', test3)
 		cache.set('test4', test4)
 		cache.set('test5', test5)
+		cache.set('test6', test6)
+		cache.set('test7', test7)
 
 		expect(cache.get('test1')).toStrictEqual(test1)
 		expect(cache.get('test2')).toStrictEqual(test2)
 		expect(cache.get('test3')).toStrictEqual(test3)
 		expect(cache.get('test4')).toStrictEqual(null)
 		expect(cache.get('test5')).toStrictEqual(null)
+		expect(cache.get('test6')).toStrictEqual(true)
+		expect(cache.get('test7')).toStrictEqual(false)
 
 		// check if it's both in local and sesion storage
 		expect(JSON.parse(localStorage.getItem('test1'))).toStrictEqual(test1)
@@ -112,28 +118,28 @@ describe('cache collection', () => {
 	test('add', () => {
 		cache.collection.create(key)
 
-		const newCollection = cache.collection.add('test', value)
+		const newCollection = cache.collection.push('test', value)
 		expect(newCollection).toContain(value)
 	})
 
 	test('add invalid', () => {
 		cache.collection.create(key)
 
-		const failedEntry = cache.collection.add('test', invalid)
+		const failedEntry = cache.collection.push('test', invalid)
 		expect(failedEntry).toBe(null)
 	})
 
 	test('add to non-collection', () => {
 		cache.create(key)
 
-		const failedEntry = cache.collection.add('test', value)
+		const failedEntry = cache.collection.push('test', value)
 		expect(failedEntry).toBe(null)
 	})
 
 	describe('collection update', () => {
 		beforeEach(() => {
 			cache.collection.create(key)
-			cache.collection.add('test', value)
+			cache.collection.push('test', value)
 		})
 
 		test('update', () => {
@@ -155,8 +161,8 @@ describe('cache collection', () => {
 	describe ('collection remove', () => {
 		beforeEach(() => {
 			cache.collection.create(key)
-			cache.collection.add(key, value)
-			cache.collection.add(key, value2)
+			cache.collection.push(key, value)
+			cache.collection.push(key, value2)
 		})
 
 		test('remove', () => {
