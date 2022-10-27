@@ -53,7 +53,7 @@ function Cache() {
 	// safe update
 	this.update = (key, value) => {
 		const val = this.get(key)
-		if (val) {
+		if (val || val === false ) {
 			this.set(key, value)
 			this.record.update(key)
 			return val
