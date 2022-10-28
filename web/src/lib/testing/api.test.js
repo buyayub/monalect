@@ -1,7 +1,6 @@
 import { cache, db, api } from 'src/lib/'
 import { updateQueue, pushQueue } from 'src/lib/api'
 import { clear } from 'idb-keyval'
-
 const changedKey = 'offline-changes'
 const tempIds = 'id-record'
 
@@ -40,7 +39,15 @@ const mockUpdate = {
 	},
 	type: 'test',
 	gql: 'blahblah',
-	variables: { id: 42, title: 'an updated title' },
+	variables: {
+		id: 42,
+		title: 'an updated title',
+		lessonId: 32,
+		questions: [
+			{ id: 33, title: 'question 1' },
+			{ id: 37, title: 'question 2' },
+		],
+	},
 }
 
 const mockFailedRequest = {
@@ -93,6 +100,13 @@ describe('test creation', () => {
 		expect(cache.get(changedKey)).toStrictEqual([{ id: 42, type: 'create' }])
 		expect(cache.get('temp-42')).toBe(null)
 		expect(cache.get('online')).toBe(false)
+	})
+
+	test('multiple similar creations', async () => {
+		await api.create(mockRequest)
+		await api.create(mockRequest)
+		expect(cache.get('temp-42')).toStrictEqual([])
+		expect(cache.get(tempIds)).toStrictEqual([{ id: 42, real: 24 }])
 	})
 })
 
@@ -168,6 +182,38 @@ describe('test update', () => {
 		expect(cache.get(tempIds)).toStrictEqual([])
 		expect(cache.get(changedKey)).toStrictEqual(null)
 	})
+
+	// this test doesn't work if you don't deepcopy
+	test('update with recursive syncing', async () => {
+		expect(cache.get(tempIds)).toBe(null)
+		expect(cache.get(changedKey)).toBe(null)
+		expect(cache.get('temp-42')).toBe(null)
+		expect(cache.get('mock-update-config')).toBe(null)
+
+		let newMock = {...mockUpdate}
+		newMock.client.mutate = async (config) => {
+			cache.create('mock-update-config', config)
+			return true
+		}
+
+		cache.create(tempIds, [
+			{ id: 42, real: 22 },
+			{ id: 32, real: 23 },
+			{ id: 33, real: 25 },
+		])
+
+		await api.update(newMock)
+		const request = cache.get('mock-update-config')
+		expect(request.variables).toStrictEqual({
+			id: 22,
+			title: 'an updated title',
+			lessonId: 23,
+			questions: [
+				{ id: 25, title: 'question 1' },
+				{ id: 37, title: 'question 2' },
+			],
+		})
+	})
 })
 
 describe('api delete', () => {
@@ -192,6 +238,35 @@ describe('api delete', () => {
 		expect(cache.get('temp-42')).toBe(null)
 		expect(cache.get(tempIds)).toStrictEqual([])
 		expect(cache.get(changedKey)).toStrictEqual([])
+	})
+
+	test('failed delete after failed creation', async () => {
+		await api.create(mockFailedRequest)
+		await api.remove(mockFailedRequest)
+		expect(cache.get('online')).toBe(false)
+		expect(cache.get('temp-42')).toBe(null)
+		expect(cache.get(tempIds)).toStrictEqual([])
+		expect(cache.get(changedKey)).toStrictEqual([])
+	})
+
+	test('failed delete after successful creation', async () => {
+		await api.create(mockRequest)
+		await api.remove(mockFailedRequest)
+
+		expect(cache.get('online')).toBe(false)
+		expect(cache.get('temp-42')).toBe(null)
+		expect(cache.get(tempIds)).toStrictEqual([
+			{
+				id: 42,
+				real: 24,
+			},
+		])
+		expect(cache.get(changedKey)).toStrictEqual([
+			{
+				id: mockRequest.id,
+				type: 'remove',
+			},
+		])
 	})
 })
 
