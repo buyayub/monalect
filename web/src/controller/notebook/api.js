@@ -1,4 +1,4 @@
-import { SAVE_PAGE } from 'src/shared/queries/notebook'
+import { SAVE_PAGE } from 'src/queries/notebook'
 
 export const updatePage = async (client, userId, input) => {
 	const payload = {

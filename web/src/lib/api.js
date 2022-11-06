@@ -30,6 +30,9 @@ const syncIds = (obj, rec) => {
 }
 
 api.create = async (request) => {
+	// request: id, client, gql, variables
+
+	console.log(request.client)
 	let online = cache.get('online')
 	if (online)
 		cache.create(`temp-${request.id}`, [
@@ -42,8 +45,9 @@ api.create = async (request) => {
 		])
 
 	if (!cache.get(tempIds)) cache.create(tempIds, [])
-	if (!cache.get(tempIds).find((item) => item.id == request.id))
+	if (!cache.get(tempIds).find((item) => item.id == request.id)) {
 		cache.collection.push(tempIds, { id: request.id, real: null })
+	}
 
 	const response = await request.client.mutate({
 		gql: request.gql,

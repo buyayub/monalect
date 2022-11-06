@@ -1,9 +1,7 @@
 import { useQuery, useMutation } from '@apollo/client'
-import Modal from 'src/components/Modal'
-import Test from 'src/components/Test'
-import Button from 'src/components/Button'
+import { Modal, Test, Button }from 'src/components'
 import { useState, useEffect, useRef } from 'react'
-import { getLessonList } from 'src/models/lesson'
+import { getLessonList } from 'src/views/lesson'
 
 const TestLessonWrapper = ({ courseId, userId, testSubmit = null }) => {
 	const [lessons, setLessons] = useState(undefined)

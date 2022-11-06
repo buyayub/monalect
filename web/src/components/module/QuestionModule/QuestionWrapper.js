@@ -1,11 +1,8 @@
 import { useQuery, useMutation } from '@apollo/client'
-import QuestionLesson from 'src/components/QuestionLesson'
-import QuestionForm from 'src/components/QuestionForm'
-import AnswerForm from 'src/components/AnswerForm'
+import { QuestionLesson, QuestionForm, AnswerForm, Modal } from 'src/components'
 import { useState, useEffect } from 'react'
 import { useAuth } from '@redwoodjs/auth'
-import Modal from 'src/components/Modal'
-import { getQuestionLessons } from 'src/models/question'
+import { getQuestionLessons } from 'src/views/question'
 
 const QuestionWrapper = ({ courseId }) => {
 	const { currentUser } = useAuth()

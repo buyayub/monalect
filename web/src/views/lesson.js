@@ -1,5 +1,5 @@
 import { get, getMany } from 'idb-keyval'
-import { getLessonMark } from 'src/models/stats/db'
+import { getLessonMark } from 'src/views/stats/db'
 
 // for display cases, such as in overview, questions, and tests
 /*

@@ -1,7 +1,4 @@
-import TextInput from 'src/components/TextInput'
-import FileUpload from 'src/components/FileUpload'
-import Dropdown from 'src/components/Dropdown'
-import Button from 'src/components/Button'
+import { TextInput, FileUpload, Dropdown, Button }from 'src/components'
 
 const LearningMaterialForm = ({
 	cancel,

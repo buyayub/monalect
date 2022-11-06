@@ -1,8 +1,7 @@
 import { NavLink, routes, navigate } from '@redwoodjs/router'
 import { useState } from 'react'
-import { getDropdown } from 'src/models/course'
-import NavBar from 'src/components/NavBar'
-import Dropdown from 'src/components/Dropdown'
+import { getDropdown } from 'src/views/course'
+import { NavBar, Dropdown}  from 'src/components'
 
 const CourseNavBar = ({ courseId }) => {
 	const [courses, setCourses] = useState(null)

@@ -8,7 +8,7 @@ import { CacheBase } from './prototype'
 function Record() {
 	const cache = new CacheBase
 	this.recordKey = `cache-record-access`
-	const recordKey = this.recordKey // Why yes, I'm evil. I'll change it later.
+	const recordKey = this.recordKey // I know. I'll change it later.
 
 	this.add = (key) => {
 		const exists = cache.get(recordKey)

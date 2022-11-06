@@ -1,4 +1,4 @@
-import { cache } from 'src/shared/cache'
+import { cache } from 'src/lib/cache'
 import { get } from 'idb-keyval'
 
 export const getPages = async (courseId) => {

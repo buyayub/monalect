@@ -1,6 +1,6 @@
-import { cache } from 'src/shared/cache'
-import { db } from 'src/shared/db'
-import { GET_PRESIGNED, GET_ALL_PRESIGNED } from 'src/shared/queries/material'
+import { cache } from 'src/lib/cache'
+import { db } from 'src/lib/db'
+import { GET_PRESIGNED, GET_ALL_PRESIGNED } from 'src/queries/material'
 
 export const getMaterialFiles = async (client, userId, courseId) => {
 	const key = `course-${courseId}`

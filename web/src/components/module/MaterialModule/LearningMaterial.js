@@ -1,5 +1,5 @@
 import { FiBook, FiFileText, FiX } from 'react-icons/fi'
-import IconButton from 'src/components/IconButton'
+import { IconButton } from 'src/components'
 
 const LearningMaterial = ({
 	className = '',

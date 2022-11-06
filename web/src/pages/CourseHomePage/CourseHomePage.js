@@ -5,9 +5,7 @@ import { RiBook2Line } from 'react-icons/ri'
 import { useState } from 'react'
 import { useAuth } from '@redwoodjs/auth'
 
-import CourseNavBar from 'src/components/CourseNavBar'
-import CourseTitle from 'src/components/CourseTitle'
-import LessonList from 'src/components/LessonList'
+import { CourseNavBar, CourseTitle, LessonList } from 'src/components'
 
 const CourseHomePage = ({
 	courseId,

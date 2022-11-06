@@ -1,6 +1,6 @@
-import { CREATE_TEST } from 'src/shared/queries/'
-import { db } from 'src/shared/db'
-import { cache } from 'src/shared/cache'
+import { CREATE_TEST } from 'src/queries'
+import { db } from 'src/lib/db'
+import { cache } from 'src/lib/cache'
 
 export const createTest = async (client, userId, courseId, input) => {
 	const response = await client.mutate({

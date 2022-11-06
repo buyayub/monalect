@@ -1,5 +1,5 @@
-import { cache } from 'src/shared/cache'
-import { db } from 'src/shared/db'
+import { cache } from 'src/lib/cache'
+import { db } from 'src/lib/db'
 
 export const createQuestion = async (courseId, input) => {
 	const key = `course-${courseId}`

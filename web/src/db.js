@@ -2,7 +2,7 @@ import { get, set, setMany, values } from 'idb-keyval'
 import { useMemo, useState, useReducer } from 'react'
 import { useApolloClient } from '@apollo/client'
 import { useAuth } from '@redwoodjs/auth'
-import { GET_ALL } from 'src/shared/queries/'
+import { GET_ALL } from 'src/queries/'
 
 export default function Database({ children }) {
 	const { currentUser } = useAuth()

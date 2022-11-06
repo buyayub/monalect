@@ -1,14 +1,8 @@
 import { Link, routes } from '@redwoodjs/router'
 import { MetaTags, useQuery, Head } from '@redwoodjs/web'
 import { useAuth } from '@redwoodjs/auth'
-import  QuestionFullForm from 'src/components/QuestionFullForm';
-import Modal from 'src/components/Modal'
-import Button from 'src/components/Button'
-
-import CourseNavBar from 'src/components/CourseNavBar'
+import  { QuestionFullForm, Modal, Button, CourseNavBar, NotebookList, PdfViewer } from 'src/components'
 import { useState } from 'react'
-import NotebookList from 'src/components/NotebookList'
-import PdfViewer from 'src/components/PDFViewer'
 
 const CourseStudyPage = ({ courseId }) => {
 	const { currentUser } = useAuth()

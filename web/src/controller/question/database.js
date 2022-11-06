@@ -1,4 +1,4 @@
-import { db } from 'src/shared/db'
+import { db } from 'src/lib/db'
 
 export const createQuestion = async (courseId, input) => {
 	db.push('question', {

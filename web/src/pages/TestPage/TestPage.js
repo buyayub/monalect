@@ -1,8 +1,7 @@
 import { Link, routes } from '@redwoodjs/router'
 import { useAuth } from '@redwoodjs/auth'
 import { MetaTags } from '@redwoodjs/web'
-import CourseNavBar from 'src/components/CourseNavBar'
-import TestLessonWrapper from 'src/components/TestLessonWrapper'
+import { CourseNavBar, TestLessonWrapper } from 'src/components'
 
 const TestPage = ({courseId}) => {
 	const { currentUser } = useAuth()

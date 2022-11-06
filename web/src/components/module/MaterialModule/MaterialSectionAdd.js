@@ -1,4 +1,4 @@
-import IconButton from 'src/components/IconButton'
+import { IconButton } from 'src/components'
 
 const LearningMaterialAdd = ({
 	onClick,

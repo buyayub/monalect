@@ -1,7 +1,25 @@
 import { get, set, setMany, update as updateIdb, entries } from 'idb-keyval'
 
+const init = async () => {
+	const schema = [
+		['answer', []],
+		['notebookPage', []],
+		['course', []],
+		['question', []],
+		['lesson', []],
+		['textbook', []],
+		['article', []],
+		['textbookSection', []],
+	]
+
+	await setMany(schema)
+}
+
 const push = (key, item) => {
-	update(key, (val) => [...val, item])
+	updateIdb(key, (val) => {
+		if (val.find((entry) => entry.id == item.id)) return val
+		return [...val, item]
+	})
 }
 
 const create = async (key, arr = []) => {
@@ -37,10 +55,11 @@ const find = async (key, id) => {
 	}
 
 	if (Array.isArray(id)) {
-		return data.filter((item) => id.includes(item.id))
-	}
-	else {
-		return data.find((item) => item.id == id)
+		const payload = data.filter((item) => id.includes(item.id))
+		return payload ? payload : null
+	} else {
+		const payload = data.find((item) => item.id == id)
+		return payload ? payload : null
 	}
 }
 
@@ -107,6 +126,7 @@ const sync = async (record) => {
 }
 
 export const db = {
+	init: init,
 	create: create,
 	push: push,
 	remove: remove,

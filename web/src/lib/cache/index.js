@@ -149,6 +149,12 @@ function Cache() {
 			console.warn(`${key} is not a collection`)
 			return null
 		}
+
+		if (val.find((item) => item.id == value.id)) {
+			console.warn(`In ${key}, id ${value.id} already exists.`)
+			return null
+		}
+
 		this.record.update(key)
 		val.push(value)
 		cache.update(key, val)

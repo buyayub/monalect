@@ -1,5 +1,5 @@
 import { get, getMany } from 'idb-keyval'
-import { cache } from 'src/shared/cache'
+import { cache } from 'src/lib/cache'
 import {
 	getCourseWords as getCourseWordsCache,
 	getLessonCount as getLessonCountCache,

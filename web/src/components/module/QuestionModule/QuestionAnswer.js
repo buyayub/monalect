@@ -1,5 +1,5 @@
 import { FiXCircle, FiCheckCircle, FiX } from 'react-icons/fi'
-import IconButton from 'src/components/IconButton'
+import { IconButton } from 'src/components'
 import { useAuth } from '@redwoodjs/auth'
 import { deleteAnswer } from 'src/controller/answer/'
 import { useParams } from '@redwoodjs/router'

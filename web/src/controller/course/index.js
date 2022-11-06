@@ -1,28 +1,25 @@
 import { deleteCourse as deleteCourseDB } from 'src/controller/course/database'
-import { deleteCourse as deleteCourseAPI } from 'src/controller/course/api'
+import { DELETE_COURSE } from 'src/queries/course'
+import { cache, api } from 'src/lib'
 
 export const deleteCourse = async (client, userId, courseId) => {
-	localStorage.removeItem(`course-${courseId}`)
-	sessionStorage.removeItem(`course-${courseId}`)
-	localStorage.removeItem(`${courseId}-stats`)
-	sessionStorage.removeItem(`${courseId}-stats`)
+	const record = cache.get(cache.record.recordKey)
+
+	const courseCache  = record.filter((item) => item.key.includes(`course-${courseId}`))
+	for (const course in courseCache ) {
+		cache.remove(course.key)
+	}
 
 	deleteCourseDB(courseId)
-	deleteCourseAPI(client, userId, courseId)
 
-	let cards = localStorage.getItem('course-cards')
-	if (cards) {
-		cards = JSON.parse(cards).filter((card) => card.id != courseId)
-		localStorage.setItem('course-cards', JSON.stringify(cards))
-		sessionStorage.setItem('course-cards', JSON.stringify(cards))
-	}
-
-	let dropdown = localStorage.getItem('course-dropdown')
-	if (dropdown) {
-		dropdown = JSON.parse(dropdown).filter((item) => item.value != courseId)
-		localStorage.setItem('course-dropdown', JSON.stringify(dropdown))
-		sessionStorage.setItem('course-dropdown', JSON.stringify(dropdown))
-	}
-
+	api.remove({
+		id: courseId,
+		client: client,
+		gql: DELETE_COURSE,
+		variables: {
+			userId: userId,
+			id: courseId,
+		},
+	})
 	console.debug(`course ${courseId} deleted from web storage`)
 }

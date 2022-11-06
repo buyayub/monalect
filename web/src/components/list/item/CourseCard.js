@@ -1,7 +1,6 @@
 import { Link, routes } from '@redwoodjs/router'
 import { useMutation } from '@apollo/client'
-import IconButton from 'src/components/IconButton'
-import Button from 'src/components/Button'
+import { IconButton, Button} from 'src/components'
 import { useState, useEffect, useRef } from 'react'
 import { useAuth } from '@redwoodjs/auth'
 

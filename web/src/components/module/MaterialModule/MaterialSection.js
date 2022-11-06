@@ -1,5 +1,5 @@
 import { FiFileText, FiX } from 'react-icons/fi'
-import IconButton from 'src/components/IconButton'
+import { IconButton } from 'src/components'
 
 const MaterialSection = ({
 	section = null, 

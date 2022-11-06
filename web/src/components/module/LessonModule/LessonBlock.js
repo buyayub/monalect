@@ -1,4 +1,4 @@
-import LessonMaterialDisplay from 'src/components/LessonMaterialDisplay'
+import { LessonMaterialDisplay } from 'src/components'
 import { useState } from 'react'
 import { FiHelpCircle } from 'react-icons/fi'
 import { RiBook2Line } from 'react-icons/ri'

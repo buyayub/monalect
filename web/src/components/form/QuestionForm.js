@@ -1,9 +1,7 @@
-import TextInput from 'src/components/TextInput'
-import Dropdown from 'src/components/Dropdown'
-import Button from 'src/components/Button'
+import { TextInput, Dropdown, Button} from 'src/components'
 import { useMutation } from '@apollo/client'
 import { createQuestion } from 'src/controller/question'
-import { cache } from 'src/shared/cache'
+import { cache } from 'src/lib/cache'
 import { useApolloClient } from '@apollo/client'
 
 import { useState } from 'react'

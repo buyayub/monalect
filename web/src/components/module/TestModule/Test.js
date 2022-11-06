@@ -1,11 +1,10 @@
 import { useQuery, useMutation } from '@apollo/client'
 import { useState, useEffect, useRef } from 'react'
-import Button from 'src/components/Button'
-import TextInput from 'src/components/TextInput'
+import { Button, TextInput } from 'src/components'
 import { createTest } from 'src/controller/test/'
 import { useApolloClient } from '@apollo/client'
-import { getQuestionLessons } from 'src/models/question'
-import { cache } from 'src/shared/cache'
+import { getQuestionLessons } from 'src/views/question'
+import { cache } from 'src/lib/cache'
 
 const randomizeArray = (array) => {
 	for (var i = array.length - 1; i > 0; i--) {

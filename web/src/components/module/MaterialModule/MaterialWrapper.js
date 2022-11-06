@@ -1,7 +1,4 @@
-import LearningMaterial from 'src/components/LearningMaterial'
-import LearningMaterialAdd from 'src/components/LearningMaterialAdd'
-import MaterialSection from 'src/components/MaterialSection'
-import MaterialSectionAdd from 'src/components/MaterialSectionAdd'
+import { LearningMaterial, LearningMaterialAdd, MaterialSection, MaterialSectionAdd } from 'src/components'
 import { FiPlus } from 'react-icons/fi'
 import { useState } from 'react'
 

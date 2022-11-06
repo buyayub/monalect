@@ -1,17 +1,11 @@
 import { useState, useRef, useEffect } from 'react'
 import { FiPlus } from 'react-icons/fi'
 import { FiXCircle, FiCheckCircle, FiX } from 'react-icons/fi'
-import TextInput from 'src/components/TextInput'
-import IconButton from 'src/components/IconButton'
-import QuestionAnswerForm from 'src/components/QuestionAnswerForm'
-import Dropdown from 'src/components/Dropdown'
-import Button from 'src/components/Button'
-import Modal from 'src/components/Modal'
-import QuestionAnswer from 'src/components/QuestionAnswer'
-import { getLessonList } from 'src/models/lesson'
+import { TextInput, IconButton, QuestionAnswerForm, Dropdown, Button, Modal, QuestionAnswer} from 'src/components'
+import { getLessonList } from 'src/views/lesson'
 import { useApolloClient } from '@apollo/client'
 import { createQuestion } from 'src/controller/question'
-import { cache } from 'src/shared/cache'
+import { cache } from 'src/lib/cache'
 
 const QuestionFullForm = ({
 	userId = null,

@@ -1,8 +1,7 @@
-import CourseCard from 'src/components/CourseCard'
-import Button from 'src/components/Button'
+import { CourseCard, Button }from 'src/components'
 import { Link, routes } from '@redwoodjs/router'
 import { useState, useLayoutEffect } from 'react'
-import { getCourseCards } from 'src/models/courseCard'
+import { getCourseCards } from 'src/views/courseCard'
 import { deleteCourse } from 'src/controller/course'
 import { useApolloClient } from '@apollo/client'
 

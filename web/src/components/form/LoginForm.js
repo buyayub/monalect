@@ -1,5 +1,4 @@
-import TextInput from 'src/components/TextInput';
-import Button from 'src/components/Button';
+import { TextInput, Button }from 'src/components';
 import { routes, Link } from '@redwoodjs/router'
 import { useState } from 'react';
 import { useAuth } from '@redwoodjs/auth'

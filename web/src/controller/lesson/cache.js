@@ -1,5 +1,5 @@
-import { db } from 'src/shared/db'
-import { cache } from 'src/shared/cache'
+import { db } from 'src/lib/db'
+import { cache } from 'src/lib/cache'
 import { getLessonWordCount, getLessonQuestionCount } from 'src/models/stats/db'
 
 export const updateLesson = async (courseId) => {

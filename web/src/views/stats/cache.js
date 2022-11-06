@@ -1,4 +1,4 @@
-import { cache } from 'src/shared/cache'
+import { cache } from 'src/lib/cache'
 
 export const getCourseWords = (courseId) => {
 	const course = cache.get(`course-${courseId}`)

@@ -1,15 +1,13 @@
-import NavBar from 'src/components/NavBar'
-import Button from 'src/components/Button'
-import CourseCardList from 'src/components/CourseCardList'
+import { NavBar, Button, CourseCardList } from 'src/components'
 import { Link, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 import { useAuth } from '@redwoodjs/auth'
 import { useContext } from 'react'
-import { cache } from 'src/shared/cache'
+import { cache } from 'src/lib/cache'
 
 const MonalectPage = () => {
 	const { currentUser } = useAuth()
-	cache.statistics()
+	cache.size()
 	return (
 		<>
 			<MetaTags title="Monalect" description="Monalect page" />

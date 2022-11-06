@@ -1,5 +1,5 @@
-import NotebookPage from 'src/components/NotebookPage'
-import { getPages } from 'src/models/notebook'
+import  { NotebookPage } from 'src/components'
+import { getPages } from 'src/views/notebook'
 import { useState } from 'react'
 
 const NotebookList = ({ courseId, userId }) => {

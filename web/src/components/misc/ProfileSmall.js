@@ -1,5 +1,5 @@
 import { useAuth } from '@redwoodjs/auth';
-import Button from 'src/components/Button';
+import { Button } from 'src/components';
 
 const ProfileSmall = ({className}) => {
 	const {currentUser, logOut} = useAuth()

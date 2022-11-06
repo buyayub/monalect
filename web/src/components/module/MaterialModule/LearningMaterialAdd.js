@@ -1,5 +1,5 @@
 import {FiPlus} from 'react-icons/fi';
-import IconButton from 'src/components/IconButton';
+import { IconButton } from 'src/components';
   
 const LearningMaterialAdd = ({onClick, label="Add Material", className=""}) => {
   return (

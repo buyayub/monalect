@@ -2,8 +2,8 @@ import { FiHelpCircle } from 'react-icons/fi'
 import { RiBook2Line } from 'react-icons/ri'
 import { useParams } from '@redwoodjs/router'
 import { useState, useLayoutEffect } from 'react'
-import { getLessonList } from 'src/models/lesson'
-import LessonBlock from 'src/components/LessonBlock'
+import { getLessonList } from 'src/views/lesson'
+import { LessonBlock } from 'src/components'
 
 const LessonList = ({ courseId }) => {
 	const [lessons, setLessons] = useState(null)

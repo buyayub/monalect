@@ -1,4 +1,4 @@
-import  Button from 'src/components/Button';
+import  { Button } from 'src/components';
 
 const GoalDisplay = ({type, completed, lessonIndex, allLessons, measure, goal}) => {
 

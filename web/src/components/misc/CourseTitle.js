@@ -1,4 +1,4 @@
-import { getCourseCard } from 'src/models/courseCard'
+import { getCourseCard } from 'src/views/courseCard'
 import { FiHelpCircle } from 'react-icons/fi'
 import { RiBook2Line } from 'react-icons/ri'
 import { useState, useLayoutEffect, useMemo } from 'react'

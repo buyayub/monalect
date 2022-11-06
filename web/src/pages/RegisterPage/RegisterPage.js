@@ -1,4 +1,4 @@
-import NavBar from 'src/components/NavBar'
+import { NavBar } from 'src/components'
 import { Link, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
 

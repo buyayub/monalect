@@ -1,5 +1,5 @@
-import Question from 'src/components/Question'
-import Button from 'src/components/Button'
+import { Question } from 'src/components'
+import { Button } from 'src/components'
 import { FiPlusSquare } from 'react-icons/fi'
 import { useState } from 'react'
 

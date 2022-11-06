@@ -1,8 +1,8 @@
 import { createTest as createTestDB } from './db'
 import { createTest as createTestCache } from './cache'
 import { createTest as createTestAPI } from './api'
-import { cache } from 'src/shared/cache'
-import { db } from 'src/shared/db'
+import { cache } from 'src/lib/cache'
+import { db } from 'src/lib/db'
 
 export const createTest = async (client, userId, courseId, input) => {
 	await createTestCache(courseId, input)

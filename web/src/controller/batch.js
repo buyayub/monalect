@@ -1,10 +1,11 @@
 import { get, getMany, setMany, update, entries } from 'idb-keyval'
-import { cache } from 'src/shared/cache'
-import { db } from 'src/shared/db'
-import { CREATE_BATCH } from 'src/shared/queries'
+import { cache } from 'src/lib/cache'
+import { db } from 'src/lib/db'
+import { CREATE_BATCH } from 'src/queries'
 
 // I'm going to make my life easier and not interact much with batch creation until I go deeper into the design
-// so for now, all this does is update the caches in one function, and update the ids in another
+
+const tempIds = 'id-record'
 
 export const createBatch = async (course, client, userId) => {
 	await createBatchWeb(course)
@@ -14,8 +15,8 @@ export const createBatch = async (course, client, userId) => {
 }
 
 export const createBatchWeb = async (course) => {
-	cache.create('course-dropdown', [])
-	cache.push('course-dropdown', {
+	cache.create('dropdown', [])
+	cache.push('dropdown', {
 		value: course.localId,
 		title: course.title ? course.title : 'Untitled',
 	})
@@ -25,8 +26,8 @@ export const createBatchWeb = async (course) => {
 		lessons: course.lesson.length,
 	})
 
-	cache.create('course-cards', [])
-	cache.push('course-cards', {
+	cache.create('course', [])
+	cache.push('course', {
 		id: course.localId,
 		title: course.title,
 		description: course.description,
@@ -36,47 +37,83 @@ export const createBatchWeb = async (course) => {
 		mark: 0,
 	})
 
-	cache.create(`course-${course.localId}`, {
-		id: course.localId,
-		title: course.title,
-		lessons: course.lesson.map((lesson, i) => {
-			const links = course.link.filter(
-				(link) => link.lessonId === lesson.localId
-			)
-			const sections = links
-				.filter((link) => link.type == 'section')
-				.map((link) => {
-					return course.section.find(
-						(section) => section.localId == link.materialId
-					)
-				})
-			const articles = links
-				.filter((link) => link.type == 'article')
-				.map((link) =>
-					course.material.find(
-						(material) => material.localId == link.materialId
-					)
-				)
-
+	const courseKey = `course-${course.localId}`
+	cache.create(
+		courseKey + '-lesson',
+		course.lesson.map((lesson, i) => {
 			return {
 				id: lesson.localId,
 				index: i,
 				title: lesson.title,
 				questionCount: 0,
 				lessonCount: 0,
-				sections: sections.map((section) => {
-					return {
-						title: section.title,
-						start: section.start,
-						end: section.end,
-					}
-				}),
-				articles: articles.map((article) => {
-					return { title: article.title, pages: article.pages }
-				}),
 			}
-		}),
-	})
+		})
+	)
+
+	cache.create(
+		courseKey + '-article',
+		course.material
+			.filter((material) => material.type == 'article')
+			.map((material) => {
+				return {
+					type: material.type,
+					id: material.localId,
+					courseId: course.localId,
+					title: material.title,
+					doi: material.identifier,
+					author: material.author,
+					uploaded: material.uploaded,
+					pageOffset: material.offset,
+					url: null,
+				}
+			})
+	)
+
+	cache.create(
+		courseKey + '-textbook',
+		course.material
+			.filter((material) => material.type == 'article')
+			.map((material) => {
+				return {
+					type: material.type,
+					id: material.localId,
+					courseId: course.localId,
+					title: material.title,
+					isbn: material.identifier,
+					author: material.author,
+					uploaded: material.uploaded,
+					pageOffset: material.offset,
+					url: null,
+				}
+			})
+	)
+
+	cache.create(
+		courseKey + '-textbookSection',
+		course.section.map((section) => {
+			return {
+				id: section.localId,
+				textbookId: section.textbookId,
+				title: section.title,
+				start: section.start,
+				end: section.end,
+			}
+		})
+	)
+
+	cache.create(
+		courseKey + '-notebookPage',
+		course.section.map((section) => {
+			return {
+				id: page.localId,
+				lessonId: page.lessonId,
+				content: page.content,
+				index: page.index,
+				lessonTitle: page.lessonTitle,
+			}
+		})
+	)
 }
 
 export const createBatchDB = async (course) => {
@@ -85,9 +122,7 @@ export const createBatchDB = async (course) => {
 		id: course.localId,
 		description: course.description,
 	})
-
-	cache.create('id-map', [])
-	cache.push('id-map', course.localId)
+	cache.collection.push(tempIds, { id: course.localId, real: null} )
 
 	for (const lesson of course.lesson) {
 		db.push('lesson', {
@@ -96,7 +131,7 @@ export const createBatchDB = async (course) => {
 			index: lesson.index,
 			title: lesson.title,
 		})
-		cache.push('id-map', lesson.localId)
+		cache.collection.push(tempIds, { id: lesson.localId, real: null} )
 	}
 
 	for (const material of course.material) {
@@ -113,7 +148,7 @@ export const createBatchDB = async (course) => {
 
 		payload[material.type == 'article' ? 'doi' : 'isbn'] = material.identifier
 		db.push(material.type, payload)
-		cache.push('id-map', material.localId)
+		cache.collection.push(tempIds, { id: material.localId, real: null} )
 	}
 
 	for (const page of course.page) {
@@ -125,6 +160,7 @@ export const createBatchDB = async (course) => {
 			index: page.index,
 			lessonTitle: page.lessonTitle,
 		})
+		cache.collection.push(tempIds, { id: page.localId, real: null} )
 	}
 
 	for (const link of course.link) {
@@ -136,24 +172,23 @@ export const createBatchDB = async (course) => {
 		payload[payload.type == 'article' ? 'articleId' : 'sectionId'] =
 			link.materialId
 		db.push(`${link.type}OnLesson`, payload)
-		cache.push('id-map', link.localId)
+		cache.collection.push(tempIds, { id: link.localId, real: null} )
 	}
 
 	for (const section of course.section) {
-		db.push('section', {
+		db.push('textbookSection', {
 			id: section.localId,
 			textbookId: section.textbookId,
 			title: section.title,
 			start: section.start,
 			end: section.end,
 		})
-		cache.push('id-map', section.localId)
+		cache.collection.push(tempIds, { id: section.localId, real: null} )
 	}
 }
 
 export const createBatchAPI = async (course, client, userId) => {
 	let input = JSON.parse(JSON.stringify(course))
-	console.debug({ course })
 
 	// some pre-mutation modifications
 	input.lesson.forEach((lesson, i) => (lesson.index = i))
@@ -176,8 +211,15 @@ export const createBatchAPI = async (course, client, userId) => {
 	const data = response.data.createBatchCourse
 	console.log(data)
 
-	syncIdDB(data.record)
-	syncIdCache(data.record, course.localId)
+	let newRecord = data.record
+	newRecord.forEach((entry) => {
+		entry.id = entry.real
+		delete entry.real
+	})
+
+	for (const entry of newRecord) {
+		cache.collection.update(tempIds, entry.id, 'real', entry.real)
+	}
 
 	for (const item of data.uploaded) {
 		// get file from the passed course object using the localid we have to get again from the record -.-
@@ -190,18 +232,18 @@ export const createBatchAPI = async (course, client, userId) => {
 		const file = course.material.find((item) => item.localId == local).file
 		uploadTextbook(file, item.presigned)
 		// update url
-		db.updateVal(item.type, item.materialId, 'url', item.url)
-		db.updateVal(item.type, item.materialId, 'presigned', item.presigned)
-		let expiry = new Date();
+		db.update(item.type, item.materialId, { url: item.url })
+		db.update(item.type, item.materialId, { presigned: item.presigned })
+		let expiry = new Date()
 		expiry.setDate(expiry.getDate() + 2)
-		db.updateVal(item.type, item.materialId, 'presignedExpiry', expiry.getTime())
+		db.update(item.type, item.materialId, { presignedExpiry: expiry.getTime() })
 	}
 	return null
 }
 
 const syncIdDB = async (record) => {
 	let data = await entries()
-	console.log("Before: ", {data})
+	console.log('Before: ', { data })
 	for (let entry of data) {
 		entry[1].forEach((item) => {
 			let id = undefined
@@ -232,8 +274,8 @@ const syncIdDB = async (record) => {
 			// I know it's bad but I'm brain-fogged right now, and I don't want to think
 		})
 	}
-	console.log({record})
-	console.log("After: ", {data})
+	console.log({ record })
+	console.log('After: ', { data })
 	setMany(data).then(() => cache.update('id-map', []))
 }
 

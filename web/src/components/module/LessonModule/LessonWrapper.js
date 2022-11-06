@@ -1,6 +1,4 @@
-import MaterialSection from 'src/components/MaterialSection'
-import Button from 'src/components/Button'
-import MaterialSectionAdd from 'src/components/MaterialSectionAdd'
+import { MaterialSection, Button, MaterialSectionAdd }from 'src/components'
 import { FiPlus, FiLink } from 'react-icons/fi'
 
 const LessonNode = ({

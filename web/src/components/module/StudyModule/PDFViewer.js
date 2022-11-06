@@ -1,10 +1,10 @@
 import { useState } from 'react'
-import Dropdown from 'src/components/Dropdown'
+import { Dropdown } from 'src/components'
 import {
 	getMaterialFiles,
 	isPresignedValid,
 	updatePresigned,
-} from 'src/models/material'
+} from 'src/views/material'
 import { useApolloClient } from '@apollo/client'
 import { Bars } from 'react-loading-icons'
 

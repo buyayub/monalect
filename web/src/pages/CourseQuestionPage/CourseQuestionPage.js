@@ -1,7 +1,5 @@
 import { MetaTags } from '@redwoodjs/web'
-import NavBar from 'src/components/NavBar'
-import QuestionWrapper from 'src/components/QuestionWrapper'
-import CourseNavBar from 'src/components/CourseNavBar'
+import { NavBar, QuestionWrapper, CourseNavBar } from 'src/components'
 
 const CourseQuestionPage = ({courseId}) => {
 	return (

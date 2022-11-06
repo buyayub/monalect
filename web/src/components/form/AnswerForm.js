@@ -1,8 +1,7 @@
-import TextInput from 'src/components/TextInput'
-import Button from 'src/components/Button'
+import { TextInput, Button }from 'src/components'
 import { useApolloClient } from '@apollo/client'
 import { createAnswer } from 'src/controller/answer'
-import { cache } from 'src/shared/cache'
+import { cache } from 'src/lib/cache'
 
 const AnswerForm = ({
 	cancel,

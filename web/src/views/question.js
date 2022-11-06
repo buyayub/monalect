@@ -1,4 +1,4 @@
-import { cache } from 'src/shared/cache'
+import { cache } from 'src/lib/cache'
 import { get } from 'idb-keyval'
 import { updateQuestions as updateQuestionsCache  } from 'src/controller/question/cache'
 

@@ -1,6 +1,4 @@
-import QuestionAnswer from 'src/components/QuestionAnswer'
-import IconButton from 'src/components/IconButton'
-import Modal from 'src/components/Modal'
+import { QuestionAnswer, IconButton, Modal } from 'src/components'
 import { FiPlus } from 'react-icons/fi'
 import { FiXCircle, FiCheckCircle, FiX } from 'react-icons/fi'
 import { useState } from 'react'

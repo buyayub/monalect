@@ -1,5 +1,4 @@
-import Button from 'src/components/Button'
-import TextInput from 'src/components/TextInput'
+import { Button, TextInput} from 'src/components'
 
 const LessonForm = ({ cancel, tools }) => {
 	const onSubmit = (e) => {

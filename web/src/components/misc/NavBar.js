@@ -4,7 +4,7 @@ import { NavLink, routes } from '@redwoodjs/router'
 import { useAuth } from '@redwoodjs/auth'
 import { FiMenu, FiBook, FiHelpCircle } from 'react-icons/fi'
 
-import IconButton from 'src/components/IconButton'
+import { IconButton } from 'src/components'
 
 const NavBar = ({ courseId, className }) => {
 	return (
