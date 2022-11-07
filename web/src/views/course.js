@@ -1,5 +1,5 @@
 import { get, getMany } from 'idb-keyval'
-import { cache } from 'src/lib/cache'
+import { cache, db } from 'src/lib/cache'
 
 export const getDropdown = async () => {
 	const key = `course-dropdown`
@@ -17,3 +17,4 @@ export const getDropdown = async () => {
 		return dropdown;
 	}
 }
+

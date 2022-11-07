@@ -1,4 +1,3 @@
-import { get, getMany } from 'idb-keyval'
 import { getCourseWords, getQuestionCount, getLessonCount} from './stats'
 import { getCourseMark } from './stats/db'
 
@@ -20,7 +19,11 @@ cards: [
 
  */
 
+export const getCourseCards = async () => {
+			
+}
 
+/*
 export const getCourseCards = async () => {
 	const key = 'course-cards'
 	// check sessionStorage
@@ -119,3 +122,4 @@ export const getCourseCard = async(courseId) => {
 		}
 	}
 }
+*/

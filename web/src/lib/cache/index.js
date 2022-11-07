@@ -137,6 +137,36 @@ function Cache() {
 		console.warn(`${key} does not exist`)
 	}
 
+	this.collection.updateMany = (key, objects) => {
+		// objects: id, props: newvalue
+		let val = cache.get(key)
+		if (!val || !Array.isArray(val)) {
+			console.warn(`${key} is not a collection`)
+			return null
+		}
+		if (!Array.isArray(objects)) {
+			console.warn(`${key} update provided with invalid prop (was not an array)`)
+			return null
+		}
+
+		let initial = []
+
+		for (const item of objects) {
+			if (!item.id) continue;
+
+			let final = val.find((cachedItem) => cachedItem.id == item.id)
+			if (final) initial.push(structuredClone(final))	
+
+			for (const prop in item) {
+				if (prop !== 'id') final[prop] = item[prop]
+			}
+		}
+
+		this.record.update(key)
+		cache.update(key, val)
+
+		return initial
+	}
 
 	this.collection.push = (key, value) => {
 		if (!value.id) {
@@ -190,7 +220,6 @@ function Cache() {
 	}
 	
 	// size
-
 	this.size = async () => {
 		let localStorageSize = function () {
 			let _lsTotal = 0,

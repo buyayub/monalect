@@ -111,8 +111,8 @@ describe('record in cache context', () => {
 
 describe('cache collection', () => {
 	const invalid = { prop1: 'invalid_object' }
-	const value = { id: 1, prop2: 'value1' }
-	const value2 = { id: 2, prop2: 'value2' }
+	const value = { id: 1, prop2: 'value1', prop3: 'prop3value1'}
+	const value2 = { id: 2, prop2: 'value2', prop3: 'prop3value2'}
 	const key = 'test'
 
 	test('add', () => {
@@ -140,6 +140,7 @@ describe('cache collection', () => {
 		beforeEach(() => {
 			cache.collection.create(key)
 			cache.collection.push('test', value)
+			cache.collection.push('test', value)
 		})
 
 		test('update', () => {
@@ -155,6 +156,28 @@ describe('cache collection', () => {
 			const collection = cache.get('test')
 			const something = collection.find((item) => item.id == value.id)
 			expect(something.newprop).toBe('propvalue')
+		})
+	})
+
+	describe('collection updateMany', () => {
+		beforeEach(() => {
+			cache.collection.create(key)
+			cache.collection.push(key, value)
+			cache.collection.push(key, value2)
+		})
+
+		test('updateMany', () => {
+			cache.collection.updateMany(key, [{ id: 2, prop3: 'newValue'}])
+			const collection = cache.get(key)
+			const updated = collection.find((item) => item.id == value2.id)
+			expect(updated.prop3).toBe('newValue')
+		})
+
+		test('updateMany nonexistant', () => {
+			cache.collection.updateMany(key, [{ id: 2, prop4: 'newerValue'}])
+			const collection = cache.get(key)
+			const updated = collection.find((item) => item.id == value2.id)
+			expect(updated.prop4).toBe('newerValue')
 		})
 	})
 

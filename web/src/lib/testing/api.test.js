@@ -27,6 +27,39 @@ const mockRequest = {
 	variables: { id: 42, title: 'a title' },
 }
 
+const mockRecordMany = [
+	{ id: 42, real: 24 },
+	{ id: 32, real: 34 },
+	{ id: 22, real: 23 },
+]
+
+const mockRequestMany = {
+	id: 42,
+	client: {
+		mutate: async (config) => {
+			return {
+				data: [
+					{ local: 42, real: 24 },
+					{ local: 32, real: 34 },
+					{ local: 22, real: 23 },
+				],
+			}
+		},
+		query: async (config) => {
+			return true
+		},
+	},
+	type: 'test',
+	gql: 'blahblah',
+	variables: {
+		input: [
+			{ id: 42, title: 'a title' },
+			{ id: 32, title: 'second entry, local id 32' },
+			{ id: 22, title: 'third, local id 22' },
+		],
+	},
+}
+
 const mockUpdate = {
 	id: 42,
 	client: {
@@ -100,6 +133,12 @@ describe('test creation', () => {
 		expect(cache.get(changedKey)).toStrictEqual([{ id: 42, type: 'create' }])
 		expect(cache.get('temp-42')).toBe(null)
 		expect(cache.get('online')).toBe(false)
+	})
+
+	test('creation w/ array return', async () => {
+		await api.create(mockRequestMany)
+
+		expect(cache.get(tempIds)).toStrictEqual(mockRecordMany)
 	})
 
 	test('multiple similar creations', async () => {
@@ -183,14 +222,14 @@ describe('test update', () => {
 		expect(cache.get(changedKey)).toStrictEqual(null)
 	})
 
-	// this test doesn't work if you don't deepcopy
+	// this test didn't work when I didn't deepcopy, just a personal note for future bugs
 	test('update with recursive syncing', async () => {
 		expect(cache.get(tempIds)).toBe(null)
 		expect(cache.get(changedKey)).toBe(null)
 		expect(cache.get('temp-42')).toBe(null)
 		expect(cache.get('mock-update-config')).toBe(null)
 
-		let newMock = {...mockUpdate}
+		let newMock = { ...mockUpdate }
 		newMock.client.mutate = async (config) => {
 			cache.create('mock-update-config', config)
 			return true

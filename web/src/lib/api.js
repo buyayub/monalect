@@ -6,7 +6,6 @@ const tempIds = 'id-record'
 
 let api = {}
 
-
 const syncIds = (obj, rec) => {
 	const idList = [
 		'id',
@@ -45,7 +44,15 @@ api.create = async (request) => {
 		])
 
 	if (!cache.get(tempIds)) cache.create(tempIds, [])
-	if (!cache.get(tempIds).find((item) => item.id == request.id)) {
+
+	// adds temporary id to record
+	if (request.variables.input && Array.isArray(request.variables.input)) {
+		for (const val of request.variables.input) {
+			if (!cache.get(tempIds).find((item) => item.id == val.id)) {
+				cache.collection.push(tempIds, { id: val.id, real: null })
+			}
+		}
+	} else if (!cache.get(tempIds).find((item) => item.id == request.id)) {
 		cache.collection.push(tempIds, { id: request.id, real: null })
 	}
 
@@ -55,11 +62,47 @@ api.create = async (request) => {
 	})
 
 	if (response && !online) {
-		cache.collection.update(tempIds, request.id, 'real', response.data.real)
+		if (Array.isArray(response.data)) {
+			cache.collection.updateMany(
+				tempIds,
+				response.data.map((item) => {
+					if (item.local) return { id: item.local, real: item.real }
+					return item
+				})
+			)
+		} else if (response.data.record) {
+			cache.collection.updateMany(
+				tempIds,
+				response.data.record.map((item) => {
+					if (item.local) return { id: item.local, real: item.real }
+					return item
+				})
+			)
+		} else if (response.data.real) {
+			cache.collection.update(tempIds, request.id, 'real', response.data.real)
+		}
+
 		cache.update('online', true)
-		document.dispatchEvent(new Event('sync'))
 	} else if (response && online) {
-		cache.collection.update(tempIds, request.id, 'real', response.data.real)
+		if (Array.isArray(response.data)) {
+			cache.collection.updateMany(
+				tempIds,
+				response.data.map((item) => {
+					if (item.local) return { id: item.local, real: item.real }
+					return item
+				})
+			)
+		} else if (response.data.record) {
+			cache.collection.updateMany(
+				tempIds,
+				response.data.record.map((item) => {
+					if (item.local) return { id: item.local, real: item.real }
+					return item
+				})
+			)
+		} else if (response.data.real) {
+			cache.collection.update(tempIds, request.id, 'real', response.data.real)
+		}
 		await updateQueue(request)
 	} else if (!response) {
 		if (online) cache.remove(`temp-${request.id}`)
@@ -109,7 +152,7 @@ api.update = async (request, queued = false) => {
 		}
 		response = await request.client.mutate({
 			gql: request.gql,
-			variables: variables
+			variables: variables,
 		})
 	}
 
@@ -209,8 +252,8 @@ export async function updateQueue(request) {
 	cache.update(`temp-${request.id}`, queue)
 
 	if (queue.length > 0) {
-		let newRequest = {...queue[0]}
-		newRequest.client = {...request.client}
+		let newRequest = { ...queue[0] }
+		newRequest.client = { ...request.client }
 		await api[newRequest.type](newRequest, true)
 	}
 }
